@@ -1,7 +1,15 @@
 [project]
-name = "src-py"
+name = "dcp-cu"
 version = "0.1.0"
-description = "Add your description here"
+description = "Data capitalism project credit union"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pywebview==6.1",
+    "pyinstaller",
+    "setuptools",
+    "pydantic",
+    "pydantic-to-typescript",
+    "pysubs2",
+    "charset_normalizer",
+]

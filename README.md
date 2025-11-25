@@ -60,6 +60,15 @@ o  Scaffolding project in C:\sources\dcp-cu\src-react...
 ```
 
 ```shell
- C:\sources\dcp-cu> git init
+C:\sources\dcp-cu> git init
+C:\sources\dcp-cu> git add .
+C:\sources\dcp-cu> git commit -m "first commit"
+C:\sources\dcp-cu> git branch -M main
+C:\sources\dcp-cu> git remote add origin https://github.com/kangtae49/dcp-cu.git
+C:\sources\dcp-cu> git push -u origin main 
 ```
 
+## sqlite3 build (use venv)
+```shell
+(src-py) PS C:\sources\dcp-cu\src-react\node_modules\sqlite3>npm install --build-from-source
+```

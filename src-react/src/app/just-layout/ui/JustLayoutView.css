@@ -1,0 +1,80 @@
+.just-layout {
+    width: 100%;
+    height: 100%;
+}
+
+.just-layout.thema-dark {
+    --title-bg-color: #1e1f22;
+    --title-font-color: #dfe1e5;
+}
+
+.just-node {
+    width: 100%;
+    height: 100%;
+}
+
+.just-win {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.just-win .just-win-title {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.just-win-title .just-active {
+    border-bottom: 4px solid gray;
+}
+
+.just-win-title .just-title-list {
+    flex: 1;
+    overflow: hidden;
+    /*cursor: move;*/
+    display: flex;
+}
+.just-win-title .just-title-menu {
+    flex: 0 0 25px;
+}
+
+.just-win .just-win-body {
+    flex: 1;
+}
+
+.just-layout .just-column { display: flex; flex-direction: column; width: 100%; height: 100%; }
+.just-layout .just-row { display: flex; flex-direction: row; width: 100%; height: 100%; }
+.just-layout .just-first { display: flex; overflow: hidden;}
+.just-layout .just-second { display: flex; flex: 1; overflow: hidden;}
+.just-layout .just-splitter {
+    flex: 0 0 3px;
+    box-sizing: border-box;
+}
+
+.just-row > .just-splitter {
+    cursor: ew-resize;
+    border-left: 1px solid #393b40;
+    border-right: 1px solid gray;
+}
+.just-column > .just-splitter {
+    cursor: ns-resize;
+    border-top: 1px solid #393b40;
+    border-bottom: 1px solid gray;
+}
+
+.dragging {
+    cursor: move;
+    border: 1px dashed gray;
+    box-sizing: border-box;
+}
+.just-win-title { display: flex;}
+.just-draggable-title {
+    display: flex; margin: 0; padding: 0; height: 25px;
+    align-items: center;
+    background-color: var(--title-bg-color);
+    color: var(--title-font-color);
+    font-size: 12px;
+}
+.just-draggable-title .just-icon { flex: 1 1 20px; }
+.just-draggable-title .just-title { flex: 1; }

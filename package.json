@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "cd src-react && pnpm dev",
+    "build": "cd src-react && pnpm build",
+    "py": "cd src-react && pnpm py",
+    "models": "cd src-react && pnpm models",
+    "start-redux-devtools": "cd src-react && pnpm start-redux-devtools",
+    "redux-devtools-app": "npx redux-devtools-app"
+  }
+}
