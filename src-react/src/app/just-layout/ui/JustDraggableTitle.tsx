@@ -1,8 +1,16 @@
-import type {JustBranch, JustDirection, JustPos, JustStack, WinInfo} from "@/app/just-layout/justLayoutSlice.ts";
+import {useRef} from "react";
+import {
+  type JustBranch,
+  type JustDirection,
+  type JustPos,
+  type JustStack,
+  type WinInfo
+} from "@/app/just-layout/justLayoutSlice.ts";
 import {type DragSourceMonitor, useDrag, useDrop} from "react-dnd";
 import type { XYCoord } from 'react-dnd';
 import classnames from "classnames";
-import {useRef} from "react";
+import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
+import {faCircleXmark} from "@fortawesome/free-solid-svg-icons"
 
 export interface DragItem {
   justBranch: JustBranch
@@ -17,24 +25,18 @@ interface Prop {
   winId: string
   winInfo: WinInfo
   justStack: JustStack
+  closeWin: (winId: string) => void
+  activeWin: (winId: string) => void
 }
 
 function JustDraggableTitle(props: Prop) {
+  const { winInfo, justBranch, winId, justStack, closeWin, activeWin } = props;
   const ref = useRef<HTMLDivElement>(null)
-
-  const { winInfo, justBranch, winId, justStack } = props;
-
-  // const onDrop = (itemType: any, item: DragItem) => {
-  //   console.log("onDrop(JustDraggableTitle)", itemType, item)
-  //   // TODO: move tab
-  //   // remove item.justBranch; item.winId;
-  //   // insert justStack.tabs item.winId;
-  // }
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: 'DRAG-SOURCE-JUST-TITLE',
-      canDrag: true,
+      canDrag: winInfo.canDrag ?? true,
       item: {
         justBranch,
         winId,
@@ -48,6 +50,7 @@ function JustDraggableTitle(props: Prop) {
 
   const [, drop] = useDrop<DragItem, void, { handlerId: any | null }> ({
     accept: 'DRAG-SOURCE-JUST-TITLE',
+    canDrop: () => winInfo.canDrop ?? true,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -59,6 +62,9 @@ function JustDraggableTitle(props: Prop) {
       }
       if (winId === item.winId) {
         return
+      }
+      if (!monitor.canDrop()) {
+        return;
       }
       const hoverBoundingRect = ref.current?.getBoundingClientRect()
       const clientOffset = monitor.getClientOffset()
@@ -79,6 +85,8 @@ function JustDraggableTitle(props: Prop) {
   })
 
   drag(drop(ref))
+
+
   console.log("JustDraggableTitle", winId, winInfo)
   return (
     <div
@@ -92,7 +100,11 @@ function JustDraggableTitle(props: Prop) {
       ref={ref}
     >
       <div className="just-icon">{winInfo.icon}</div>
-      <div className="just-title">{winInfo.title}({winId})</div>
+      <div className="just-title" onClick={() => activeWin(winId)}>{winInfo.title}({winId})</div>
+
+      {(winInfo.showClose ?? true) && <div className="just-icon just-close" onClick={() => closeWin(winId)}>
+        <Icon icon={faCircleXmark}/>
+      </div>}
     </div>
   )
 }

@@ -1,7 +1,9 @@
 import {useDispatch, useSelector} from "react-redux";
-import {type RootState, type AppDispatch, injectReducer, removeReducer} from "./index";
+import {type RootState, type AppDispatch, injectReducer, getSlice} from "./index";
+import type {Slice} from "@reduxjs/toolkit";
+import {useMemo} from "react";
 // import type {Slice} from "@reduxjs/toolkit";
-import {useEffect} from "react";
+// import {useEffect} from "react";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
@@ -14,20 +16,38 @@ export function useDynamicSlice<
 >(
   id: string,
   // createSliceFn: (id: string) => Slice<State>
-  createSliceFn: (id: string) => {
-    reducer: any;
-    actions: Actions;
-  }
+  createSliceFn: (id: string) => Slice
 ) {
-  const slice = createSliceFn(id);
-  useEffect(() => {
-    console.log("useDynamicSlice", id)
-    injectReducer(id, slice.reducer)
-    return () => {
-      console.log("useDynamicSlice unmount", id)
-      removeReducer(id)
+  // const slice = getSlice(id) ?? createSliceFn(id);
+  // let slice = getSlice(id);
+  // if (!slice) {
+  //   console.log("useDynamicSlice createSlice", id)
+  //   slice = createSliceFn(id);
+  //   injectReducer(id, slice)
+  // }
+
+  const slice = useMemo(() => {
+    // return getSlice(id) ?? createSliceFn(id);
+    let slice = getSlice(id);
+    if (!slice) {
+      console.log("useDynamicSlice createSlice", id)
+      slice = createSliceFn(id);
+      injectReducer(id, slice)
     }
-  }, [])
+    return slice
+  }, [id]);
+
+
+  // injectReducer(id, slice)
+  // useEffect(() => {
+  //   console.log("useDynamicSlice", id)
+  //   injectReducer(id, slice.reducer)
+  //   return () => {
+  //     console.log("useDynamicSlice unmount", id)
+  //     removeReducer(id)
+  //   }
+  // }, [])
+
   const state = useAppSelector<State>(id);
   const dispatch = useAppDispatch();
   return {

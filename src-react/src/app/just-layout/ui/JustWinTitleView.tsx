@@ -21,9 +21,11 @@ interface Prop {
   justBranch: JustBranch
   justStack: JustStack
   viewMap: Record<string, WinInfo>
+  closeWin: (winId: string) => void
+  activeWin: (winId: string) => void
 }
 
-function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
+function JustWinTitleView({justBranch, justStack, viewMap, closeWin, activeWin}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const {
     // state: justLayoutState,
@@ -48,6 +50,14 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: ['DRAG-SOURCE-JUST-TITLE'],
+      canDrop: () => {
+        let canDrop = true;
+        if (justStack.active !== null && !(viewMap[justStack.active].canDrop ?? true)) {
+          canDrop = false
+        }
+        return canDrop;
+      },
+      // canDrop: () => true,
       collect: (monitor: DropTargetMonitor) => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
@@ -57,7 +67,7 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
         onDrop(monitor.getItemType(), monitor.getItem())
         return undefined
       },
-    }),
+    }), [justStack]
   )
 
   drop(ref)
@@ -73,6 +83,8 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
             justBranch={justBranch}
             justStack={justStack}
             winInfo={viewMap[winId]}
+            activeWin={activeWin}
+            closeWin={closeWin}
           />
         )}
       </div>

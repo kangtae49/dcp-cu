@@ -87,6 +87,18 @@ export function removeWinId(layout: JustNode | null, winId: string): JustNode | 
   })
 }
 
+export function activeWinId(layout: JustNode | null, winId: string): JustNode | null {
+  if (layout == null) return null;
+  const justStack = getNodeByWinId(layout, winId) as unknown as JustStack | null
+  if (justStack == null) return layout;
+  return updateNodeOfWinId(layout, winId, {
+    $set: {
+      ...justStack,
+      active: winId,
+    }
+  })
+}
+
 
 export function removeEmpty(layout: JustNode | null): JustNode | null {
   if (layout == null) return layout;
@@ -133,7 +145,7 @@ export function findEmptyBranch(layout: JustNode | null): JustBranch | null {
 
 export function moveWinId(layout: JustNode | null, winId: string, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
   const newLayout = removeWinId(layout, winId)
-  return removeEmpty(insertWinId(newLayout, winId, branch, pos, direction, index))
+  return insertWinId(newLayout, winId, branch, pos, direction, index)
 
 }
 
@@ -171,7 +183,7 @@ function getBranchByWinId(layout: JustNode | null, winId: string): JustBranch | 
   return getBranch(layout, winId, [])
 }
 
-function getNodeByWinId(layout: JustNode | null, winId: string): JustNode | null {
+export function getNodeByWinId(layout: JustNode | null, winId: string): JustNode | null {
   if( layout === null) return null
   if (layout.type === 'stack') {
     if (layout.tabs.includes(winId)) {
@@ -211,4 +223,8 @@ function updateNodeOfWinId(layout: JustNode | null, winId: string, value: any): 
   if (branch == null) return layout;
   const patch = makePatch(branch, value)
   return update(layout, patch)
+}
+
+export function hasWinId(layout: JustNode | null, winId: string)  {
+  return getNodeByWinId(layout, winId) != null
 }

@@ -1,16 +1,24 @@
-import { configureStore, combineReducers, type Reducer } from "@reduxjs/toolkit"
+import {configureStore, combineReducers, type Slice} from "@reduxjs/toolkit"
 import {devToolsEnhancer} from "@redux-devtools/remote";
 
-const staticReducers = {} as Record<string, Reducer>
-const asyncReducers = {} as Record<string, Reducer>
+// const staticReducers = {} as Record<string, Reducer>
+// const asyncReducers = {} as Record<string, Reducer>
+const staticSlices = {} as Record<string, Slice>
+const asyncSlices = {} as Record<string, Slice>
+
+function slicesToReducers(slices: Record<string, any>) {
+  return Object.fromEntries(
+    Object.entries(slices).map(([key, slice]) => [key, slice.reducer])
+  );
+}
 
 function createReducer() {
-  if (Object.keys(staticReducers).length === 0 && Object.keys(asyncReducers).length === 0) {
+  if (Object.keys(staticSlices).length === 0 && Object.keys(asyncSlices).length === 0) {
     return (state = {}) => state
   }
   return combineReducers({
-    ...staticReducers,
-    ...asyncReducers,
+    ...slicesToReducers(staticSlices),
+    ...slicesToReducers(asyncSlices),
   })
 }
 
@@ -27,15 +35,23 @@ export const store = configureStore({
   }))
 })
 
-export function injectReducer(key: string, reducer: Reducer) {
-  if (asyncReducers[key]) return
-  asyncReducers[key] = reducer
+export function injectReducer(key: string, slice: Slice) { //reducer: Reducer) {
+  if (asyncSlices[key]) return
+  asyncSlices[key] = slice
   store.replaceReducer(createReducer())
 }
 
+export function getSlice (key: string): Slice  {
+  return asyncSlices[key]
+}
+
+export function getActions<T>(key: string) {
+  return asyncSlices[key].actions as T
+}
+
 export function removeReducer(key: string) {
-  if (!asyncReducers[key]) return
-  delete asyncReducers[key]
+  if (!asyncSlices[key]) return
+  delete asyncSlices[key]
   store.replaceReducer(createReducer())
 }
 

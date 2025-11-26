@@ -16,9 +16,11 @@ interface Props {
   justBranch: JustBranch
   node: JustNode | null
   viewMap: Record<string, WinInfo>
+  closeWin: (winId: string) => void
+  activeWin: (winId: string) => void
 }
 
-export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => {
+export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap, closeWin, activeWin }) => {
   const layoutId = "just-layout"
   const refNode = useRef<HTMLDivElement>(null);
 
@@ -34,7 +36,13 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
   return (
     <div className="just-node" ref={refNode}>
       {node?.type === 'stack' && (
-        <JustWinView justStack={node} justBranch={justBranch} viewMap={viewMap} />
+        <JustWinView
+          justStack={node}
+          justBranch={justBranch}
+          viewMap={viewMap}
+          closeWin={closeWin}
+          activeWin={activeWin}
+        />
       )}
       {node?.type === 'split' && (
         <div key={`JustNode-${justBranch.join(",")}`}
@@ -53,7 +61,13 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
               minWidth: 0,
             }}
           >
-            <JustNodeView node={node.first} justBranch={[...justBranch, "first"]} viewMap={viewMap} />
+            <JustNodeView
+              node={node.first}
+              justBranch={[...justBranch, "first"]}
+              viewMap={viewMap}
+              closeWin={closeWin}
+              activeWin={activeWin}
+            />
           </div>
 
           <JustSplit
@@ -65,7 +79,13 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
           />
 
           <div className="just-second">
-            <JustNodeView node={node.second} justBranch={[...justBranch, "second"]} viewMap={viewMap} />
+            <JustNodeView
+              node={node.second}
+              justBranch={[...justBranch, "second"]}
+              viewMap={viewMap}
+              closeWin={closeWin}
+              activeWin={activeWin}
+            />
           </div>
         </div>
       )}

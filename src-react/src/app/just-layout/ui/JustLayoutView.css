@@ -1,12 +1,10 @@
 .just-layout {
     width: 100%;
     height: 100%;
+    --title-bg-color: #1e1f22;
+    --title-font-color: rgb(255, 255, 255, 0.7);
 }
 
-.just-layout.thema-dark {
-    --title-bg-color: #1e1f22;
-    --title-font-color: #dfe1e5;
-}
 
 .just-node {
     width: 100%;
@@ -21,13 +19,12 @@
 }
 
 .just-win .just-win-title {
+    flex: 0 0 40px;
     display: flex;
     box-sizing: border-box;
 }
 
-.just-win-title .just-active {
-    border-bottom: 4px solid gray;
-}
+
 
 .just-win-title .just-title-list {
     flex: 1;
@@ -70,11 +67,25 @@
 }
 .just-win-title { display: flex;}
 .just-draggable-title {
-    display: flex; margin: 0; padding: 0; height: 25px;
+    display: flex;
+    margin: 0;
+    padding: 3px;
+    height: 100%;
     align-items: center;
+    white-space: nowrap;
     background-color: var(--title-bg-color);
     color: var(--title-font-color);
     font-size: 12px;
+    border-bottom: 4px solid transparent;
+    box-sizing: border-box;
 }
-.just-draggable-title .just-icon { flex: 1 1 20px; }
+.just-draggable-title.just-active {
+    border-bottom: 4px solid #3574f0;
+    box-sizing: border-box;
+}
+.just-draggable-title .just-icon { display: flex; flex: 0 0 25px; align-items: center; justify-content: center}
+.just-icon svg {
+    width: 16px; height: 16px;
+    color: rgb(255, 255, 255, 0.3);
+}
 .just-draggable-title .just-title { flex: 1; }

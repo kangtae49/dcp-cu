@@ -38,13 +38,36 @@ export function JustLayoutView({viewMap, initialValue}: Props) {
     // dispatch(justLayoutActions.insertWin({ branch: ['second', 'second'], winId: "winId04", direction: 'row', pos: 'stack' }))
 
   })
+  const closeWin = (winId: string) => {
+    console.log("closeWin", winId)
+    dispatch(
+      justLayoutActions.removeWin({
+        winId
+      })
+    )
+  }
+  const activeWin = (winId: string) => {
+    console.log("activeWin", winId)
+    dispatch(
+      justLayoutActions.activeWin({
+        winId
+      })
+    )
+  }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={classNames(
         "just-layout",
         // "thema-dark"
       )}>
-        {justLayoutState && <JustNodeView node={justLayoutState.layout} justBranch={[]} viewMap={viewMap}/>}
+        {justLayoutState && <JustNodeView
+            node={justLayoutState.layout}
+            justBranch={[]}
+            viewMap={viewMap}
+            closeWin={closeWin}
+            activeWin={activeWin}
+        />}
       </div>
     </DndProvider>
   )

@@ -26,7 +26,7 @@ function JustWinBodyView (props: Prop) {
   const { viewMap, justBranch, justStack } = props;
 
   const {
-    // state: justLayoutState,
+    state: justLayoutState,
     actions: justLayoutActions
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
   const dispatch = useAppDispatch();
@@ -44,10 +44,17 @@ function JustWinBodyView (props: Prop) {
       })
     )
   }
-
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: ['DRAG-SOURCE-JUST-TITLE'],
+      canDrop: () => {
+        let canDrop = true;
+        if (justStack.active !== null && !(viewMap[justStack.active].canDrop ?? true)) {
+          canDrop = false
+        }
+        return canDrop;
+      },
+      // canDrop: () => true,
       collect: (monitor: DropTargetMonitor) => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
@@ -65,6 +72,9 @@ function JustWinBodyView (props: Prop) {
       hover(item: DragItem, monitor) {
         if (!ref.current) {
           return
+        }
+        if(!monitor.canDrop()) {
+          return;
         }
         // if (item.winId === justStack.active) {
         //   return
@@ -92,7 +102,7 @@ function JustWinBodyView (props: Prop) {
           console.log('item: ', item, percentX, percentY)
         }
       }
-    }),
+    }), [justStack, justLayoutState]
   )
   // console.log("JustWinBodyView", justStack)
   drop(ref)

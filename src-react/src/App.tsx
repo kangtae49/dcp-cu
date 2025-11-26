@@ -6,13 +6,23 @@ import type {JustNode, WinInfo} from "@/app/just-layout/justLayoutSlice.ts";
 
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons"
-import TopMenuBar from "@/app/top-menu-bar/TopMenuBar.tsx";
+// import TopMenuBar from "@/app/top-menu-bar/TopMenuBar.tsx";
+import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
+import SideMenu from "@/app/side-menu/SideMenu.tsx";
 
 const viewMap: Record<string, WinInfo> = {
   "about": {
     title: "About",
     icon: <Icon icon={faCircleQuestion} />,
     view: <AboutView/>
+  },
+  "side-bar": {
+    title: "Menu",
+    icon: <Icon icon={faCircleQuestion} />,
+    view: <SideMenu />,
+    canDrag: false,
+    canDrop: false,
+    // showClose: false,
   },
   "winId02": {
     title: "About",
@@ -44,8 +54,8 @@ const initialValue: JustNode = {
   splitPercentage: 50,
   first: {
     type: 'stack',
-    tabs: ['about'],
-    active: 'about'
+    tabs: ['side-bar'],
+    active: 'side-bar'
   },
   second: {
     type: 'split',
@@ -68,8 +78,11 @@ function App() {
 
   return (
     <div className="just-app">
-      <TopMenuBar />
-      <JustLayoutView viewMap={viewMap} initialValue={initialValue} />
+      {/*<TopMenuBar />*/}
+      <div className="just-container">
+        <JustToolBar />
+        <JustLayoutView viewMap={viewMap} initialValue={initialValue} />
+      </div>
       {/*<VideoView />*/}
     </div>
   )
