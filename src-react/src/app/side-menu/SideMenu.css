@@ -1,0 +1,38 @@
+.side-menu {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.side-menu .side-menu-title {
+    flex: 0 0 40px;
+    display: flex;
+    align-items: center;
+    background-color: #2e2e2e;
+    color: white;
+    /*justify-content: center;*/
+}
+
+.side-menu-title .side-menu-name {
+    flex: 1;
+}
+.side-menu-title .side-menu-minimize {
+    flex: 0 0 25px;
+}
+
+.side-menu .side-menu-items {
+    padding: 5px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.side-menu .side-menu-item {
+    white-space: nowrap;
+}
+
+.side-menu-icon {
+    align-items: center;
+    justify-content: center;
+}
