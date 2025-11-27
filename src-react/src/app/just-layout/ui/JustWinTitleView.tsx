@@ -14,7 +14,7 @@ import {
 import JustDraggableTitle, {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
-import {useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 
 
 interface Prop {
@@ -27,6 +27,7 @@ interface Prop {
 
 function JustWinTitleView({justBranch, justStack, viewMap, closeWin, activeWin}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
+  const [rect, setRect] = useState<DOMRect | null>(null)
   const {
     // state: justLayoutState,
     actions: justLayoutActions
@@ -71,6 +72,30 @@ function JustWinTitleView({justBranch, justStack, viewMap, closeWin, activeWin}:
   )
 
   drop(ref)
+
+  useEffect(() => {
+    if (ref.current === null) return;
+
+    function update() {
+      if (ref.current === null) return;
+      const newRect = ref.current?.getBoundingClientRect() ?? null;
+      console.log("parent Rect:", newRect)
+      setRect(newRect)
+    }
+    update();
+
+    const observer = new ResizeObserver(update);
+    observer.observe(ref.current);
+
+    window.addEventListener("scroll", update, true);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", update, true);
+    };
+  }, []);
+
+
   return (
     <div
       className={classNames("just-win-title")}
@@ -85,6 +110,7 @@ function JustWinTitleView({justBranch, justStack, viewMap, closeWin, activeWin}:
             winInfo={viewMap[winId]}
             activeWin={activeWin}
             closeWin={closeWin}
+            rect={rect}
           />
         )}
       </div>

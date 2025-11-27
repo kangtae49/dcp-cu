@@ -3,6 +3,7 @@
     height: 100%;
     --title-bg-color: #1e1f22;
     --title-font-color: rgb(255, 255, 255, 0.7);
+    --splitter-color: #7d7e81;
 }
 
 
@@ -47,17 +48,18 @@
 .just-layout .just-splitter {
     flex: 0 0 3px;
     box-sizing: border-box;
+    background-color: #b8b6b0;
 }
 
 .just-row > .just-splitter {
     cursor: ew-resize;
-    border-left: 1px solid #393b40;
-    border-right: 1px solid gray;
+    border-left: 1px solid var(--splitter-color);
+    border-right: 1px solid var(--splitter-color);
 }
 .just-column > .just-splitter {
     cursor: ns-resize;
-    border-top: 1px solid #393b40;
-    border-bottom: 1px solid gray;
+    border-top: 1px solid var(--splitter-color);
+    border-bottom: 1px solid var(--splitter-color);
 }
 
 .dragging {

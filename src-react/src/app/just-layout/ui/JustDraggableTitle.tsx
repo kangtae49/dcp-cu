@@ -1,4 +1,4 @@
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {
   type JustBranch,
   type JustDirection,
@@ -27,10 +27,11 @@ interface Prop {
   justStack: JustStack
   closeWin: (winId: string) => void
   activeWin: (winId: string) => void
+  rect: DOMRect | null
 }
 
 function JustDraggableTitle(props: Prop) {
-  const { winInfo, justBranch, winId, justStack, closeWin, activeWin } = props;
+  const { winInfo, justBranch, winId, justStack, closeWin, activeWin, rect: parentRect } = props;
   const ref = useRef<HTMLDivElement>(null)
 
   const [{ isDragging }, drag] = useDrag(
@@ -83,6 +84,21 @@ function JustDraggableTitle(props: Prop) {
       item.index = targetIndex
     }
   })
+
+  useEffect(() => {
+    if (ref.current == null) return;
+    if (parentRect == null) return;
+    if (justStack.active !== winId) return;
+    const rect = ref.current.getBoundingClientRect();
+
+    if (parentRect.left > rect.left || parentRect.right < rect.right) {
+      ref.current.scrollIntoView({
+        behavior: 'auto',
+        block: 'center',
+        inline: 'center'
+      })
+    }
+  }, [ref.current, parentRect])
 
   drag(drop(ref))
 

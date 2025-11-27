@@ -29,10 +29,17 @@
 }
 
 .side-menu .side-menu-item {
+    display: flex;
     white-space: nowrap;
+    align-items: center;
+    /*justify-content: center;*/
 }
 
 .side-menu-icon {
     align-items: center;
     justify-content: center;
+}
+
+.side-menu-name {
+    padding-left: 5px;
 }
