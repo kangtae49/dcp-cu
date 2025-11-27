@@ -103,7 +103,8 @@ export function activeWinId(layout: JustNode | null, winId: string): JustNode | 
 export function removeEmpty(layout: JustNode | null): JustNode | null {
   if (layout == null) return layout;
   const branch = findEmptyBranch(layout)
-  if (branch === null || branch.length === 0) return layout;
+  if (branch === null) return layout
+  if (branch.length === 0) return null
   const lastSplitType = branch[branch.length - 1]
   const parentBranch = branch.slice(0, -1)
   const otherSplitType = lastSplitType === 'first' ? 'second' : 'first'

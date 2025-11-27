@@ -100,7 +100,7 @@ export const createJustLayoutSlice = (id: string) =>
       setLayout: (state, { payload }: {payload: JustNode}) => { state.layout = payload },
       insertWin: (state, { payload }: {payload: JustPayloadInsert}) => {
         state.layout = insertWinId(
-          current(state.layout),
+          state.layout == null ? null : current(state.layout),
           payload.winId,
           payload.branch,
           payload.pos,
@@ -111,26 +111,26 @@ export const createJustLayoutSlice = (id: string) =>
       },
       removeWin: (state, { payload }: {payload: JustPayloadRemove}) => {
         state.layout = removeEmpty(removeWinId(
-          current(state.layout),
+          state.layout == null ? null : current(state.layout),
           payload.winId
         ))
       },
       activeWin: (state, { payload }: {payload: JustPayloadActive}) => {
         state.layout = activeWinId(
-          current(state.layout),
+          state.layout == null ? null : current(state.layout),
           payload.winId
         )
       },
       updateResize: (state, { payload }: {payload: JustPayloadResize}) => {
         state.layout = updateSplitPercentage(
-          current(state.layout),
+          state.layout == null ? null : current(state.layout),
           payload.branch,
           payload.splitPercentage
         )
       },
       moveWin: (state, { payload }: {payload: JustPayloadMoveWin}) => {
         state.layout = removeEmpty(moveWinId(
-          current(state.layout),
+          state.layout == null ? null : current(state.layout),
           payload.winId,
           payload.branch,
           payload.pos,
