@@ -13,12 +13,27 @@ import classNames from "classnames";
 function JustToolBar() {
   const {
     state: justLayoutState,
-    // actions: justLayoutActions
+    actions: justLayoutActions,
+    dispatch
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
 
+  const toggleSideMenu = () => {
+    if (hasWinId(justLayoutState?.layout ?? null, "side-bar")) {
+      dispatch(justLayoutActions.removeWin({
+        winId: "side-bar"
+      }))
+    } else {
+      dispatch(justLayoutActions.insertWin({
+        branch: [], direction: "row", index: -1, pos: "first", winId: "side-bar", splitPercentage: 25,
+      }))
+    }
+  }
   return (
     <div className="just-tool-bar">
-      <div className={classNames("just-app-icon", {"on": hasWinId(justLayoutState?.layout ?? null, "side-bar")})}>
+      <div
+        className={classNames("just-app-icon", {"on": hasWinId(justLayoutState?.layout ?? null, "side-bar")})}
+        onClick={toggleSideMenu}
+      >
         <IconLogo />
       </div>
       <div className="just-tool-center">

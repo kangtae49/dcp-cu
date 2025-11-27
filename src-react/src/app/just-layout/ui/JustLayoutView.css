@@ -65,7 +65,7 @@
     border: 1px dashed gray;
     box-sizing: border-box;
 }
-.just-win-title { display: flex;}
+.just-win-title { display: flex; background-color: var(--title-bg-color);}
 .just-draggable-title {
     display: flex;
     margin: 0;

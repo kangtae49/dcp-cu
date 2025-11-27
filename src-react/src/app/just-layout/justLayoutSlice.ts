@@ -37,6 +37,7 @@ export interface JustPayloadInsert {
   direction: JustDirection
   pos: JustPos
   index: number
+  splitPercentage: number
 }
 
 export interface JustPayloadRemove {
@@ -88,6 +89,7 @@ export interface WinInfo {
   canDrag?: boolean
   canDrop?: boolean
   showClose?: boolean
+  showTitle?: boolean
 }
 
 export const createJustLayoutSlice = (id: string) =>
@@ -103,7 +105,8 @@ export const createJustLayoutSlice = (id: string) =>
           payload.branch,
           payload.pos,
           payload.direction,
-          payload.index
+          payload.index,
+          payload.splitPercentage
         )
       },
       removeWin: (state, { payload }: {payload: JustPayloadRemove}) => {

@@ -8,7 +8,7 @@ import update from "immutability-helper"
 import clamp from "lodash/clamp";
 
 
-export function insertWinId(layout: JustNode | null, winId: string, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
+export function insertWinId(layout: JustNode | null, winId: string, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number, splitPercentage: number): JustNode | null {
   if (layout == null) {
     // stack
     return {
@@ -47,7 +47,7 @@ export function insertWinId(layout: JustNode | null, winId: string, branch: Just
           tabs: [winId],
           active: winId,
         },
-        splitPercentage: 50,
+        splitPercentage: splitPercentage,
       }
     })
   } else if (pos === 'first') {
@@ -61,7 +61,7 @@ export function insertWinId(layout: JustNode | null, winId: string, branch: Just
           active: winId,
         },
         second: targetNode,
-        splitPercentage: 50,
+        splitPercentage: splitPercentage,
       }
     })
   }
@@ -145,7 +145,7 @@ export function findEmptyBranch(layout: JustNode | null): JustBranch | null {
 
 export function moveWinId(layout: JustNode | null, winId: string, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
   const newLayout = removeWinId(layout, winId)
-  return insertWinId(newLayout, winId, branch, pos, direction, index)
+  return insertWinId(newLayout, winId, branch, pos, direction, index, 50)
 
 }
 

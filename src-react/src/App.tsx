@@ -22,6 +22,7 @@ const viewMap: Record<string, WinInfo> = {
     view: <SideMenu />,
     canDrag: false,
     canDrop: false,
+    showTitle: false,
     // showClose: false,
   },
   "winId02": {
