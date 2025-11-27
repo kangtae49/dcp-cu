@@ -90,4 +90,12 @@
     width: 16px; height: 16px;
     color: rgb(255, 255, 255, 0.3);
 }
-.just-draggable-title .just-title { flex: 1; }
+.just-draggable-title .just-title {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.just-draggable-title>div {
+    height: 100%;
+}
