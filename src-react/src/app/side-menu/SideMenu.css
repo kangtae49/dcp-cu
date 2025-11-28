@@ -11,10 +11,14 @@
     background-color: #2e2e2e;
     color: white;
     /*justify-content: center;*/
+    min-width: 0;
 }
 
 .side-menu-title .side-menu-name {
-    flex: 1;
+    flex: 1 1 auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .side-menu-title .side-menu-icon {
     flex: 0 0 26px;

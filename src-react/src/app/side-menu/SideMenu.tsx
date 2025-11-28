@@ -1,5 +1,5 @@
 import "./SideMenu.css"
-import Avatar from 'react-avatar';
+import Jdenticon from "react-jdenticon";
 import IconMinimize from "@/assets/minimize.svg?react"
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {
@@ -32,15 +32,21 @@ function SideMenu() {
       </div>
       <div className="side-menu-items">
         <div className="side-menu-item" onClick={() => openWin("demo")}>
-          <Avatar name="D" size="30" round={true} maxInitials={2} textSizeRatio={2} textMarginRatio={0.2} title="메뉴1" />
+          <div className="side-menu-icon">
+            <Jdenticon size="25" value="demo" />
+          </div>
           <div className="side-menu-name">Demo</div>
         </div>
         <div className="side-menu-item">
-          <Avatar name="ㅁ 2" size="30" round={true} maxInitials={2} textSizeRatio={2} textMarginRatio={0.2} title="메뉴2" />
+          <div className="side-menu-icon">
+            <Jdenticon size="25" value="메뉴2" />
+          </div>
           <div className="side-menu-name">메뉴2</div>
         </div>
         <div className="side-menu-item">
-          <Avatar name="ㅁ 3" size="30" round={true} maxInitials={2} textSizeRatio={2} textMarginRatio={0.2} title="메뉴3" />
+          <div className="side-menu-icon">
+            <Jdenticon size="25" value="메뉴3" />
+          </div>
           <div className="side-menu-name">메뉴3</div>
         </div>
       </div>

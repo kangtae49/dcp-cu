@@ -10,6 +10,7 @@ import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons"
 import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
 import SideMenu from "@/app/side-menu/SideMenu.tsx";
 import DemoView from "@/app/demo/DemoView.tsx";
+import Jdenticon from "react-jdenticon";
 
 const viewMap: Record<string, WinInfo> = {
   "side-menu": {
@@ -23,27 +24,27 @@ const viewMap: Record<string, WinInfo> = {
   },
   "demo": {
     title: "Demo",
-    icon: <Icon icon={faCircleQuestion} />,
+    icon: <Jdenticon size="30" value="demo" />,
     view: <DemoView />
   },
   "about": {
     title: "About",
-    icon: <Icon icon={faCircleQuestion} />,
+    icon: <Jdenticon size="30" value="about" />,
     view: <AboutView />
   },
   "winId02": {
-    title: "About(winId02)",
-    icon: <Icon icon={faCircleQuestion} />,
+    title: "winId02",
+    icon: <Jdenticon size="30" value="winId02" />,
     view: <AboutView />
   },
   "winId03": {
-    title: "About(winId03)",
-    icon: <Icon icon={faCircleQuestion} />,
+    title: "winId03",
+    icon: <Jdenticon size="30" value="winId03" />,
     view: <AboutView />
   },
   "winId04": {
-    title: "About(winId04)",
-    icon: <Icon icon={faCircleQuestion} />,
+    title: "winId04",
+    icon: <Jdenticon size="30" value="winId04" />,
     view: <AboutView />
   },
 }
