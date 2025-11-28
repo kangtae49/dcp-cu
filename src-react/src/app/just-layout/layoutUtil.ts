@@ -1,6 +1,6 @@
 import type {
   JustBranch, JustDirection,
-  JustNode,
+  JustNode, JustPayloadInsert,
   JustPos,
   JustStack,
 } from "@/app/just-layout/justLayoutSlice.ts";
@@ -8,64 +8,64 @@ import update from "immutability-helper"
 import clamp from "lodash/clamp";
 
 
-export function insertWinId(layout: JustNode | null, winId: string, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number, splitPercentage: number): JustNode | null {
+export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert): JustNode | null {
   if (layout == null) {
     // stack
     return {
       type: "stack",
       tabs: [
-        winId,
+        payload.winId,
       ],
-      active: winId,
+      active: payload.winId,
     } as JustStack
   }
-  const targetNode = getNodeByBranch(layout, branch)
+  const targetNode = getNodeByBranch(layout, payload.branch)
   const targetType = targetNode.type
-  if (pos === 'stack' && targetType === 'stack') {
+  if (payload.pos === 'stack' && targetType === 'stack') {
     const targetTabs = (targetNode as JustStack).tabs
 
-    const newIndex = index >= 0 ? clamp(index, 0, targetTabs.length) : targetTabs.length;
-    return updateNodeOfBranch(layout, branch, {
+    const newIndex = payload.index >= 0 ? clamp(payload.index, 0, targetTabs.length) : targetTabs.length;
+    return updateNodeOfBranch(layout, payload.branch, {
       $set: {
         type: "stack",
         tabs: [
           ...targetTabs.slice(0, newIndex),
-          winId,
+          payload.winId,
           ...targetTabs.slice(newIndex),
         ],
-        active: winId,
+        active: payload.winId,
       }
     })
-  } else if (pos === 'second') {
-    return updateNodeOfBranch(layout, branch, {
+  } else if (payload.pos === 'second') {
+    return updateNodeOfBranch(layout, payload.branch, {
       $set: {
         type: "split",
-        direction: direction,
+        direction: payload.direction,
         first: targetNode,
         second: {
           type: "stack",
-          tabs: [winId],
-          active: winId,
+          tabs: [payload.winId],
+          active: payload.winId,
         },
-        splitPercentage: splitPercentage,
+        splitPercentage: payload.splitPercentage ?? 50,
       }
     })
-  } else if (pos === 'first') {
-    return updateNodeOfBranch(layout, branch, {
+  } else if (payload.pos === 'first') {
+    return updateNodeOfBranch(layout, payload.branch, {
       $set: {
         type: "split",
-        direction: direction,
+        direction: payload.direction,
         first: {
           type: "stack",
-          tabs: [winId],
-          active: winId,
+          tabs: [payload.winId],
+          active: payload.winId,
         },
         second: targetNode,
-        splitPercentage: splitPercentage,
+        splitPercentage: payload.splitPercentage ?? 50,
       }
     })
   }
-  console.log("unknown error pos: ", pos, ", targetType: ", targetType)
+  console.log("unknown error pos: ", payload.pos, ", targetType: ", targetType)
   return null
 
 }
@@ -87,6 +87,21 @@ export function removeWinId(layout: JustNode | null, winId: string): JustNode | 
   })
 }
 
+export function removeAllTabs(layout: JustNode | null, branch: JustBranch): JustNode | null {
+  if (layout == null) return null;
+  const justStack = getNodeByBranch(layout, branch);
+  if (justStack == null) return layout;
+  if (justStack.type !== 'stack') return layout;
+  return updateNodeOfBranch(layout, branch, {
+    $set: {
+      ...justStack,
+      tabs: [],
+      active: null,
+    }
+  })
+}
+
+
 export function activeWinId(layout: JustNode | null, winId: string): JustNode | null {
   if (layout == null) return null;
   const justStack = getNodeByWinId(layout, winId) as unknown as JustStack | null
@@ -99,6 +114,23 @@ export function activeWinId(layout: JustNode | null, winId: string): JustNode | 
   })
 }
 
+export function getActiveWinIds(layout: JustNode | null): string[] {
+  const findFn = (layout: JustNode | null, activeWinIds: string []): string [] => {
+    if( layout === null) return activeWinIds
+    if (layout.type === 'stack') {
+      if (layout.active !== null) {
+        return [...activeWinIds, layout.active]
+      } else {
+        return activeWinIds
+      }
+    } else {
+      const firstActiveWinIds = findFn(layout.first, activeWinIds)
+      return findFn(layout.second, firstActiveWinIds)
+    }
+  }
+
+  return findFn(layout, [])
+}
 
 export function removeEmpty(layout: JustNode | null): JustNode | null {
   if (layout == null) return layout;
@@ -146,7 +178,14 @@ export function findEmptyBranch(layout: JustNode | null): JustBranch | null {
 
 export function moveWinId(layout: JustNode | null, winId: string, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
   const newLayout = removeWinId(layout, winId)
-  return insertWinId(newLayout, winId, branch, pos, direction, index, 50)
+  return insertWinId(newLayout, {
+    winId,
+    branch,
+    pos,
+    direction,
+    index,
+    splitPercentage: 50
+  })
 
 }
 
@@ -180,7 +219,7 @@ function getBranch(layout: JustNode | null, winId: string, branch: JustBranch): 
   }
 }
 
-function getBranchByWinId(layout: JustNode | null, winId: string): JustBranch | null {
+export function getBranchByWinId(layout: JustNode | null, winId: string): JustBranch | null {
   return getBranch(layout, winId, [])
 }
 

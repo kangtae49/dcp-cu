@@ -9,14 +9,10 @@ import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons"
 // import TopMenuBar from "@/app/top-menu-bar/TopMenuBar.tsx";
 import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
 import SideMenu from "@/app/side-menu/SideMenu.tsx";
+import DemoView from "@/app/demo/DemoView.tsx";
 
 const viewMap: Record<string, WinInfo> = {
-  "about": {
-    title: "About",
-    icon: <Icon icon={faCircleQuestion} />,
-    view: <AboutView/>
-  },
-  "side-bar": {
+  "side-menu": {
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
     view: <SideMenu />,
@@ -25,20 +21,30 @@ const viewMap: Record<string, WinInfo> = {
     showTitle: false,
     // showClose: false,
   },
-  "winId02": {
+  "demo": {
+    title: "Demo",
+    icon: <Icon icon={faCircleQuestion} />,
+    view: <DemoView />
+  },
+  "about": {
     title: "About",
     icon: <Icon icon={faCircleQuestion} />,
-    view: <AboutView/>
+    view: <AboutView />
+  },
+  "winId02": {
+    title: "About(winId02)",
+    icon: <Icon icon={faCircleQuestion} />,
+    view: <AboutView />
   },
   "winId03": {
-    title: "About",
+    title: "About(winId03)",
     icon: <Icon icon={faCircleQuestion} />,
-    view: <AboutView/>
+    view: <AboutView />
   },
   "winId04": {
-    title: "About",
+    title: "About(winId04)",
     icon: <Icon icon={faCircleQuestion} />,
-    view: <AboutView/>
+    view: <AboutView />
   },
 }
 
@@ -55,8 +61,8 @@ const initialValue: JustNode = {
   splitPercentage: 50,
   first: {
     type: 'stack',
-    tabs: ['side-bar'],
-    active: 'side-bar'
+    tabs: ['side-menu'],
+    active: 'side-menu'
   },
   second: {
     type: 'split',

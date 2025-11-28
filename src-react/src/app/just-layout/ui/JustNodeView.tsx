@@ -16,11 +16,9 @@ interface Props {
   justBranch: JustBranch
   node: JustNode | null
   viewMap: Record<string, WinInfo>
-  closeWin: (winId: string) => void
-  activeWin: (winId: string) => void
 }
 
-export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap, closeWin, activeWin }) => {
+export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => {
   const layoutId = "just-layout"
   const refNode = useRef<HTMLDivElement>(null);
 
@@ -40,8 +38,6 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap, close
           justStack={node}
           justBranch={justBranch}
           viewMap={viewMap}
-          closeWin={closeWin}
-          activeWin={activeWin}
         />
       )}
       {node?.type === 'split' && (
@@ -65,8 +61,6 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap, close
               node={node.first}
               justBranch={[...justBranch, "first"]}
               viewMap={viewMap}
-              closeWin={closeWin}
-              activeWin={activeWin}
             />
           </div>
 
@@ -83,8 +77,6 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap, close
               node={node.second}
               justBranch={[...justBranch, "second"]}
               viewMap={viewMap}
-              closeWin={closeWin}
-              activeWin={activeWin}
             />
           </div>
         </div>

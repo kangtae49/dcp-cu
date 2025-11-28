@@ -16,7 +16,8 @@ export function useDynamicSlice<
 >(
   id: string,
   // createSliceFn: (id: string) => Slice<State>
-  createSliceFn: (id: string) => Slice
+  createSliceFn: (id: string) => Slice,
+  createThunksFn?: (id: string) => any,
 ) {
   // const slice = getSlice(id) ?? createSliceFn(id);
   // let slice = getSlice(id);
@@ -50,11 +51,34 @@ export function useDynamicSlice<
 
   const state = useAppSelector<State>(id);
   const dispatch = useAppDispatch();
+  const thunks = createThunksFn ? createThunksFn(id) : undefined;
+  // const thunks =
+
   return {
     id,
     slice,
     actions: slice.actions as Actions,
     state,
     dispatch,
+    thunks
+  };
+}
+
+export function createSliceThunk(
+  sliceId: string,
+  fn: (
+    args: any,
+    helpers: {
+      dispatch: AppDispatch;
+      getState: () => RootState;
+      sliceState: any;
+    }
+  ) => void
+) {
+  return function (args: any) {
+    return (dispatch: AppDispatch, getState: () => RootState) => {
+      const sliceState = getState()[sliceId];
+      return fn(args, { dispatch, getState, sliceState });
+    };
   };
 }

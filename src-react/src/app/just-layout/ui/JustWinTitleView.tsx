@@ -1,7 +1,7 @@
 import {type DropTargetMonitor, useDrop} from "react-dnd";
 import classNames from 'classnames';
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons"
+import {faEllipsisVertical, faAngleDown, faCircleXmark} from "@fortawesome/free-solid-svg-icons"
 
 import {
   createJustLayoutSlice,
@@ -15,24 +15,51 @@ import JustDraggableTitle, {type DragItem} from "@/app/just-layout/ui/JustDragga
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {useEffect, useRef, useState} from "react";
+import {Menu, MenuItem} from "@szhsin/react-menu";
+import '@szhsin/react-menu/dist/index.css';
+// import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 
 interface Prop {
   justBranch: JustBranch
   justStack: JustStack
   viewMap: Record<string, WinInfo>
-  closeWin: (winId: string) => void
-  activeWin: (winId: string) => void
 }
 
-function JustWinTitleView({justBranch, justStack, viewMap, closeWin, activeWin}: Prop) {
+function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
   const {
-    // state: justLayoutState,
     actions: justLayoutActions
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
   const dispatch = useAppDispatch();
+
+  const closeWin = (winId: string) => {
+    console.log("closeWin", winId)
+    dispatch(
+      justLayoutActions.removeWin({
+        winId
+      })
+    )
+  }
+
+  const closeAllTabs = (branch: JustBranch) => {
+    dispatch(
+      justLayoutActions.removeAllTabs({
+        branch
+      })
+    )
+  }
+
+  const activeWin = (winId: string) => {
+    console.log("activeWin", winId)
+    dispatch(
+      justLayoutActions.activeWin({
+        winId
+      })
+    )
+  }
+
 
 
   const onDrop = (itemType: any, item: DragItem) => {
@@ -108,14 +135,45 @@ function JustWinTitleView({justBranch, justStack, viewMap, closeWin, activeWin}:
             justBranch={justBranch}
             justStack={justStack}
             winInfo={viewMap[winId]}
-            activeWin={activeWin}
-            closeWin={closeWin}
             rect={rect}
           />
         )}
       </div>
-      <div className="just-title-menu">
-        <Icon icon={faEllipsisVertical} />
+      <div className="just-title-menus">
+        <Menu menuButton={
+          <div className="just-title-menu">
+            <Icon icon={faAngleDown} />
+          </div>
+        }>
+          {justStack.tabs.map(winId =>
+            <MenuItem key={winId} className="just-menu-item">
+              <div className="just-icon" onClick={() => activeWin(winId)}>{viewMap[winId].icon}</div>
+              <div className="just-title" onClick={() => activeWin(winId)}>
+                {viewMap[winId].title}
+              </div>
+
+              {(viewMap[winId].showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {
+                e.stopPropagation();
+                closeWin(winId)
+              }}>
+                  <Icon icon={faCircleXmark}/>
+              </div>}
+            </MenuItem>
+          )}
+        </Menu>
+        <Menu menuButton={
+          <div className="just-title-menu">
+            <Icon icon={faEllipsisVertical} />
+          </div>
+        }>
+          <MenuItem className="just-menu-item" onClick={() => closeAllTabs(justBranch)}>
+            <div className="just-icon" />
+            <div className="just-title">
+              Close All
+            </div>
+
+          </MenuItem>
+        </Menu>
       </div>
     </div>
   )

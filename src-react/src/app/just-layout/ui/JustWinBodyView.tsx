@@ -26,7 +26,6 @@ function JustWinBodyView (props: Prop) {
   const { viewMap, justBranch, justStack } = props;
 
   const {
-    state: justLayoutState,
     actions: justLayoutActions
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
   const dispatch = useAppDispatch();
@@ -102,7 +101,7 @@ function JustWinBodyView (props: Prop) {
           console.log('item: ', item, percentX, percentY)
         }
       }
-    }), [justStack, justLayoutState]
+    }), [justStack]
   )
   // console.log("JustWinBodyView", justStack)
   drop(ref)

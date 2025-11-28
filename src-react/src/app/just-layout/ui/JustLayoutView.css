@@ -33,8 +33,29 @@
     /*cursor: move;*/
     display: flex;
 }
-.just-win-title .just-title-menu {
-    flex: 0 0 25px;
+.just-win-title .just-title-menus {
+    display: flex;
+    align-items: center;
+    padding-right: 3px;
+}
+
+.just-title-menu {
+    flex: 0 0 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.just-title-menu:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.just-title-menu svg {
+    color: white;
 }
 
 .just-win .just-win-body {
@@ -95,7 +116,70 @@
     height: 100%;
     display: flex;
     align-items: center;
+
 }
 .just-draggable-title>div {
+    height: 100%;
+}
+
+.just-title-menus .szh-menu-container {
+    display: flex;
+}
+.just-title-menus .szh-menu {
+    background-color: #2b2d30;
+    color: white;
+    padding: 5px;
+    border: 1px solid #393b40;
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/
+    justify-content: center;
+
+}
+
+.just-title-menus .szh-menu__item {
+    flex: 0 0 26px;
+    display: flex;
+    font-size: 12px;
+    border-radius: 3px;
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    padding: 0;
+
+}
+.just-title-menus .szh-menu__item:hover {
+    background-color: rgba(53, 116, 240, 0.4);
+}
+
+.just-menu-item {
+    display: flex;
+    margin: 0;
+    padding: 3px;
+    height: 100%;
+    align-items: center;
+    white-space: nowrap;
+    background-color: var(--title-bg-color);
+    color: var(--title-font-color);
+    font-size: 12px;
+    /*border-bottom: 4px solid transparent;*/
+    box-sizing: border-box;
+}
+.just-menu-item.just-active {
+    border-bottom: 4px solid #3574f0;
+    box-sizing: border-box;
+}
+.just-menu-item .just-icon { display: flex; flex: 0 0 25px; align-items: center; justify-content: center}
+.just-icon svg {
+    width: 16px; height: 16px;
+    color: rgb(255, 255, 255, 0.3);
+}
+.just-menu-item .just-title {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+}
+.just-menu-item>div {
     height: 100%;
 }

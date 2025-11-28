@@ -16,8 +16,19 @@
 .side-menu-title .side-menu-name {
     flex: 1;
 }
-.side-menu-title .side-menu-minimize {
-    flex: 0 0 25px;
+.side-menu-title .side-menu-icon {
+    flex: 0 0 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 3px;
+    margin-right: 3px;
+    box-sizing: border-box;
+}
+.side-menu-title .side-menu-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .side-menu .side-menu-items {
@@ -32,13 +43,15 @@
     display: flex;
     white-space: nowrap;
     align-items: center;
+    cursor: default;
+    padding: 3px;
     /*justify-content: center;*/
 }
 
-.side-menu-icon {
-    align-items: center;
-    justify-content: center;
+.side-menu .side-menu-item:hover {
+    background-color: #b9dfe8;
 }
+
 
 .side-menu-name {
     padding-left: 5px;

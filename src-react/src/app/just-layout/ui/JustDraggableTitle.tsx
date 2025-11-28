@@ -1,7 +1,8 @@
 import {useEffect, useRef} from "react";
 import {
+  createJustLayoutSlice,
   type JustBranch,
-  type JustDirection,
+  type JustDirection, type JustLayoutActions, type JustLayoutState,
   type JustPos,
   type JustStack,
   type WinInfo
@@ -11,6 +12,8 @@ import type { XYCoord } from 'react-dnd';
 import classnames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons"
+import {useDynamicSlice} from "@/store/hooks.ts";
+import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 
 export interface DragItem {
   justBranch: JustBranch
@@ -25,14 +28,34 @@ interface Prop {
   winId: string
   winInfo: WinInfo
   justStack: JustStack
-  closeWin: (winId: string) => void
-  activeWin: (winId: string) => void
   rect: DOMRect | null
 }
 
 function JustDraggableTitle(props: Prop) {
-  const { winInfo, justBranch, winId, justStack, closeWin, activeWin, rect: parentRect } = props;
+  const { winInfo, justBranch, winId, justStack, rect: parentRect } = props;
   const ref = useRef<HTMLDivElement>(null)
+  const {
+    state: justLayoutState,
+    actions: justLayoutActions,
+    dispatch,
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
+
+  const closeWin = (winId: string) => {
+    console.log("closeWin", winId)
+    dispatch(
+      justLayoutActions.removeWin({
+        winId
+      })
+    )
+  }
+  const activeWin = (winId: string) => {
+    console.log("activeWin", winId)
+    dispatch(
+      justLayoutActions.activeWin({
+        winId
+      })
+    )
+  }
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
@@ -98,7 +121,7 @@ function JustDraggableTitle(props: Prop) {
         inline: 'center'
       })
     }
-  }, [ref.current, parentRect])
+  }, [ref.current, parentRect, justLayoutState])
 
   drag(drop(ref))
 
@@ -115,8 +138,8 @@ function JustDraggableTitle(props: Prop) {
       )}
       ref={ref}
     >
-      <div className="just-icon">{winInfo.icon}</div>
-      <div className="just-title" onClick={() => activeWin(winId)}>{winInfo.title}({winId})</div>
+      <div className="just-icon" onClick={() => activeWin(winId)}>{winInfo.icon}</div>
+      <div className="just-title" onClick={() => activeWin(winId)}>{winInfo.title}</div>
 
       {(winInfo.showClose ?? true) && <div className="just-icon just-close" onClick={() => closeWin(winId)}>
         <Icon icon={faCircleXmark}/>

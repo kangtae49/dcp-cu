@@ -7,31 +7,25 @@ import {
   type JustLayoutState
 } from "@/app/just-layout/justLayoutSlice.ts";
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
-import {hasWinId} from "@/app/just-layout/ui/layoutUtil.ts";
+import {hasWinId} from "@/app/just-layout/layoutUtil.ts";
 import classNames from "classnames";
+import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
 function JustToolBar() {
   const {
     state: justLayoutState,
-    actions: justLayoutActions,
-    dispatch
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
+    // actions: justLayoutActions,
+    dispatch,
+    thunks: justLayoutTrunks
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
 
   const toggleSideMenu = () => {
-    if (hasWinId(justLayoutState?.layout ?? null, "side-bar")) {
-      dispatch(justLayoutActions.removeWin({
-        winId: "side-bar"
-      }))
-    } else {
-      dispatch(justLayoutActions.insertWin({
-        branch: [], direction: "row", index: -1, pos: "first", winId: "side-bar", splitPercentage: 25,
-      }))
-    }
+    dispatch(justLayoutTrunks.toggleSideMenu())
   }
   return (
     <div className="just-tool-bar">
       <div
-        className={classNames("just-app-icon", {"on": hasWinId(justLayoutState?.layout ?? null, "side-bar")})}
+        className={classNames("just-app-icon", {"on": hasWinId(justLayoutState?.layout ?? null, "side-menu")})}
         onClick={toggleSideMenu}
       >
         <IconLogo />

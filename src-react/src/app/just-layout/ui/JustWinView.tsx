@@ -7,11 +7,9 @@ interface Prop {
   justBranch: JustBranch
   justStack: JustStack
   viewMap: Record<string, WinInfo>
-  closeWin: (winId: string) => void
-  activeWin: (winId: string) => void
 }
 
-function JustWinView ({justBranch, justStack, viewMap, closeWin, activeWin}: Prop) {
+function JustWinView ({justBranch, justStack, viewMap}: Prop) {
   const [showTitle, setShowTitle] = useState(true)
   useEffect(() => {
     if (justStack.active === null) {
@@ -27,8 +25,6 @@ function JustWinView ({justBranch, justStack, viewMap, closeWin, activeWin}: Pro
           justBranch={justBranch}
           justStack={justStack}
           viewMap={viewMap}
-          closeWin={closeWin}
-          activeWin={activeWin}
         />
       }
       <JustWinBodyView justBranch={justBranch} justStack={justStack} viewMap={viewMap} />

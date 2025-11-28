@@ -3,10 +3,10 @@ import {type JSX} from "react";
 import {
   activeWinId,
   insertWinId,
-  moveWinId, removeEmpty,
+  moveWinId, removeAllTabs, removeEmpty,
   removeWinId,
   updateSplitPercentage
-} from "@/app/just-layout/ui/layoutUtil.ts";
+} from "@/app/just-layout/layoutUtil.ts";
 
 export type JustDirection = 'row' | 'column';
 export type JustSplitType = 'first' | 'second';
@@ -37,11 +37,14 @@ export interface JustPayloadInsert {
   direction: JustDirection
   pos: JustPos
   index: number
-  splitPercentage: number
+  splitPercentage?: number
 }
 
 export interface JustPayloadRemove {
   winId: string
+}
+export interface JustPayloadAllTabs {
+  branch: JustBranch
 }
 
 export interface JustPayloadActive {
@@ -64,14 +67,6 @@ export interface JustPayloadMoveWin {
   pos: JustPos
   index: number
 }
-
-// export interface JustPayloadMoveSplit {
-//   sourceBranch: JustBranch
-//   targetBranch: JustBranch
-//   winId: string
-//   direction: JustDirection
-//   split: JustSplitType
-// }
 
 export interface JustLayoutState {
   layout: JustNode | null
@@ -101,18 +96,19 @@ export const createJustLayoutSlice = (id: string) =>
       insertWin: (state, { payload }: {payload: JustPayloadInsert}) => {
         state.layout = insertWinId(
           state.layout == null ? null : current(state.layout),
-          payload.winId,
-          payload.branch,
-          payload.pos,
-          payload.direction,
-          payload.index,
-          payload.splitPercentage
+          payload
         )
       },
       removeWin: (state, { payload }: {payload: JustPayloadRemove}) => {
         state.layout = removeEmpty(removeWinId(
           state.layout == null ? null : current(state.layout),
           payload.winId
+        ))
+      },
+      removeAllTabs: (state, { payload }: {payload: JustPayloadAllTabs}) => {
+        state.layout = removeEmpty(removeAllTabs(
+          state.layout == null ? null : current(state.layout),
+          payload.branch
         ))
       },
       activeWin: (state, { payload }: {payload: JustPayloadActive}) => {
@@ -138,9 +134,6 @@ export const createJustLayoutSlice = (id: string) =>
           payload.index
         ))
       },
-      // hasWin: (state, { payload }: {payload: JustPayloadHasWin}) => {
-      //   return getNodeByWinId(current(state.layout), payload.winId) != null
-      // },
     }
   })
 
