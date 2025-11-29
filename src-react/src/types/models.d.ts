@@ -6,6 +6,7 @@
 */
 
 export type DialogType = "OPEN" | "FOLDER" | "SAVE";
+export type PyAction = "PY_SHELL_STDOUT" | "PY_SHELL_STATUS";
 
 export interface DialogOptions {
   dialog_type?: DialogType;
@@ -24,6 +25,9 @@ export interface DropFile {
   size: number;
   type: string;
   pywebview_full_path: string;
+}
+export interface PyEvent {
+  action: PyAction;
 }
 export interface Sub {
   fullpath: string;

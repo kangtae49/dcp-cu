@@ -11,6 +11,7 @@ import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
 import SideMenu from "@/app/side-menu/SideMenu.tsx";
 import DemoView from "@/app/demo/DemoView.tsx";
 import Jdenticon from "react-jdenticon";
+import PyListener from "@/app/listeners/PyListener.tsx";
 
 const viewMap: Record<string, WinInfo> = {
   "side-menu": {
@@ -85,14 +86,17 @@ const initialValue: JustNode = {
 function App() {
 
   return (
-    <div className="just-app">
-      {/*<TopMenuBar />*/}
-      <div className="just-container">
-        <JustToolBar />
-        <JustLayoutView viewMap={viewMap} initialValue={initialValue} />
+    <>
+      <PyListener />
+      <div className="just-app">
+        {/*<TopMenuBar />*/}
+        <div className="just-container">
+          <JustToolBar />
+          <JustLayoutView viewMap={viewMap} initialValue={initialValue} />
+        </div>
+        {/*<VideoView />*/}
       </div>
-      {/*<VideoView />*/}
-    </div>
+    </>
   )
 }
 

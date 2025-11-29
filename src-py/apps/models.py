@@ -32,3 +32,11 @@ class Sub(BaseModel):
     priority: int
     src: str
 
+
+class PyAction(str, Enum):
+    PY_JOB_STDOUT = "PY_SHELL_STDOUT"
+    PY_JOB_STATUS = "PY_SHELL_STATUS"
+
+class PyEvent(BaseModel):
+    action: PyAction
+
