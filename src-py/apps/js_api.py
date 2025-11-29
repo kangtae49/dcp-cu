@@ -12,7 +12,7 @@ from typing import Optional
 import webview
 import pysubs2
 from charset_normalizer import from_path
-from apps.models import DialogType, DialogOptions, Sub
+from apps.models import DialogType, DialogOptions, Sub, PyEvent, PyAction, StreamType
 
 # MUSIC_PLAYER_SETTING = 'music-player.setting.json'
 # MOVIE_PLAYER_SETTING = 'movie-player.setting.json'
@@ -206,22 +206,50 @@ class JsApi:
             raise ApiException(f"not format: {p}")
         return subs.to_string(encoding='utf-8', format_="vtt")
 
+    def send_event(self, event: PyEvent):
+        window = webview.active_window()
+        if window:
+            window.evaluate_js(f"""
+                window.dispatchEvent(
+                    new CustomEvent("py-event", {{detail: {event.model_dump_json()}}} )
+                );
+            """)
 
-    def start_script(self, job_id: str, script_path: str):
+    def read_stream(self, stream, stream_type: StreamType, job_id: str):
+        for line in stream:
+            msg = line.rstrip()
+            self.send_event(
+                PyEvent(
+                    action=PyAction.PY_JOB_STDOUT,
+                    message=msg,
+                    message_type=stream_type,
+                    job_id=job_id
+                ))
+
+    def start_script(self, job_id: str, subpath: str, args: list[str] = []):
+
+        appdata = Path(os.getenv("APPDATA"))
+        script_path = appdata.joinpath(APP_NAME).joinpath(subpath)
+        interpreter = appdata.joinpath(APP_NAME).joinpath(".venv/Scripts/python.exe")
+        print(script_path, interpreter)
+        print(f"start_script: ", job_id, subpath, args)
         def runner():
             try:
                 p = subprocess.Popen(
-                    ['python.exe', script_path],
+                    [interpreter, script_path] + args,
                     stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
+                    stderr=subprocess.PIPE,
+                    # stderr=subprocess.STDOUT,
                     text=True,
                     bufsize=1,
                 )
                 with process_lock:
                     processes[job_id] = p
 
-                for line in p.stdout:
-                    print(line, end='')
+                # for line in p.stdout:
+                #     print(line, end='', flush=True)
+                threading.Thread(target=self.read_stream, args=(p.stdout, StreamType.STDOUT, job_id), daemon=True).start()
+                threading.Thread(target=self.read_stream, args=(p.stderr, StreamType.STDERR, job_id), daemon=True).start()
 
                 rc = p.wait()
             finally:
@@ -233,6 +261,7 @@ class JsApi:
 
 
     def stop_script(self, job_id: str):
+        print(f"stop_script: ", job_id)
         with process_lock:
             p = processes.get(job_id)
 

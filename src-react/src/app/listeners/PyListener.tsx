@@ -8,8 +8,8 @@ import type {PyEvent} from "@/types/models";
 function PyListener() {
   useEffect(() => {
     const handler = (e: CustomEvent<PyEvent>) => {
-      const action = e.detail.action;
-      console.log(action)
+      const pyEvent = e.detail;
+      console.log(pyEvent)
     }
     window.addEventListener("py-event", handler as EventListener);
     return () => {

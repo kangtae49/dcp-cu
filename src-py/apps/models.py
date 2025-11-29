@@ -37,6 +37,13 @@ class PyAction(str, Enum):
     PY_JOB_STDOUT = "PY_SHELL_STDOUT"
     PY_JOB_STATUS = "PY_SHELL_STATUS"
 
+class StreamType(str, Enum):
+    STDOUT = "STDOUT"
+    STDERR = "STDERR"
+
 class PyEvent(BaseModel):
     action: PyAction
+    job_id: str = ""
+    message: str = ""
+    message_type: StreamType
 

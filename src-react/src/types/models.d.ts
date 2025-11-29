@@ -7,6 +7,7 @@
 
 export type DialogType = "OPEN" | "FOLDER" | "SAVE";
 export type PyAction = "PY_SHELL_STDOUT" | "PY_SHELL_STATUS";
+export type StreamType = "STDOUT" | "STDERR";
 
 export interface DialogOptions {
   dialog_type?: DialogType;
@@ -28,6 +29,9 @@ export interface DropFile {
 }
 export interface PyEvent {
   action: PyAction;
+  job_id?: string;
+  message?: string;
+  message_type: StreamType;
 }
 export interface Sub {
   fullpath: string;
