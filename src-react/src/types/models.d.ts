@@ -6,8 +6,9 @@
 */
 
 export type DialogType = "OPEN" | "FOLDER" | "SAVE";
-export type PyAction = "PY_SHELL_STDOUT" | "PY_SHELL_STATUS";
+export type JobStatus = "RUNNING" | "STOPPED" | "DONE";
 export type StreamType = "STDOUT" | "STDERR";
+export type PyAction = "PY_JOB_STREAM" | "PY_JOB_STATUS" | "PY_JOB_ERROR";
 
 export interface DialogOptions {
   dialog_type?: DialogType;
@@ -27,11 +28,21 @@ export interface DropFile {
   type: string;
   pywebview_full_path: string;
 }
-export interface PyEvent {
-  action: PyAction;
-  job_id?: string;
+export interface JobDataError {
+  message?: string;
+}
+export interface JobDataStatus {
+  status: JobStatus;
+}
+export interface JobDataStream {
   message?: string;
   message_type: StreamType;
+}
+export interface PyEvent {
+  job_id?: string;
+  action: PyAction;
+  job_data: JobDataStream | JobDataStatus | JobDataError;
+  timestamp?: number;
 }
 export interface Sub {
   fullpath: string;

@@ -1,6 +1,7 @@
+import time
 from typing import List
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DialogType(str, Enum):
@@ -33,17 +34,35 @@ class Sub(BaseModel):
     src: str
 
 
+class JobStatus(str, Enum):
+    RUNNING = "RUNNING"
+    STOPPED = "STOPPED"
+    DONE = "DONE"
+
 class PyAction(str, Enum):
-    PY_JOB_STDOUT = "PY_SHELL_STDOUT"
-    PY_JOB_STATUS = "PY_SHELL_STATUS"
+    PY_JOB_STREAM = "PY_JOB_STREAM"
+    PY_JOB_STATUS = "PY_JOB_STATUS"
+    PY_JOB_ERROR = "PY_JOB_ERROR"
 
 class StreamType(str, Enum):
     STDOUT = "STDOUT"
     STDERR = "STDERR"
 
-class PyEvent(BaseModel):
-    action: PyAction
-    job_id: str = ""
+class JobDataStream(BaseModel):
     message: str = ""
     message_type: StreamType
+
+class JobDataStatus(BaseModel):
+    status: JobStatus
+
+class JobDataError(BaseModel):
+    message: str = ""
+
+JobData = JobDataStream | JobDataStatus | JobDataError
+
+class PyEvent(BaseModel):
+    job_id: str = ""
+    action: PyAction
+    job_data: JobData
+    timestamp: int = Field(default_factory=lambda: int(time.time()*1000))
 

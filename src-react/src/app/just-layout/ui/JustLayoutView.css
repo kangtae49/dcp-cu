@@ -124,6 +124,7 @@
 
 .just-title-menus .szh-menu-container {
     display: flex;
+    background-color: #2b2d30;
 }
 .just-title-menus .szh-menu {
     background-color: #2b2d30;
@@ -132,24 +133,23 @@
     border: 1px solid #393b40;
     display: flex;
     flex-direction: column;
-    /*align-items: center;*/
     justify-content: center;
-
+    outline: none;
 }
 
 .just-title-menus .szh-menu__item {
+    background-color: #2b2d30;
     flex: 0 0 26px;
     display: flex;
     font-size: 12px;
     border-radius: 3px;
-    /*align-items: center;*/
-    /*justify-content: center;*/
     padding: 0;
-
+    outline: none;
 }
 .just-title-menus .szh-menu__item:hover {
     background-color: rgba(53, 116, 240, 0.4);
 }
+
 
 .just-menu-item {
     display: flex;

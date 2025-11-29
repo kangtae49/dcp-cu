@@ -16,7 +16,7 @@ import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {useEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
-import '@szhsin/react-menu/dist/index.css';
+// import '@szhsin/react-menu/dist/index.css';
 // import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 
@@ -171,6 +171,7 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
             <div className="just-title">
               Close All
             </div>
+            <div className="just-icon" />
 
           </MenuItem>
         </Menu>

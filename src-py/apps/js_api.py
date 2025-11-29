@@ -12,7 +12,8 @@ from typing import Optional
 import webview
 import pysubs2
 from charset_normalizer import from_path
-from apps.models import DialogType, DialogOptions, Sub, PyEvent, PyAction, StreamType
+from apps.models import DialogType, DialogOptions, Sub, PyEvent, PyAction, StreamType, JobData, \
+    JobDataStatus, JobStatus, JobDataError, JobDataStream
 
 # MUSIC_PLAYER_SETTING = 'music-player.setting.json'
 # MOVIE_PLAYER_SETTING = 'movie-player.setting.json'
@@ -206,7 +207,7 @@ class JsApi:
             raise ApiException(f"not format: {p}")
         return subs.to_string(encoding='utf-8', format_="vtt")
 
-    def send_event(self, event: PyEvent):
+    def dispatch_event(self, event: PyEvent):
         window = webview.active_window()
         if window:
             window.evaluate_js(f"""
@@ -214,16 +215,16 @@ class JsApi:
                     new CustomEvent("py-event", {{detail: {event.model_dump_json()}}} )
                 );
             """)
+        print(f"dispatch_event: {event}")
 
-    def read_stream(self, stream, stream_type: StreamType, job_id: str):
+    def dispatch_job_stream(self, stream: str, job_id: str, stream_type: StreamType):
         for line in stream:
             msg = line.rstrip()
-            self.send_event(
+            self.dispatch_event(
                 PyEvent(
-                    action=PyAction.PY_JOB_STDOUT,
-                    message=msg,
-                    message_type=stream_type,
-                    job_id=job_id
+                    action=PyAction.PY_JOB_STREAM,
+                    job_id=job_id,
+                    job_data=JobDataStream(message=msg, message_type=stream_type)
                 ))
 
     def start_script(self, job_id: str, subpath: str, args: list[str] = []):
@@ -233,6 +234,16 @@ class JsApi:
         interpreter = appdata.joinpath(APP_NAME).joinpath(".venv/Scripts/python.exe")
         print(script_path, interpreter)
         print(f"start_script: ", job_id, subpath, args)
+        self.dispatch_event(
+            PyEvent(
+                action=PyAction.PY_JOB_STATUS,
+                job_id=job_id,
+                job_data=JobDataStatus(
+                    status=JobStatus.RUNNING
+                )
+            )
+        )
+
         def runner():
             try:
                 p = subprocess.Popen(
@@ -248,13 +259,23 @@ class JsApi:
 
                 # for line in p.stdout:
                 #     print(line, end='', flush=True)
-                threading.Thread(target=self.read_stream, args=(p.stdout, StreamType.STDOUT, job_id), daemon=True).start()
-                threading.Thread(target=self.read_stream, args=(p.stderr, StreamType.STDERR, job_id), daemon=True).start()
+                threading.Thread(target=self.dispatch_job_stream, args=(p.stdout, job_id, StreamType.STDOUT), daemon=True).start()
+                threading.Thread(target=self.dispatch_job_stream, args=(p.stderr, job_id, StreamType.STDERR), daemon=True).start()
 
                 rc = p.wait()
             finally:
                 with process_lock:
                     processes.pop(job_id, None)
+                print("finally")
+                self.dispatch_event(
+                    PyEvent(
+                        action=PyAction.PY_JOB_STATUS,
+                        job_id=job_id,
+                        job_data=JobDataStatus(
+                            status=JobStatus.DONE
+                        )
+                    )
+                )
 
         t = threading.Thread(target=runner, daemon=True)
         t.start()
@@ -266,7 +287,16 @@ class JsApi:
             p = processes.get(job_id)
 
         if not p:
-            return {"status": "error", "message": "process not found"}
+            self.dispatch_event(
+                PyEvent(
+                    action=PyAction.PY_JOB_ERROR,
+                    job_id=job_id,
+                    job_data=JobDataError(
+                        message="not found process"
+                    )
+                )
+            )
+            return
 
         try:
             p.terminate()
@@ -278,6 +308,22 @@ class JsApi:
 
             threading.Thread(target=killer, args=(p,), daemon=True).start()
 
-            return {"status": "ok", "message": "terminating"}
+            self.dispatch_event(
+                PyEvent(
+                    action=PyAction.PY_JOB_STATUS,
+                    job_id=job_id,
+                    job_data=JobDataStatus(
+                        status=JobStatus.STOPPED
+                    )
+                )
+            )
         except Exception as e:
-            return {"status": "error", "message": str(e)}
+            self.dispatch_event(
+                PyEvent(
+                    action=PyAction.PY_JOB_ERROR,
+                    job_id=job_id,
+                    job_data=JobDataError(
+                        message=str(e)
+                    )
+                )
+            )
