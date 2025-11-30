@@ -12,4 +12,7 @@ dependencies = [
     "pydantic-to-typescript",
     "pysubs2",
     "charset_normalizer",
+    "pandas",
+    "openpyxl",
+    "watchdog",
 ]

@@ -11,7 +11,8 @@ import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
 import SideMenu from "@/app/side-menu/SideMenu.tsx";
 import DemoView from "@/app/demo/DemoView.tsx";
 import Jdenticon from "react-jdenticon";
-import PyListener from "@/app/listeners/PyListener.tsx";
+import PyJobListener from "@/app/listeners/PyJobListener.tsx";
+import PyWatchListener from "@/app/listeners/PyWatchListener.tsx";
 
 const viewMap: Record<string, WinInfo> = {
   "side-menu": {
@@ -87,7 +88,8 @@ function App() {
 
   return (
     <>
-      <PyListener />
+      <PyJobListener />
+      <PyWatchListener />
       <div className="just-app">
         {/*<TopMenuBar />*/}
         <div className="just-container">

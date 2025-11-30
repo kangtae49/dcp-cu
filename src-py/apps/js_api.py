@@ -7,13 +7,17 @@ import glob
 import fnmatch
 import ctypes
 from pathlib import Path
-from typing import List
+from typing import List, Any
 from typing import Optional
 import webview
 import pysubs2
 from charset_normalizer import from_path
-from apps.models import DialogType, DialogOptions, Sub, PyEvent, PyAction, StreamType, JobData, \
+from pandas._typing import IntStrT
+
+from apps.event_util import dispatch_job_event
+from apps.models import DialogType, DialogOptions, Sub, PyJobEvent, PyAction, StreamType, JobData, \
     JobDataStatus, JobStatus, JobDataError, JobDataStream
+import pandas as pd
 
 # MUSIC_PLAYER_SETTING = 'music-player.setting.json'
 # MOVIE_PLAYER_SETTING = 'movie-player.setting.json'
@@ -207,24 +211,14 @@ class JsApi:
             raise ApiException(f"not format: {p}")
         return subs.to_string(encoding='utf-8', format_="vtt")
 
-    def dispatch_event(self, event: PyEvent):
-        window = webview.active_window()
-        if window:
-            window.evaluate_js(f"""
-                window.dispatchEvent(
-                    new CustomEvent("py-event", {{detail: {event.model_dump_json()}}} )
-                );
-            """)
-        print(f"dispatch_event: {event}")
-
     def dispatch_job_stream(self, stream: str, job_id: str, stream_type: StreamType):
         for line in stream:
             msg = line.rstrip()
-            self.dispatch_event(
-                PyEvent(
+            dispatch_job_event(
+                PyJobEvent(
                     action=PyAction.PY_JOB_STREAM,
                     job_id=job_id,
-                    job_data=JobDataStream(message=msg, message_type=stream_type)
+                    data=JobDataStream(message=msg, message_type=stream_type)
                 ))
 
     def start_script(self, job_id: str, subpath: str, args: list[str] = []):
@@ -234,11 +228,11 @@ class JsApi:
         interpreter = appdata.joinpath(APP_NAME).joinpath(".venv/Scripts/python.exe")
         print(script_path, interpreter)
         print(f"start_script: ", job_id, subpath, args)
-        self.dispatch_event(
-            PyEvent(
+        dispatch_job_event(
+            PyJobEvent(
                 action=PyAction.PY_JOB_STATUS,
                 job_id=job_id,
-                job_data=JobDataStatus(
+                data=JobDataStatus(
                     status=JobStatus.RUNNING
                 )
             )
@@ -267,11 +261,11 @@ class JsApi:
                 with process_lock:
                     processes.pop(job_id, None)
                 print("finally")
-                self.dispatch_event(
-                    PyEvent(
+                dispatch_job_event(
+                    PyJobEvent(
                         action=PyAction.PY_JOB_STATUS,
                         job_id=job_id,
-                        job_data=JobDataStatus(
+                        data=JobDataStatus(
                             status=JobStatus.DONE
                         )
                     )
@@ -287,11 +281,11 @@ class JsApi:
             p = processes.get(job_id)
 
         if not p:
-            self.dispatch_event(
-                PyEvent(
+            dispatch_job_event(
+                PyJobEvent(
                     action=PyAction.PY_JOB_ERROR,
                     job_id=job_id,
-                    job_data=JobDataError(
+                    data=JobDataError(
                         message="not found process"
                     )
                 )
@@ -308,29 +302,40 @@ class JsApi:
 
             threading.Thread(target=killer, args=(p,), daemon=True).start()
 
-            self.dispatch_event(
-                PyEvent(
+            dispatch_job_event(
+                PyJobEvent(
                     action=PyAction.PY_JOB_STATUS,
                     job_id=job_id,
-                    job_data=JobDataStatus(
+                    data=JobDataStatus(
                         status=JobStatus.STOPPED
                     )
                 )
             )
         except Exception as e:
-            self.dispatch_event(
-                PyEvent(
+            dispatch_job_event(
+                PyJobEvent(
                     action=PyAction.PY_JOB_ERROR,
                     job_id=job_id,
-                    job_data=JobDataError(
+                    data=JobDataError(
                         message=str(e)
                     )
                 )
             )
     def start_data_file(self, subpath: str):
         appdata = Path(os.getenv("APPDATA"))
-        file_path = appdata.joinpath(APP_NAME).joinpath(subpath)
+        file_path = appdata.joinpath(APP_NAME).joinpath("data").joinpath(subpath)
         os.startfile(file_path)
 
     def start_file(self, filepath: str):
         os.startfile(filepath)
+
+    def read_data_excel(self, subpath: str, sheet_name: str | int | list[IntStrT] | None = 0) -> dict[str, list[dict[str, Any]]]:
+        appdata = Path(os.getenv("APPDATA"))
+        file_path = appdata.joinpath(APP_NAME).joinpath("data").joinpath(subpath)
+        dfs = pd.read_excel(file_path, sheet_name=sheet_name, dtype=str, engine="openpyxl")
+
+        if isinstance(dfs, pd.DataFrame):
+            return {str(sheet_name): dfs.to_dict(orient="records")}
+
+        return {str(k): v.to_dict(orient="records") for k, v in dfs.items()}
+

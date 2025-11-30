@@ -13,7 +13,14 @@ function DemoView() {
   }
 
   const openSetting = () => {
-    window.pywebview.api.start_data_file('data/설정1.xlsx')
+    window.pywebview.api.start_data_file('설정1.xlsx')
+  }
+
+  const readExcel = () => {
+    window.pywebview.api.read_data_excel('설정1.xlsx', null).then(res => {
+      console.log(res)
+
+    })
   }
 
   return (
@@ -28,6 +35,10 @@ function DemoView() {
 
       <div onClick={() => openSetting()}>
         Open Setting
+      </div>
+
+      <div onClick={() => readExcel()}>
+        read Excel
       </div>
 
     </div>

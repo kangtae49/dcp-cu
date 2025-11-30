@@ -39,10 +39,16 @@ class JobStatus(str, Enum):
     STOPPED = "STOPPED"
     DONE = "DONE"
 
+class WatchStatus(str, Enum):
+    CREATED = "CREATED"
+    MODIFIED = "MODIFIED"
+    DELETED = "DELETED"
+
 class PyAction(str, Enum):
     PY_JOB_STREAM = "PY_JOB_STREAM"
     PY_JOB_STATUS = "PY_JOB_STATUS"
     PY_JOB_ERROR = "PY_JOB_ERROR"
+    PY_WATCH_FILE = "PY_WATCH_FILE"
 
 class StreamType(str, Enum):
     STDOUT = "STDOUT"
@@ -58,11 +64,19 @@ class JobDataStatus(BaseModel):
 class JobDataError(BaseModel):
     message: str = ""
 
+class WatchFile(BaseModel):
+    status: WatchStatus
+    path: str
+    mtime: int
+
 JobData = JobDataStream | JobDataStatus | JobDataError
 
-class PyEvent(BaseModel):
+class PyJobEvent(BaseModel):
     job_id: str = ""
     action: PyAction
-    job_data: JobData
+    data: JobData
     timestamp: int = Field(default_factory=lambda: int(time.time()*1000))
 
+class PyWatchEvent(BaseModel):
+    action: PyAction
+    data: WatchFile

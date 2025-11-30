@@ -8,7 +8,8 @@
 export type DialogType = "OPEN" | "FOLDER" | "SAVE";
 export type JobStatus = "RUNNING" | "STOPPED" | "DONE";
 export type StreamType = "STDOUT" | "STDERR";
-export type PyAction = "PY_JOB_STREAM" | "PY_JOB_STATUS" | "PY_JOB_ERROR";
+export type PyAction = "PY_JOB_STREAM" | "PY_JOB_STATUS" | "PY_JOB_ERROR" | "PY_WATCH_FILE";
+export type WatchStatus = "CREATED" | "MODIFIED" | "DELETED";
 
 export interface DialogOptions {
   dialog_type?: DialogType;
@@ -38,11 +39,19 @@ export interface JobDataStream {
   message?: string;
   message_type: StreamType;
 }
-export interface PyEvent {
+export interface PyJobEvent {
   job_id?: string;
   action: PyAction;
-  job_data: JobDataStream | JobDataStatus | JobDataError;
+  data: JobDataStream | JobDataStatus | JobDataError;
   timestamp?: number;
+}
+export interface PyWatchEvent {
+  action: PyAction;
+  data: WatchFile;
+}
+export interface WatchFile {
+  status: WatchStatus;
+  path: string;
 }
 export interface Sub {
   fullpath: string;

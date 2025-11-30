@@ -1,12 +1,13 @@
 import os
 import sys
 import argparse
+import threading
+
 import webview
 
 from apps import js_api
 from apps.listeners.window_event_listener import WindowEventListener
-
-
+from apps.watch_dir import start_watchdog
 
 api = js_api.JsApi()
 window_listener = None
@@ -63,6 +64,12 @@ def run():
 
     # events
     WindowEventListener(window, api)
+
+    threading.Thread(
+        target=start_watchdog,
+        args=(window, ),
+        daemon=True
+    ).start()
 
     webview.start(debug=debug)
     # webview.start(debug=False)
