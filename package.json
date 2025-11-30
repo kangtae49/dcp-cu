@@ -5,6 +5,7 @@
     "py": "cd src-react && pnpm py",
     "models": "cd src-react && pnpm models",
     "start-redux-devtools": "cd src-react && pnpm start-redux-devtools",
-    "redux-devtools-app": "npx redux-devtools-app"
+    "redux-devtools-app": "npx redux-devtools-app",
+    "installer": "cd src-py && setup.cmd"
   }
 }

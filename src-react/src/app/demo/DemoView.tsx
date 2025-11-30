@@ -12,15 +12,24 @@ function DemoView() {
       })
   }
 
+  const openSetting = () => {
+    window.pywebview.api.start_data_file('data/설정1.xlsx')
+  }
+
   return (
     <div className="demo">
       <div>Demo</div>
       <div onClick={() => startScript()}>
-        Start
+        Start Job
       </div>
       <div onClick={() => stopScript()}>
-        Stop
+        Stop Job
       </div>
+
+      <div onClick={() => openSetting()}>
+        Open Setting
+      </div>
+
     </div>
   )
 }

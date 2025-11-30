@@ -327,3 +327,10 @@ class JsApi:
                     )
                 )
             )
+    def start_data_file(self, subpath: str):
+        appdata = Path(os.getenv("APPDATA"))
+        file_path = appdata.joinpath(APP_NAME).joinpath(subpath)
+        os.startfile(file_path)
+
+    def start_file(self, filepath: str):
+        os.startfile(filepath)
