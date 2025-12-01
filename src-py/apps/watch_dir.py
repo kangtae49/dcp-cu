@@ -33,8 +33,8 @@ class MyHandler(FileSystemEventHandler):
         except FileNotFoundError:
             return
 
-        if self.last_mtime.get(file_path) == mtime:
-            return
+        # if self.last_mtime.get(file_path) == mtime:
+        #     return
 
         self.last_mtime[file_path] = mtime
 

@@ -361,6 +361,7 @@ class JsApi:
             dfs = pd.read_excel(xlsx, sheet_name=0, dtype=str, engine="openpyxl")
             if isinstance(dfs, pd.Series):
                 dfs = dfs.to_frame()
+            dfs = dfs.fillna("")
             result = {key: dfs.to_dict(orient="records")}
 
             # if isinstance(dfs, pd.DataFrame):

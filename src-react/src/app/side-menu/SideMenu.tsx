@@ -37,11 +37,11 @@ function SideMenu() {
           </div>
           <div className="side-menu-name">Demo</div>
         </div>
-        <div className="side-menu-item">
+        <div className="side-menu-item"  onClick={() => openWin("demo-grid")}>
           <div className="side-menu-icon">
-            <Jdenticon size="25" value="메뉴2" />
+            <Jdenticon size="25" value="demo-grid" />
           </div>
-          <div className="side-menu-name">메뉴2</div>
+          <div className="side-menu-name">Demo Grid</div>
         </div>
         <div className="side-menu-item">
           <div className="side-menu-icon">

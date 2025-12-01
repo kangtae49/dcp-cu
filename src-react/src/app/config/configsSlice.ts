@@ -1,16 +1,19 @@
 import {createSlice} from "@reduxjs/toolkit";
 
+export interface ConfigsState {
+  configs: Record<string, Record<string, string> []>
+}
 
-const initialState = {
-  configs: {} as Record<string, any>,
+const initialState: ConfigsState = {
+  configs: {} as Record<string, Record<string, string> []>,
 }
 
 export interface ConfigsPayloadSetConfig {
   key: string,
-  val: any
+  val: Record<string, string> []
 }
 export interface ConfigsPayloadUpdateConfigs {
-  configs: Record<string, any>,
+  configs: Record<string, Record<string, string> []>,
 }
 
 

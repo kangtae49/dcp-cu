@@ -1,6 +1,7 @@
 import webview
 from webview.window import Window
 from apps.models import PyJobEvent, PyWatchEvent
+import threading
 
 
 def dispatch_job_event(event: PyJobEvent):
@@ -13,8 +14,8 @@ def dispatch_job_event(event: PyJobEvent):
             """)
     print(f"dispatch_event: {event}")
 
+
 def dispatch_watch_event(window: Window, event: PyWatchEvent):
-    # window = webview.active_window()
     if window:
         window.evaluate_js(f"""
                 window.dispatchEvent(
@@ -22,3 +23,7 @@ def dispatch_watch_event(window: Window, event: PyWatchEvent):
                 );
             """)
     print(f"dispatch_event: {event}")
+
+
+def dispatch_watch_event_delay(window: Window, event: PyWatchEvent, delay=0.3):
+    threading.Timer(delay, dispatch_watch_event, args=(window, event)).start()

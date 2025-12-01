@@ -16,6 +16,7 @@ import PyWatchListener from "@/app/listeners/PyWatchListener.tsx";
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {type ConfigsActions, type ConfigsSlice, createConfigsSlice} from "@/app/config/configsSlice.ts";
 import {useEffect, useState} from "react";
+import DemoGridView from "@/app/demo/DemoGridView.tsx";
 
 const viewMap: Record<string, WinInfo> = {
   "side-menu": {
@@ -31,6 +32,11 @@ const viewMap: Record<string, WinInfo> = {
     title: "Demo",
     icon: <Jdenticon size="30" value="demo" />,
     view: <DemoView />
+  },
+  "demo-grid": {
+    title: "Demo Grid",
+    icon: <Jdenticon size="30" value="demo-grid" />,
+    view: <DemoGridView />
   },
   "about": {
     title: "About",
@@ -76,8 +82,8 @@ const initialValue: JustNode = {
     splitPercentage: 50,
     first: {
       type: 'stack',
-      tabs: ['winId02'],
-      active: 'winId02'
+      tabs: ['demo-grid'],
+      active: 'demo-grid'
     },
     second: {
       type: 'stack',
@@ -89,7 +95,9 @@ const initialValue: JustNode = {
 
 function App() {
   const [isPywebviewReady, setIsPywebviewReady] = useState(false);
-  const { actions: ConfigsActions, dispatch } = useDynamicSlice<ConfigsSlice, ConfigsActions>("CONFIGS", createConfigsSlice)
+  const {
+    actions: configsActions, dispatch
+  } = useDynamicSlice<ConfigsSlice, ConfigsActions>("CONFIGS", createConfigsSlice)
 
   useEffect(() => {
 
@@ -109,10 +117,10 @@ function App() {
     if(!isPywebviewReady) return;
     console.log("api", window.pywebview.api)
     window.pywebview.api.read_config("설정1.xlsx").then(res => {
-      dispatch(ConfigsActions.updateConfigs({ configs: res}))
+      dispatch(configsActions.updateConfigs({ configs: res}))
     })
     window.pywebview.api.read_config("설정2.xlsx").then(res => {
-      dispatch(ConfigsActions.updateConfigs({ configs: res}))
+      dispatch(configsActions.updateConfigs({ configs: res}))
     })
   }, [isPywebviewReady])
 
