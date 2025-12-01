@@ -13,6 +13,8 @@ class MyHandler(FileSystemEventHandler):
         self.last_mtime = {}
         self.window = window
         self.exts = ['.xlsx', '.xls']
+        appdata = Path(os.getenv("APPDATA"))
+        self.data_path = appdata.joinpath(APP_NAME).joinpath("data")
 
     def dispatch(self, event):
         if event.is_directory:
@@ -21,6 +23,9 @@ class MyHandler(FileSystemEventHandler):
 
         ext = file_path.suffix.lower()
         if ext not in self.exts:
+            return
+
+        if file_path.name.startswith("~"):
             return
 
         try:
@@ -42,6 +47,7 @@ class MyHandler(FileSystemEventHandler):
             data=WatchFile(
                 status=WatchStatus.MODIFIED,
                 path=event.src_path,
+                key=str(Path(event.src_path).relative_to(self.data_path)),
                 mtime=int(Path(event.src_path).stat().st_mtime * 1000)
             )
         ))
@@ -52,6 +58,7 @@ class MyHandler(FileSystemEventHandler):
             data=WatchFile(
                 status=WatchStatus.CREATED,
                 path=event.src_path,
+                key=str(Path(event.src_path).relative_to(self.data_path)),
                 mtime=int(Path(event.src_path).stat().st_mtime * 1000)
             )
         ))
@@ -62,12 +69,13 @@ class MyHandler(FileSystemEventHandler):
             data=WatchFile(
                 status=WatchStatus.DELETED,
                 path=event.src_path,
+                key=str(Path(event.src_path).relative_to(self.data_path)),
                 mtime=int(time.time()*1000)
             )
         ))
 
 
-def start_watchdog(window):
+def start_watchdog_data(window):
     print("start watchdog")
     appdata = Path(os.getenv("APPDATA"))
     path = appdata.joinpath(APP_NAME).joinpath("data")

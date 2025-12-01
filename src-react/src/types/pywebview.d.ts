@@ -13,6 +13,7 @@ declare global {
         start_data_file(subpath: string): Promise<void>,
         start_file(filepath: string): Promise<void>,
         read_data_excel(subpath: string, sheet_name: SheetName): Promise<Record<string, any>>,
+        read_config(subpath: string): Promise<Record<string, any>>,
       },
     },
 

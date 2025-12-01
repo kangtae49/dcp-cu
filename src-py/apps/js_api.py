@@ -329,13 +329,46 @@ class JsApi:
     def start_file(self, filepath: str):
         os.startfile(filepath)
 
-    def read_data_excel(self, subpath: str, sheet_name: str | int | list[IntStrT] | None = 0) -> dict[str, list[dict[str, Any]]]:
+    # def read_data_excel(self, subpath: str, sheet_name: str | int | list[IntStrT] | None = 0) -> dict[str, list[dict[str, Any]]]:
+    #     appdata = Path(os.getenv("APPDATA"))
+    #     file_path = appdata.joinpath(APP_NAME).joinpath("data").joinpath(subpath)
+    #     result = {}
+    #     with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
+    #         sheet_names = xlsx.sheet_names
+    #         dfs = pd.read_excel(xlsx, sheet_name=sheet_name, dtype=str, engine="openpyxl")
+    #
+    #         if isinstance(dfs, pd.DataFrame):
+    #             if isinstance(sheet_name, int):
+    #                 name = sheet_names[sheet_name]
+    #             else:
+    #                 name = str(sheet_name)
+    #             result = {name: dfs.to_dict(orient="records")}
+    #         else:
+    #             for k, v in dfs.items():
+    #                 if isinstance(k, int):
+    #                     name = sheet_names[k]
+    #                 else:
+    #                     name = str(k)
+    #                 result[name] = v.to_dict(orient="records")
+    #     return result
+
+
+    def read_config(self, key: str) -> dict[str, list[dict[str, Any]]]:
         appdata = Path(os.getenv("APPDATA"))
-        file_path = appdata.joinpath(APP_NAME).joinpath("data").joinpath(subpath)
-        dfs = pd.read_excel(file_path, sheet_name=sheet_name, dtype=str, engine="openpyxl")
+        file_path = appdata.joinpath(APP_NAME).joinpath("data").joinpath(key)
+        result = {}
+        with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
+            dfs = pd.read_excel(xlsx, sheet_name=0, dtype=str, engine="openpyxl")
+            if isinstance(dfs, pd.Series):
+                dfs = dfs.to_frame()
+            result = {key: dfs.to_dict(orient="records")}
 
-        if isinstance(dfs, pd.DataFrame):
-            return {str(sheet_name): dfs.to_dict(orient="records")}
+            # if isinstance(dfs, pd.DataFrame):
+            #     result = {key: dfs.to_dict(orient="records")}
+            # else:
+            #     for k, v in dfs.items():
+            #         result = {key: v.to_dict(orient="records")}
+            #         break
 
-        return {str(k): v.to_dict(orient="records") for k, v in dfs.items()}
+        return result
 

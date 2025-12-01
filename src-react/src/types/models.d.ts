@@ -52,6 +52,8 @@ export interface PyWatchEvent {
 export interface WatchFile {
   status: WatchStatus;
   path: string;
+  key: string;
+  mtime: number;
 }
 export interface Sub {
   fullpath: string;

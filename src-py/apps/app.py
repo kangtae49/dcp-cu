@@ -7,7 +7,7 @@ import webview
 
 from apps import js_api
 from apps.listeners.window_event_listener import WindowEventListener
-from apps.watch_dir import start_watchdog
+from apps.watch_dir import start_watchdog_data
 
 api = js_api.JsApi()
 window_listener = None
@@ -66,7 +66,7 @@ def run():
     WindowEventListener(window, api)
 
     threading.Thread(
-        target=start_watchdog,
+        target=start_watchdog_data,
         args=(window, ),
         daemon=True
     ).start()

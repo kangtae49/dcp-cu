@@ -13,6 +13,9 @@ import DemoView from "@/app/demo/DemoView.tsx";
 import Jdenticon from "react-jdenticon";
 import PyJobListener from "@/app/listeners/PyJobListener.tsx";
 import PyWatchListener from "@/app/listeners/PyWatchListener.tsx";
+import {useDynamicSlice} from "@/store/hooks.ts";
+import {type ConfigsActions, type ConfigsSlice, createConfigsSlice} from "@/app/config/configsSlice.ts";
+import {useEffect, useState} from "react";
 
 const viewMap: Record<string, WinInfo> = {
   "side-menu": {
@@ -85,6 +88,35 @@ const initialValue: JustNode = {
 }
 
 function App() {
+  const [isPywebviewReady, setIsPywebviewReady] = useState(false);
+  const { actions: ConfigsActions, dispatch } = useDynamicSlice<ConfigsSlice, ConfigsActions>("CONFIGS", createConfigsSlice)
+
+  useEffect(() => {
+
+    window.addEventListener("pywebviewready", handleReady);
+
+    return () => {
+      window.removeEventListener("pywebviewready", handleReady);
+    };
+  }, []);
+
+  function handleReady() {
+    console.log("pywebview is ready!");
+    setIsPywebviewReady(true);
+  }
+
+  useEffect(() => {
+    if(!isPywebviewReady) return;
+    console.log("api", window.pywebview.api)
+    window.pywebview.api.read_config("설정1.xlsx").then(res => {
+      dispatch(ConfigsActions.updateConfigs({ configs: res}))
+    })
+    window.pywebview.api.read_config("설정2.xlsx").then(res => {
+      dispatch(ConfigsActions.updateConfigs({ configs: res}))
+    })
+  }, [isPywebviewReady])
+
+
 
   return (
     <>

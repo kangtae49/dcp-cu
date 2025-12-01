@@ -67,6 +67,7 @@ class JobDataError(BaseModel):
 class WatchFile(BaseModel):
     status: WatchStatus
     path: str
+    key: str
     mtime: int
 
 JobData = JobDataStream | JobDataStatus | JobDataError
