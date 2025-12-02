@@ -117,10 +117,10 @@ function App() {
     if(!isPywebviewReady) return;
     console.log("api", window.pywebview.api)
     window.pywebview.api.read_config("설정1.xlsx").then(res => {
-      dispatch(configsActions.updateConfigs({ configs: res}))
+      dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
     })
     window.pywebview.api.read_config("설정2.xlsx").then(res => {
-      dispatch(configsActions.updateConfigs({ configs: res}))
+      dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
     })
   }, [isPywebviewReady])
 

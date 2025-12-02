@@ -1,19 +1,25 @@
 import {createSlice} from "@reduxjs/toolkit";
 
+export interface ConfigTable {
+  key: string,
+  header: string [],
+  data: Record<string, string> []
+}
+
 export interface ConfigsState {
-  configs: Record<string, Record<string, string> []>
+  configs: Record<string, ConfigTable>
 }
 
 const initialState: ConfigsState = {
-  configs: {} as Record<string, Record<string, string> []>,
+  configs: {} as Record<string, ConfigTable>,
 }
 
 export interface ConfigsPayloadSetConfig {
   key: string,
-  val: Record<string, string> []
+  val: ConfigTable
 }
 export interface ConfigsPayloadUpdateConfigs {
-  configs: Record<string, Record<string, string> []>,
+  configs: Record<string, ConfigTable>,
 }
 
 
@@ -23,7 +29,7 @@ export const createConfigsSlice = (id: string) =>
     initialState,
     reducers: {
       setConfig: (state, { payload }: {payload: ConfigsPayloadSetConfig}) => {
-        state.configs[`${id}_${payload.key}`] = payload.val
+        state.configs[payload.key] = payload.val
       },
       updateConfigs: (state, { payload }: {payload: ConfigsPayloadUpdateConfigs}) => {
         state.configs = {

@@ -362,7 +362,11 @@ class JsApi:
             if isinstance(dfs, pd.Series):
                 dfs = dfs.to_frame()
             dfs = dfs.fillna("")
-            result = {key: dfs.to_dict(orient="records")}
+            result = {
+                'key': key,
+                'header': dfs.columns.to_list(),
+                'data': dfs.to_dict(orient="records"),
+            }
 
             # if isinstance(dfs, pd.DataFrame):
             #     result = {key: dfs.to_dict(orient="records")}

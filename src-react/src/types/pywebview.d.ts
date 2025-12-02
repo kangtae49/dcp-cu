@@ -12,8 +12,8 @@ declare global {
         stop_script(job_id: string): Promise<void>,
         start_data_file(subpath: string): Promise<void>,
         start_file(filepath: string): Promise<void>,
-        read_data_excel(subpath: string, sheet_name: SheetName): Promise<Record<string, any>>,
-        read_config(subpath: string): Promise<Record<string, any>>,
+        read_data_excel(subpath: string, sheet_name: SheetName): Promise<ConfigTable>,
+        read_config(subpath: string): Promise<ConfigTable>,
       },
     },
 

@@ -21,7 +21,9 @@ function PyWatchListener() {
         window.pywebview.api.read_config(watchFile.key).then(res => {
           dispatch(
             configsActions.updateConfigs({
-              configs: res
+              configs: {
+                [watchFile.key]: res
+              }
             })
           )
         })
@@ -29,7 +31,11 @@ function PyWatchListener() {
         dispatch(
           configsActions.updateConfigs({
             configs: {
-              [watchFile.key]: []
+              [watchFile.key]: {
+                key: watchFile.key,
+                header: [],
+                data: []
+              }
             }
           })
         )

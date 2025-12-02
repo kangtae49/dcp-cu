@@ -10,7 +10,7 @@ import time
 
 class MyHandler(FileSystemEventHandler):
     def __init__(self, window):
-        self.last_mtime = {}
+        # self.last_mtime = {}
         self.window = window
         self.exts = ['.xlsx', '.xls']
         appdata = Path(os.getenv("APPDATA"))
@@ -36,7 +36,7 @@ class MyHandler(FileSystemEventHandler):
         # if self.last_mtime.get(file_path) == mtime:
         #     return
 
-        self.last_mtime[file_path] = mtime
+        # self.last_mtime[file_path] = mtime
 
         super().dispatch(event)
 
