@@ -2,19 +2,19 @@ from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-from apps.event_util import dispatch_watch_event
-from apps.js_api import APP_NAME
+from apps.utils.event_util import dispatch_watch_event
 from apps.models import PyWatchEvent, PyAction, WatchFile, WatchStatus
-import os
 import time
 
+from apps.utils.path_util import get_data_path
+
+
 class MyHandler(FileSystemEventHandler):
-    def __init__(self, window):
+    def __init__(self, window, watch_dir):
         # self.last_mtime = {}
         self.window = window
         self.exts = ['.xlsx', '.xls']
-        appdata = Path(os.getenv("APPDATA"))
-        self.data_path = appdata.joinpath(APP_NAME).joinpath("data")
+        self.watch_dir = watch_dir
 
     def dispatch(self, event):
         if event.is_directory:
@@ -28,10 +28,10 @@ class MyHandler(FileSystemEventHandler):
         if file_path.name.startswith("~"):
             return
 
-        try:
-            mtime = file_path.stat().st_mtime
-        except FileNotFoundError:
-            return
+        # try:
+        #     mtime = file_path.stat().st_mtime
+        # except FileNotFoundError:
+        #     return
 
         # if self.last_mtime.get(file_path) == mtime:
         #     return
@@ -47,7 +47,7 @@ class MyHandler(FileSystemEventHandler):
             data=WatchFile(
                 status=WatchStatus.MODIFIED,
                 path=event.src_path,
-                key=str(Path(event.src_path).relative_to(self.data_path)),
+                key=str(Path(event.src_path).relative_to(self.watch_dir)),
                 mtime=int(Path(event.src_path).stat().st_mtime * 1000)
             )
         ))
@@ -58,7 +58,7 @@ class MyHandler(FileSystemEventHandler):
             data=WatchFile(
                 status=WatchStatus.CREATED,
                 path=event.src_path,
-                key=str(Path(event.src_path).relative_to(self.data_path)),
+                key=str(Path(event.src_path).relative_to(self.watch_dir)),
                 mtime=int(Path(event.src_path).stat().st_mtime * 1000)
             )
         ))
@@ -69,7 +69,7 @@ class MyHandler(FileSystemEventHandler):
             data=WatchFile(
                 status=WatchStatus.DELETED,
                 path=event.src_path,
-                key=str(Path(event.src_path).relative_to(self.data_path)),
+                key=str(Path(event.src_path).relative_to(self.watch_dir)),
                 mtime=int(time.time()*1000)
             )
         ))
@@ -77,10 +77,9 @@ class MyHandler(FileSystemEventHandler):
 
 def start_watchdog_data(window):
     print("start watchdog")
-    appdata = Path(os.getenv("APPDATA"))
-    path = appdata.joinpath(APP_NAME).joinpath("data")
-    event_handler = MyHandler(window)
+    watch_dir = get_data_path()
+    event_handler = MyHandler(window, watch_dir)
     observer = Observer()
-    observer.schedule(event_handler, path=path, recursive=True)
+    observer.schedule(event_handler, path=watch_dir, recursive=True)
     observer.start()
 

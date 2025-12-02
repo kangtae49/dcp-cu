@@ -15,7 +15,7 @@ window_listener = None
 
 def get_index_url():
     if hasattr(sys, "_MEIPASS"):
-        # py-desk.exe
+        # dcp-cu.exe
         base_path = sys._MEIPASS
         index_path = os.path.join(base_path, "gui/index.html")
         server_url = f"file://{index_path}"

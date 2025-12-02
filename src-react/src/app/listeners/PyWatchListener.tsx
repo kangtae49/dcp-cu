@@ -9,14 +9,22 @@ import {
 
 
 function PyWatchListener() {
-  const { actions: configsActions, dispatch } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
+  const {
+    state: configsState,
+    actions: configsActions,
+    dispatch
+  } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
 
   useEffect(() => {
+    const keys = configsState!.keys;
+    console.log('keys:', keys)
 
     const handler = (e: CustomEvent<PyWatchEvent>) => {
       const pyWatchEvent = e.detail;
       const watchFile = pyWatchEvent.data;
       console.log(watchFile)
+      if (!keys.includes(watchFile.key)) return;
+
       if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
         window.pywebview.api.read_config(watchFile.key).then(res => {
           dispatch(

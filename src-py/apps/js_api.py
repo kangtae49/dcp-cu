@@ -14,15 +14,18 @@ import pysubs2
 from charset_normalizer import from_path
 from pandas._typing import IntStrT
 
-from apps.event_util import dispatch_job_event
+from apps.constants import APP_NAME
+from apps.utils.event_util import dispatch_job_event
 from apps.models import DialogType, DialogOptions, Sub, PyJobEvent, PyAction, StreamType, JobData, \
     JobDataStatus, JobStatus, JobDataError, JobDataStream
 import pandas as pd
 
+from apps.utils.path_util import get_scripts_path, get_data_path
+
 # MUSIC_PLAYER_SETTING = 'music-player.setting.json'
 # MOVIE_PLAYER_SETTING = 'movie-player.setting.json'
 # MOSAIC_LAYOUT_SETTING = 'mosaic-layout.setting.json'
-APP_NAME = "dcp-cu"
+
 
 processes = {}  # job_id -> Popen
 process_lock = threading.Lock()
@@ -223,9 +226,8 @@ class JsApi:
 
     def start_script(self, job_id: str, subpath: str, args: list[str] = []):
 
-        appdata = Path(os.getenv("APPDATA"))
-        script_path = appdata.joinpath(APP_NAME).joinpath(subpath)
-        interpreter = appdata.joinpath(APP_NAME).joinpath(".venv/Scripts/python.exe")
+        script_path = get_scripts_path().joinpath(subpath)
+        interpreter = get_scripts_path().joinpath(".venv/Scripts/python.exe")
         print(script_path, interpreter)
         print(f"start_script: ", job_id, subpath, args)
         dispatch_job_event(
@@ -322,8 +324,7 @@ class JsApi:
                 )
             )
     def start_data_file(self, subpath: str):
-        appdata = Path(os.getenv("APPDATA"))
-        file_path = appdata.joinpath(APP_NAME).joinpath("data").joinpath(subpath)
+        file_path = get_data_path().joinpath(subpath)
         os.startfile(file_path)
 
     def start_file(self, filepath: str):
@@ -354,8 +355,7 @@ class JsApi:
 
 
     def read_config(self, key: str) -> dict[str, list[dict[str, Any]]]:
-        appdata = Path(os.getenv("APPDATA"))
-        file_path = appdata.joinpath(APP_NAME).joinpath("data").joinpath(key)
+        file_path = get_data_path().joinpath(key)
         result = {}
         with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
             dfs = pd.read_excel(xlsx, sheet_name=0, dtype=str, engine="openpyxl")

@@ -8,10 +8,12 @@ export interface ConfigTable {
 
 export interface ConfigsState {
   configs: Record<string, ConfigTable>
+  keys: string[]
 }
 
 const initialState: ConfigsState = {
   configs: {} as Record<string, ConfigTable>,
+  keys: ["설정1.xlsx", "설정2.xlsx"]
 }
 
 export interface ConfigsPayloadSetConfig {

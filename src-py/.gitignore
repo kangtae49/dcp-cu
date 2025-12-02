@@ -10,3 +10,5 @@ Output/
 
 # Virtual environments
 .venv
+~*
+scripts/data/
