@@ -20,7 +20,7 @@ from apps.models import DialogType, DialogOptions, Sub, PyJobEvent, PyAction, St
     JobDataStatus, JobStatus, JobDataError, JobDataStream
 import pandas as pd
 
-from apps.utils.path_util import get_scripts_path, get_data_path
+from apps.utils.path_util import get_scripts_path, get_data_path, get_python_path
 
 # MUSIC_PLAYER_SETTING = 'music-player.setting.json'
 # MOVIE_PLAYER_SETTING = 'movie-player.setting.json'
@@ -227,9 +227,9 @@ class JsApi:
     def start_script(self, job_id: str, subpath: str, args: list[str] = []):
 
         script_path = get_scripts_path().joinpath(subpath)
-        interpreter = get_scripts_path().joinpath(".venv/Scripts/python.exe")
+        interpreter = get_python_path()
         print(script_path, interpreter)
-        print(f"start_script: ", job_id, subpath, args)
+        print(f"start_script: ", job_id, script_path, subpath, args)
         dispatch_job_event(
             PyJobEvent(
                 action=PyAction.PY_JOB_STATUS,

@@ -18,3 +18,10 @@ def get_scripts_path() -> Path:
         return appdata.joinpath(APP_NAME)
     else:
         return Path(os.curdir).joinpath("scripts")
+
+
+def get_python_path() -> Path:
+    if hasattr(sys, "_MEIPASS"):
+        return get_scripts_path().joinpath(".venv/Scripts/python.exe")
+    else:
+        return Path(os.curdir).joinpath(".venv/Scripts/python.exe")

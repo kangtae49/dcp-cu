@@ -26,6 +26,7 @@ function JustWinBodyView (props: Prop) {
   const { viewMap, justBranch, justStack } = props;
 
   const {
+    // state: justLayoutState,
     actions: justLayoutActions
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
   const dispatch = useAppDispatch();
@@ -109,6 +110,9 @@ function JustWinBodyView (props: Prop) {
     <div
       className={classnames("just-win-body", {"isOver": isOver})}
       ref={ref}
+      // style={{
+      //   pointerEvents: justLayoutState?.isDragging ? "none" : "auto",
+      // }}
     >
       {justStack.active !== null && viewMap[justStack.active].view}
     </div>

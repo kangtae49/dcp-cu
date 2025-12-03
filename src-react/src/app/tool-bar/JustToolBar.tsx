@@ -55,12 +55,21 @@ function JustToolBar() {
             <Icon icon={faGear} />
           </div>
         }>
-          <MenuItem className="just-menu-item" onClick={() => openWin("setting-configs")}>
+          <MenuItem className="just-menu-item" onClick={() => openWin("setting-config1")}>
             <div className="just-icon">
-              <Jdenticon size="25" value="setting-configs" />
+              <Jdenticon size="25" value="setting-config1" />
             </div>
             <div className="just-title">
-              설정
+              설정1
+            </div>
+            <div className="just-icon" />
+          </MenuItem>
+          <MenuItem className="just-menu-item" onClick={() => openWin("setting-config2")}>
+            <div className="just-icon">
+              <Jdenticon size="25" value="setting-config2" />
+            </div>
+            <div className="just-title">
+              설정2
             </div>
             <div className="just-icon" />
           </MenuItem>

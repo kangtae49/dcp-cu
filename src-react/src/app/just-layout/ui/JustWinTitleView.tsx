@@ -126,6 +126,7 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
   return (
     <div
       className={classNames("just-win-title")}
+      tabIndex={1}
     >
       <div className={classNames("just-title-list", {"is-over": isOver})} ref={ref}>
         {justStack.tabs.map(winId =>

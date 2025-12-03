@@ -18,9 +18,14 @@ function ConfigGrid({configKey}: Props) {
     // actions: configsActions,
     // dispatch
   } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
+
+
+
+
   const defaultConfigTable: ConfigTable = {key: configKey, header: [], data: []}
 
   const [configTable, setConfigTable] = useState<ConfigTable>(defaultConfigTable);
+
 
   const getColumns = (header: string[]): Column[] => [
     { columnId: " ", width: 50, resizable: true, },
@@ -28,18 +33,6 @@ function ConfigGrid({configKey}: Props) {
   ]
 
   const [columns, setColumns] = useState<Column[]>(getColumns([]));
-
-  useEffect(() => {
-    if (configsState === undefined) return;
-    setConfigTable(configsState.configs[configKey] ?? defaultConfigTable)
-  }, [configsState, configKey])
-
-
-  useEffect(() => {
-    setColumns(getColumns(configTable.header))
-  }, [configTable])
-
-
 
   const getTableRows = (table: ConfigTable): Row[] => {
     console.log('table:', table)
@@ -68,6 +61,15 @@ function ConfigGrid({configKey}: Props) {
       ]
     }))
   }
+
+  useEffect(() => {
+    if (configsState === undefined) return;
+    const newTable = configsState.configs[configKey] ?? defaultConfigTable;
+    setColumns(getColumns(newTable.header))
+    setConfigTable(configsState.configs[configKey] ?? defaultConfigTable)
+  }, [configsState, configKey])
+
+
 
   const handleColumnResize = (ci: Id, width: number) => {
     setColumns((prevColumns) => {
