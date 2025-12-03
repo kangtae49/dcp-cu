@@ -1,12 +1,13 @@
 .config {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    padding: 5px;
-    flex-direction: column;
-    box-sizing: border-box;
     min-height: 0;
-    min-width: 0;
+
+    padding: 5px;
+    box-sizing: border-box;
+    /*min-width: 0;*/
 }
 
 /*.config .configs-keys {*/
@@ -15,16 +16,17 @@
 /*    flex-direction: column;*/
 /*}*/
 .config .config-key {
+    flex: 0 0 25px;
     display: flex;
     padding: 3px;
 }
 .config .config-table {
     flex: 1;
-    overflow: auto;
-    width: 100%;
-    height: 100%;
     min-height: 0;
-    min-width: 0;
+    overflow: auto;
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*justify-content: flex-start;*/
 }
 
 

@@ -70,13 +70,11 @@ export interface JustPayloadMoveWin {
 
 export interface JustLayoutState {
   layout: JustNode | null
-  canDragStart: boolean
 }
 
 
 const initialState: JustLayoutState = {
   layout: null,
-  canDragStart: true,
 }
 
 export interface WinInfo {
@@ -94,7 +92,6 @@ export const createJustLayoutSlice = (id: string) =>
     name: id,
     initialState,
     reducers: {
-      setCanDragStart: (state, { payload }: {payload: boolean}) => { state.canDragStart = payload },
       setLayout: (state, { payload }: {payload: JustNode}) => { state.layout = payload },
       insertWin: (state, { payload }: {payload: JustPayloadInsert}) => {
         state.layout = insertWinId(
