@@ -32,7 +32,7 @@ function ConfigGrid({configKey}: Props) {
   useEffect(() => {
     if (configsState === undefined) return;
     setConfigTable(configsState.configs[configKey] ?? defaultConfigTable)
-  }, [configsState])
+  }, [configsState, configKey])
 
 
   useEffect(() => {

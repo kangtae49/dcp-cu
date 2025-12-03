@@ -17,6 +17,7 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {type ConfigsActions, type ConfigsSlice, createConfigsSlice} from "@/app/config/configsSlice.ts";
 import {useEffect, useState} from "react";
 import DemoGridView from "@/app/demo/DemoGridView.tsx";
+import ConfigsView from "@/app/config/ui/ConfigsView.tsx";
 
 const viewMap: Record<string, WinInfo> = {
   "side-menu": {
@@ -43,10 +44,10 @@ const viewMap: Record<string, WinInfo> = {
     icon: <Jdenticon size="30" value="about" />,
     view: <AboutView />
   },
-  "winId02": {
-    title: "winId02",
-    icon: <Jdenticon size="30" value="winId02" />,
-    view: <AboutView />
+  "setting-configs": {
+    title: "설정",
+    icon: <Jdenticon size="30" value="setting-configs" />,
+    view: <ConfigsView />
   },
   "winId03": {
     title: "winId03",
