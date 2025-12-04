@@ -43,6 +43,12 @@ function SideMenu() {
           </div>
           <div className="side-menu-name">Demo Grid</div>
         </div>
+        <div className="side-menu-item"  onClick={() => openWin("demo-line-chart")}>
+          <div className="side-menu-icon">
+            <Jdenticon size="25" value="demo-line-chart" />
+          </div>
+          <div className="side-menu-name">Demo Line Chart</div>
+        </div>
         <div className="side-menu-item">
           <div className="side-menu-icon">
             <Jdenticon size="25" value="메뉴3" />

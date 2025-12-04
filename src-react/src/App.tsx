@@ -18,6 +18,7 @@ import {type ConfigsActions, type ConfigsSlice, createConfigsSlice} from "@/app/
 import {useEffect, useState} from "react";
 import DemoGridView from "@/app/demo/DemoGridView.tsx";
 import ConfigView from "@/app/config/ui/ConfigView.tsx";
+import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 
 const viewMap: Record<string, WinInfo> = {
   "side-menu": {
@@ -38,6 +39,11 @@ const viewMap: Record<string, WinInfo> = {
     title: "Demo Grid",
     icon: <Jdenticon size="30" value="demo-grid" />,
     view: <DemoGridView />
+  },
+  "demo-line-chart": {
+    title: "Demo Line Chart",
+    icon: <Jdenticon size="30" value="demo-line-chart" />,
+    view: <DemoLineChartView />
   },
   "about": {
     title: "About",
