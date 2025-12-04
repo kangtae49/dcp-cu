@@ -83,9 +83,11 @@ function ConfigGrid({configKey}: Props) {
   console.log('columns:', columns)
   return (
     <ReactGrid
+      key={configKey}
       rows={getTableRows(configTable)}
       columns={columns}
       stickyTopRows={1}
+      stickyLeftColumns={1}
       enableRangeSelection={true}
       onColumnResized={handleColumnResize}
     />

@@ -29,6 +29,7 @@
     "react-jdenticon": "^1.5.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.5",
+    "react-virtualized-auto-sizer": "^1.0.26",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
