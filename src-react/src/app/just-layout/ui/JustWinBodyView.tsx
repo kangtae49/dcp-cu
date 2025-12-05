@@ -12,7 +12,7 @@ import {
 import {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
-import {useRef} from "react";
+import {Activity, useRef} from "react";
 
 interface Prop {
   justBranch: JustBranch
@@ -111,7 +111,11 @@ function JustWinBodyView (props: Prop) {
       className={classnames("just-win-body", {"isOver": isOver})}
       ref={ref}
     >
-      {justStack.active !== null && viewMap[justStack.active].view}
+      {justStack.tabs.map(winId =>
+        <Activity key={winId} mode={justStack.active === winId ? 'visible' : 'hidden'}>
+          {viewMap[winId].view}
+        </Activity>
+      )}
     </div>
   )
 }

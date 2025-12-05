@@ -80,7 +80,7 @@ const viewMap: Record<string, WinInfo> = {
 // dispatch(justLayoutActions.insertWin({ branch: ['second', 'second'], winId: "winId04", direction: 'row', pos: 'stack' }))
 
 const initialValue: JustNode = {
-  type: 'split',
+  type: 'split-percentage',
   direction: 'row',
   splitPercentage: 50,
   first: {
@@ -89,7 +89,7 @@ const initialValue: JustNode = {
     active: 'side-menu'
   },
   second: {
-    type: 'split',
+    type: 'split-percentage',
     direction: 'column',
     splitPercentage: 50,
     first: {

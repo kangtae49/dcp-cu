@@ -1,4 +1,5 @@
-import {useEffect, useState} from "react";
+import "./ConfigGrid.css"
+import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {
@@ -7,6 +8,7 @@ import {
   type ConfigTable,
   createConfigsSlice
 } from "@/app/config/configsSlice.ts";
+import throttle from "lodash/throttle";
 
 interface Props {
   configKey: string
@@ -19,7 +21,7 @@ function ConfigGrid({configKey}: Props) {
     // dispatch
   } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
 
-
+  const ref = useRef<ReactGrid>(null)
 
 
   const defaultConfigTable: ConfigTable = {key: configKey, header: [], data: []}
@@ -81,16 +83,36 @@ function ConfigGrid({configKey}: Props) {
   }
   console.log('rows:', getTableRows(configTable))
   console.log('columns:', columns)
+
+  const handleScroll = () => {
+    throttledUpdateScroll()
+  }
+
+  const throttledUpdateScroll = throttle(() => {
+    if (ref.current == null) return null;
+    console.log('scroll')
+    ref?.current?.forceUpdate();
+  }, 1000 / 2)
+
   return (
-    <ReactGrid
-      key={configKey}
-      rows={getTableRows(configTable)}
-      columns={columns}
-      stickyTopRows={1}
-      stickyLeftColumns={1}
-      enableRangeSelection={true}
-      onColumnResized={handleColumnResize}
-    />
+    // <AutoSizer>
+    //   {({ height, width }) => (
+    //   )}
+    // </AutoSizer>
+
+  <div className="just-grid" onScroll={handleScroll}>
+      <ReactGrid
+        key={configKey}
+        ref={ref}
+        rows={getTableRows(configTable)}
+        columns={columns}
+        stickyTopRows={1}
+        stickyLeftColumns={1}
+        enableRangeSelection={true}
+        onColumnResized={handleColumnResize}
+        disableVirtualScrolling={false}
+      />
+    </div>
   )
 }
 

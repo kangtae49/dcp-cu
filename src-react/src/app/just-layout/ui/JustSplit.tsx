@@ -7,12 +7,18 @@ import clamp from "lodash/clamp";
 
 const RESIZE_THROTTLE_MS = 1000 / 30; // 30 fps
 
+export interface SplitSize {
+  percentage: number,
+  firstSize: number,
+  secondSize: number
+}
+
 interface Props {
   direction: JustDirection
   justBranch: JustBranch
   containerRef: React.RefObject<HTMLDivElement | null>
-  onChange?: (splitPercentage: number) => void;
-  onRelease?: (splitPercentage: number) => void;
+  onChange?: (splitSize: SplitSize) => void;
+  onRelease?: (splitSize: SplitSize) => void;
 }
 
 function JustSplit({ direction, containerRef, onChange, onRelease }: Props) {
@@ -47,9 +53,9 @@ function JustSplit({ direction, containerRef, onChange, onRelease }: Props) {
     unbindListeners();
     if (containerRef == undefined) return;
 
-    const percentage = calculateRelativePercentage(event, containerRef)
-    if (percentage !== null){
-      onRelease!(percentage);
+    const splitSize = calculateSplitSize(event, containerRef)
+    if (splitSize !== null){
+      onRelease!(splitSize);
     }
   };
 
@@ -59,22 +65,36 @@ function JustSplit({ direction, containerRef, onChange, onRelease }: Props) {
     throttledUpdatePercentage(event, containerRef);
   };
 
-  const calculateRelativePercentage = (event: MouseEvent, containerRef: React.RefObject<HTMLDivElement | null>) => {
+  // const calculateRelativePercentage = (event: MouseEvent, containerRef: React.RefObject<HTMLDivElement | null>) => {
+  //   if (containerRef.current == null) return null;
+  //   const rect = containerRef.current.getBoundingClientRect()
+  //   const MousePos = direction === 'row' ? event.clientX : event.clientY;
+  //   const containerPos = direction === 'row' ? rect.left : rect.top;
+  //   const containerSize = direction === 'row' ? rect.width : rect.height;
+  //   let percentage = (MousePos - containerPos) * 100 / containerSize;
+  //
+  //   percentage = clamp(percentage, 0, 100);
+  //   return percentage;
+  // }
+
+  const calculateSplitSize = (event: MouseEvent, containerRef: React.RefObject<HTMLDivElement | null>): SplitSize | null => {
     if (containerRef.current == null) return null;
     const rect = containerRef.current.getBoundingClientRect()
     const MousePos = direction === 'row' ? event.clientX : event.clientY;
     const containerPos = direction === 'row' ? rect.left : rect.top;
     const containerSize = direction === 'row' ? rect.width : rect.height;
-    let percentage = (MousePos - containerPos) * 100 / containerSize;
+    const firstSize = clamp(MousePos - containerPos, 0, containerSize);
+    const secondSize = clamp(containerSize - firstSize, 0, containerSize);
+    const percentage = clamp(firstSize * 100 / containerSize, 0, 100);
 
-    percentage = clamp(percentage, 0, 100);
-    return percentage;
+    return {percentage, firstSize, secondSize};
   }
+
   const throttledUpdatePercentage = throttle((event: MouseEvent, containerRef: React.RefObject<HTMLDivElement | null>) => {
     if (containerRef.current == null) return null;
-    const percentage = calculateRelativePercentage(event, containerRef)
-    if (percentage !== null) {
-      onChange!(percentage)
+    const splitSize = calculateSplitSize(event, containerRef)
+    if (splitSize !== null) {
+      onChange!(splitSize)
     }
   }, RESIZE_THROTTLE_MS)
 

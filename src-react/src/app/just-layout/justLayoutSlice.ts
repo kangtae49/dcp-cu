@@ -9,11 +9,12 @@ import {
 } from "@/app/just-layout/layoutUtil.ts";
 
 export type JustDirection = 'row' | 'column';
-export type JustSplitType = 'first' | 'second';
+export type JustSplitDirection = 'first' | 'second';
+export type JustSplitType = 'split-percentage' | 'split-pixels';
 
 export type JustNode = JustStack | JustSplit
 
-export type JustBranch = JustSplitType []
+export type JustBranch = JustSplitDirection []
 
 export interface JustStack {
   type: 'stack'
@@ -21,15 +22,34 @@ export interface JustStack {
   active: string | null
 }
 
-export interface JustSplit {
-  type: 'split'
+export type JustSplit = JustSplitPercentage | JustSplitPixels
+// export interface JustSplit {
+//   type: 'split'
+//   direction: JustDirection
+//   first: JustNode
+//   second: JustNode
+//   splitPercentage: number
+// }
+
+export interface JustSplitBase {
+  type: JustSplitType
   direction: JustDirection
   first: JustNode
   second: JustNode
+}
+
+export interface JustSplitPercentage extends JustSplitBase {
+  type: 'split-percentage'
   splitPercentage: number
 }
 
-export type JustPos = JustSplitType | 'stack'
+export interface JustSplitPixels extends JustSplitBase {
+  type: 'split-pixels'
+  splitPixels: number
+  primary: JustSplitDirection
+}
+
+export type JustPos = JustSplitDirection | 'stack'
 
 export interface JustPayloadInsert {
   branch: JustBranch

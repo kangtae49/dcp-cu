@@ -30,6 +30,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.5",
     "react-virtualized-auto-sizer": "^1.0.26",
+    "react-window": "^2.2.3",
     "recharts": "^3.5.1",
     "sqlite3": "^5.1.7"
   },

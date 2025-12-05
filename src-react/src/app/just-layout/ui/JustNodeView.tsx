@@ -9,7 +9,7 @@ import JustWinView from "@/app/just-layout/ui/JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
-import JustSplit from "@/app/just-layout/ui/JustSplit.tsx";
+import JustSplit, {type SplitSize} from "@/app/just-layout/ui/JustSplit.tsx";
 import {useRef} from "react";
 
 interface Props {
@@ -28,8 +28,8 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
   const dispatch = useAppDispatch();
 
-  const onResize= (splitPercentage: number) => {
-    dispatch(justLayoutActions.updateResize({ branch: justBranch, splitPercentage }))
+  const onResize= ({percentage}: SplitSize) => {
+    dispatch(justLayoutActions.updateResize({ branch: justBranch, splitPercentage: percentage }))
   }
   return (
     <div className="just-node" ref={refNode}>
@@ -40,7 +40,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
           viewMap={viewMap}
         />
       )}
-      {node?.type === 'split' && (
+      {node?.type === 'split-percentage' && (
         <div key={`JustNode-${justBranch.join(",")}`}
              className={classNames(
                {
