@@ -4,8 +4,9 @@ import type {
   JustPos,
   JustStack,
 } from "@/app/just-layout/justLayoutSlice.ts";
-import update from "immutability-helper"
+import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
+import {get, set} from "lodash";
 
 
 export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert): JustNode | null {
@@ -39,7 +40,7 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
   } else if (payload.pos === 'second') {
     return updateNodeOfBranch(layout, payload.branch, {
       $set: {
-        type: "split",
+        type: "split-percentage",
         direction: payload.direction,
         first: targetNode,
         second: {
@@ -47,13 +48,13 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
           tabs: [payload.winId],
           active: payload.winId,
         },
-        splitPercentage: payload.splitPercentage ?? 50,
+        size: payload.size ?? 50,
       }
     })
   } else if (payload.pos === 'first') {
     return updateNodeOfBranch(layout, payload.branch, {
       $set: {
-        type: "split",
+        type: "split-percentage",
         direction: payload.direction,
         first: {
           type: "stack",
@@ -61,7 +62,7 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
           active: payload.winId,
         },
         second: targetNode,
-        splitPercentage: payload.splitPercentage ?? 50,
+        size: payload.size ?? 50,
       }
     })
   }
@@ -184,15 +185,15 @@ export function moveWinId(layout: JustNode | null, winId: string, branch: JustBr
     pos,
     direction,
     index,
-    splitPercentage: 50
+    size: 50
   })
 
 }
 
-export function updateSplitPercentage(layout: JustNode | null, branch: JustBranch, splitPercentage: number) {
+export function updateSplitPercentage(layout: JustNode | null, branch: JustBranch, size: number) {
   return updateNodeOfBranch(layout, branch, {
     $merge: {
-      splitPercentage: splitPercentage,
+      size: size,
     }
   })
 }
@@ -268,3 +269,57 @@ function updateNodeOfWinId(layout: JustNode | null, winId: string, value: any): 
 export function hasWinId(layout: JustNode | null, winId: string)  {
   return getNodeByWinId(layout, winId) != null
 }
+
+
+//
+
+export type JustUpdateSpec = Spec<JustNode>;
+
+export function updateNode(layout: JustNode | null, updateSpec: JustUpdateSpec) {
+  if (layout == null) return null;
+  return update(layout, updateSpec)
+}
+
+export function buildSpecFromUpdateSpec(branch: JustBranch, updateSpec: JustUpdateSpec): JustUpdateSpec {
+  if (branch.length > 0) {
+    return set({}, branch, updateSpec);
+  } else {
+    return updateSpec;
+  }
+}
+
+export function getNodeAtBranch(node: JustNode | null, branch: JustBranch): JustNode | null {
+  if (branch.length > 0) {
+    return get(node, branch, null);
+  } else {
+    return node;
+  }
+}
+
+export function getBranchRightTop(node: JustNode | null): JustBranch {
+  if (node == null) {
+    return [];
+  }
+  let currentNode = node;
+  const currentBranch: JustBranch = []
+  while (currentNode.type !== 'stack') {
+    if (currentNode.direction === 'row') {
+      currentBranch.push('second')
+      currentNode = currentNode.second
+    } else if (currentNode.direction === 'column') {
+      currentBranch.push('first')
+      currentNode = currentNode.first
+    }
+  }
+  return currentBranch
+}
+
+export function updateSplitSize(node: JustNode | null, branch: JustBranch, size: number) {
+  const updateSpec = buildSpecFromUpdateSpec(branch, {
+    $merge: {
+      size: size
+    }
+  })
+  updateNode(node, updateSpec)
+}
+

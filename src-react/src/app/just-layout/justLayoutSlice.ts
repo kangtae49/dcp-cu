@@ -10,9 +10,9 @@ import {
 
 export type JustDirection = 'row' | 'column';
 export type JustSplitDirection = 'first' | 'second';
-export type JustSplitType = 'split-percentage' | 'split-pixels';
+export type JustSplitTypeUnit = 'split-percentage' | 'split-pixels';
 
-export type JustNode = JustStack | JustSplit
+export type JustNode = JustStack | JustSplitType
 
 export type JustBranch = JustSplitDirection []
 
@@ -22,7 +22,8 @@ export interface JustStack {
   active: string | null
 }
 
-export type JustSplit = JustSplitPercentage | JustSplitPixels
+export type JustSplitType = JustSplitPercentage | JustSplitPixels;
+
 // export interface JustSplit {
 //   type: 'split'
 //   direction: JustDirection
@@ -32,20 +33,20 @@ export type JustSplit = JustSplitPercentage | JustSplitPixels
 // }
 
 export interface JustSplitBase {
-  type: JustSplitType
+  type: JustSplitTypeUnit
   direction: JustDirection
   first: JustNode
   second: JustNode
+  size: number
+  show: boolean
 }
 
 export interface JustSplitPercentage extends JustSplitBase {
   type: 'split-percentage'
-  splitPercentage: number
 }
 
 export interface JustSplitPixels extends JustSplitBase {
   type: 'split-pixels'
-  splitPixels: number
   primary: JustSplitDirection
 }
 
@@ -57,7 +58,7 @@ export interface JustPayloadInsert {
   direction: JustDirection
   pos: JustPos
   index: number
-  splitPercentage?: number
+  size?: number
 }
 
 export interface JustPayloadRemove {
@@ -77,7 +78,7 @@ export interface JustPayloadHasWin {
 
 export interface JustPayloadResize {
   branch: JustBranch
-  splitPercentage: number
+  size: number
 }
 
 export interface JustPayloadMoveWin {
@@ -141,7 +142,7 @@ export const createJustLayoutSlice = (id: string) =>
         state.layout = updateSplitPercentage(
           state.layout == null ? null : current(state.layout),
           payload.branch,
-          payload.splitPercentage
+          payload.size
         )
       },
       moveWin: (state, { payload }: {payload: JustPayloadMoveWin}) => {

@@ -13,7 +13,7 @@ export function createJustLayoutThunks(sliceId: string) {
         }))
       } else {
         dispatch(justLayoutActions.insertWin({
-          branch: [], direction: "row", index: -1, pos: "first", winId: "side-menu", splitPercentage: 25,
+          branch: [], direction: "row", index: -1, pos: "first", winId: "side-menu", size: 25,
         }))
       }
     }),
@@ -28,13 +28,13 @@ export function createJustLayoutThunks(sliceId: string) {
         const targetWinIds = activeWinIds.filter(activeWinId => activeWinId !== 'side-menu');
         if (targetWinIds.length === 0) {
           dispatch(justLayoutActions.insertWin({
-            branch: [], direction: "row", index: -1, pos: "second", winId: winId, splitPercentage: 25,
+            branch: [], direction: "row", index: -1, pos: "second", winId: winId, size: 25,
           }))
         } else {
           const targetBranch = getBranchByWinId(sliceState?.layout ?? null, targetWinIds[0])
           if (targetBranch !== null) {
             dispatch(justLayoutActions.insertWin({
-              branch: targetBranch, direction: "row", index: -1, pos: "stack", winId: winId, splitPercentage: 25,
+              branch: targetBranch, direction: "row", index: -1, pos: "stack", winId: winId, size: 25,
             }))
           }
         }

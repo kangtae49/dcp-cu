@@ -101,17 +101,17 @@ function ConfigGrid({configKey}: Props) {
     // </AutoSizer>
 
   <div className="just-grid" onScroll={handleScroll}>
-      <ReactGrid
-        key={configKey}
-        ref={ref}
-        rows={getTableRows(configTable)}
-        columns={columns}
-        stickyTopRows={1}
-        stickyLeftColumns={1}
-        enableRangeSelection={true}
-        onColumnResized={handleColumnResize}
-        disableVirtualScrolling={false}
-      />
+    <ReactGrid
+      key={configKey}
+      ref={ref}
+      rows={getTableRows(configTable)}
+      columns={columns}
+      stickyTopRows={1}
+      stickyLeftColumns={1}
+      enableRangeSelection={true}
+      onColumnResized={handleColumnResize}
+      disableVirtualScrolling={false}
+    />
     </div>
   )
 }

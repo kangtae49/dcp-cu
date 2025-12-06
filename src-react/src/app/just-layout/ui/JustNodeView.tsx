@@ -3,14 +3,14 @@ import {
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustNode, type WinInfo
+  type JustNode, type JustSplitDirection, type JustSplitType, type WinInfo
 } from "@/app/just-layout/justLayoutSlice.ts";
 import JustWinView from "@/app/just-layout/ui/JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import JustSplit, {type SplitSize} from "@/app/just-layout/ui/JustSplit.tsx";
-import {useRef} from "react";
+import {type CSSProperties, useRef} from "react";
 
 interface Props {
   justBranch: JustBranch
@@ -28,9 +28,25 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
   const dispatch = useAppDispatch();
 
-  const onResize= ({percentage}: SplitSize) => {
-    dispatch(justLayoutActions.updateResize({ branch: justBranch, splitPercentage: percentage }))
+  const onResize= ({size}: SplitSize) => {
+    dispatch(justLayoutActions.updateResize({ branch: justBranch, size: size }))
   }
+
+
+  const getStyle = (node: JustSplitType, splitDirection: JustSplitDirection): CSSProperties => {
+
+    if (node.type === "split-percentage" && splitDirection === 'first') {
+      return {
+        flexBasis: `calc(${node.size}% - 3px)`,
+      }
+    } else if (node.type === "split-pixels" && splitDirection === node.primary) {
+      return {
+        flexBasis: `${node.size}px`,
+      }
+    }
+    return {}
+  }
+
   return (
     <div className="just-node" ref={refNode}>
       {node?.type === 'stack' && (
@@ -40,22 +56,21 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
           viewMap={viewMap}
         />
       )}
-      {node?.type === 'split-percentage' && (
+      {(node?.type === 'split-percentage' || node?.type === 'split-pixels') && (
         <div key={`JustNode-${justBranch.join(",")}`}
              className={classNames(
+               node.type,
                {
                  "just-column": node.direction === 'column',
                  "just-row": node.direction === 'row'
                }
              )}>
           <div
-            className="just-first"
-            style={{
-              flexBasis: `calc(${node.splitPercentage}% - 2px)`,
-              flexGrow: 0,
-              flexShrink: 0,
-              minWidth: 0,
-            }}
+            className={classNames("just-first", {
+              "just-primary": node.type === "split-percentage" || (node.type === 'split-pixels' && node.primary === 'first'),
+              "just-secondary": !(node.type === "split-percentage" || (node.type === 'split-pixels' && node.primary === 'first')),
+            })}
+            style={getStyle(node, 'first')}
           >
             <JustNodeView
               node={node.first}
@@ -65,14 +80,20 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
           </div>
 
           <JustSplit
-            direction={node.direction}
+            node={node}
             justBranch={justBranch}
             containerRef={refNode}
             onChange={onResize}
             onRelease={onResize}
           />
 
-          <div className="just-second">
+          <div
+               className={classNames("just-second", {
+                 "just-primary": !(node.type === "split-percentage" || (node.type === 'split-pixels' && node.primary === 'first')),
+                 "just-secondary": node.type === "split-percentage" || (node.type === 'split-pixels' && node.primary === 'first'),
+               })}
+               style={getStyle(node, 'second')}
+          >
             <JustNodeView
               node={node.second}
               justBranch={[...justBranch, "second"]}
