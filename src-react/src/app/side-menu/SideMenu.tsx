@@ -47,7 +47,7 @@ function SideMenu() {
       <div className="side-menu-items">
         {
           SIDE_MENU_ID_LIST.map(item =>
-            <div className="side-menu-item" onClick={() => openWin(item.menuId)}>
+            <div key={item.menuId} className="side-menu-item" onClick={() => openWin(item.menuId)}>
               <div className="side-menu-icon">
                 <Jdenticon size="25" value={item.menuId} />
               </div>

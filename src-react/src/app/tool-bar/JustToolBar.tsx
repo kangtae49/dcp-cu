@@ -57,7 +57,7 @@ function JustToolBar() {
         {
           size <= 0 &&
           SIDE_MENU_ID_LIST.map(item =>
-            <div className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
+            <div key={item.menuId} className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
               <div className="just-icon">
                 <Jdenticon size="25" value={item.menuId} />
               </div>
@@ -65,11 +65,6 @@ function JustToolBar() {
           )
         }
       </div>
-      {/*<div*/}
-      {/*  className={classNames("just-app-icon")}*/}
-      {/*>*/}
-      {/*  <Icon icon={faGear} />*/}
-      {/*</div>*/}
 
       <div className="just-tool-menus">
 
