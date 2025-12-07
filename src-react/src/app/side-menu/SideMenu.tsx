@@ -13,11 +13,22 @@ import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
 export const INIT_SIDE_MENU_SIZE = 200;
 
+export interface SideMenuItem {
+  menuId: string,
+  menuName: string
+}
+export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
+  {menuId: "demo", menuName: "Demo"},
+  {menuId: "demo-grid", menuName: "Demo Grid"},
+  {menuId: "demo-line-chart", menuName: "Demo Line Chart"},
+]
+
 function SideMenu() {
   const {
     dispatch,
     thunks: justLayoutTrunks
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
+
 
   const toggleSideMenu = () => {
     dispatch(justLayoutTrunks.toggleSideMenu({size: INIT_SIDE_MENU_SIZE}))
@@ -34,30 +45,16 @@ function SideMenu() {
         <div className="side-menu-minimize side-menu-icon" onClick={toggleSideMenu}><IconMinimize /></div>
       </div>
       <div className="side-menu-items">
-        <div className="side-menu-item" onClick={() => openWin("demo")}>
-          <div className="side-menu-icon">
-            <Jdenticon size="25" value="demo" />
-          </div>
-          <div className="side-menu-name">Demo</div>
-        </div>
-        <div className="side-menu-item"  onClick={() => openWin("demo-grid")}>
-          <div className="side-menu-icon">
-            <Jdenticon size="25" value="demo-grid" />
-          </div>
-          <div className="side-menu-name">Demo Grid</div>
-        </div>
-        <div className="side-menu-item"  onClick={() => openWin("demo-line-chart")}>
-          <div className="side-menu-icon">
-            <Jdenticon size="25" value="demo-line-chart" />
-          </div>
-          <div className="side-menu-name">Demo Line Chart</div>
-        </div>
-        <div className="side-menu-item">
-          <div className="side-menu-icon">
-            <Jdenticon size="25" value="메뉴3" />
-          </div>
-          <div className="side-menu-name">메뉴3</div>
-        </div>
+        {
+          SIDE_MENU_ID_LIST.map(item =>
+            <div className="side-menu-item" onClick={() => openWin(item.menuId)}>
+              <div className="side-menu-icon">
+                <Jdenticon size="25" value={item.menuId} />
+              </div>
+              <div className="side-menu-name">{item.menuName}</div>
+            </div>
+          )
+        }
       </div>
     </div>
   )

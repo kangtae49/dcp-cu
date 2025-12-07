@@ -85,6 +85,7 @@ const initialValue: JustNode = {
   primary: 'first',
   size: 200,
   show: true,
+  // minSize: 38,
   first: {
     type: 'stack',
     tabs: ['side-menu'],

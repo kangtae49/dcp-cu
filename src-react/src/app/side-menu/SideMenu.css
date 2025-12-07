@@ -1,7 +1,6 @@
 .side-menu {
     display: flex;
     flex-direction: column;
-
 }
 
 .side-menu .side-menu-title {
@@ -12,6 +11,11 @@
     color: white;
     /*justify-content: center;*/
     min-width: 0;
+}
+
+.side-menu .side-menu-title .side-menu-minimize {
+    flex: 0 0 30px;
+    padding: 5px;
 }
 
 .side-menu-title .side-menu-name {

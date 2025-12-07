@@ -48,13 +48,38 @@
 
 .just-tool-bar .just-app-icon:hover { background-color: rgba(255, 255, 255, 0.22);}
 
+.just-tool-center {
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    row-gap: 5px;
+}
 
-.just-tool-menus {
+
+.just-tool-center-menu {
     display: flex;
     align-items: center;
-    padding-right: 3px;
+    /*padding-right: 3px;*/
     z-index: 999;
+
 }
+.just-tool-center .just-tool-center-menu:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.just-tool-center .just-icon {
+    padding: 5px;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+}
+.just-tool-center .just-icon.on {
+    background-color: rgba(255, 255, 255, 0.22);
+}
+.just-tool-center .just-icon svg { width: 100%; height: 100%; color: var(--icon-color);}
+
+.just-tool-center .just-icon:hover { background-color: rgba(255, 255, 255, 0.22);}
+
+
 
 .just-tool-menu {
     flex: 0 0 26px;
@@ -102,3 +127,4 @@
 .just-tool-menus .szh-menu__item:hover {
     background-color: rgba(53, 116, 240, 0.4);
 }
+

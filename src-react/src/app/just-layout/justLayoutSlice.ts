@@ -24,13 +24,6 @@ export interface JustStack {
 
 export type JustSplitType = JustSplitPercentage | JustSplitPixels;
 
-// export interface JustSplit {
-//   type: 'split'
-//   direction: JustDirection
-//   first: JustNode
-//   second: JustNode
-//   splitPercentage: number
-// }
 
 export interface JustSplitBase {
   type: JustSplitTypeUnit
@@ -39,6 +32,7 @@ export interface JustSplitBase {
   second: JustNode
   size: number
   show: boolean
+  minSize?: number
 }
 
 export interface JustSplitPercentage extends JustSplitBase {

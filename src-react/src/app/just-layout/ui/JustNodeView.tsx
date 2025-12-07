@@ -37,11 +37,13 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
 
     if (node.type === "split-percentage" && splitDirection === 'first') {
       return {
-        flexBasis: `${node.size}%`,
+        flexBasis: `calc(${node.size}% - 3px)`,
+        [node.direction === 'row' ? 'minWidth' : 'minHeight']: `${node.minSize ?? 0}%`
       }
     } else if (node.type === "split-pixels" && splitDirection === node.primary) {
       return {
         flexBasis: `${node.size}px`,
+        [node.direction === 'row' ? 'minWidth' : 'minHeight']: `${node.minSize ?? 0}px`
       }
     }
     return {}

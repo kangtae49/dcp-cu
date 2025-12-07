@@ -14,7 +14,7 @@ import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {useCallback, useEffect, useState} from "react";
-import {INIT_SIDE_MENU_SIZE} from "@/app/side-menu/SideMenu.tsx";
+import {INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/app/side-menu/SideMenu.tsx";
 
 
 function JustToolBar() {
@@ -54,7 +54,16 @@ function JustToolBar() {
         <IconLogo />
       </div>
       <div className="just-tool-center">
-
+        {
+          size <= 0 &&
+          SIDE_MENU_ID_LIST.map(item =>
+            <div className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
+              <div className="just-icon">
+                <Jdenticon size="25" value={item.menuId} />
+              </div>
+            </div>
+          )
+        }
       </div>
       {/*<div*/}
       {/*  className={classNames("just-app-icon")}*/}
