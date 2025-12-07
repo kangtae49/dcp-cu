@@ -5,7 +5,7 @@ import {
   insertWinId,
   moveWinId, removeAllTabs, removeEmpty,
   removeWinId,
-  updateSplitPercentage
+  updateSplitSize,
 } from "@/app/just-layout/layoutUtil.ts";
 
 export type JustDirection = 'row' | 'column';
@@ -139,7 +139,7 @@ export const createJustLayoutSlice = (id: string) =>
         )
       },
       updateResize: (state, { payload }: {payload: JustPayloadResize}) => {
-        state.layout = updateSplitPercentage(
+        state.layout = updateSplitSize(
           state.layout == null ? null : current(state.layout),
           payload.branch,
           payload.size

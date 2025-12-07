@@ -10,6 +10,9 @@ import {
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
+
+export const INIT_SIDE_MENU_SIZE = 200;
+
 function SideMenu() {
   const {
     dispatch,
@@ -17,7 +20,7 @@ function SideMenu() {
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
 
   const toggleSideMenu = () => {
-    dispatch(justLayoutTrunks.toggleSideMenu())
+    dispatch(justLayoutTrunks.toggleSideMenu({size: INIT_SIDE_MENU_SIZE}))
   }
 
   const openWin = (winId: string) => {

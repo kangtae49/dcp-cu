@@ -190,13 +190,13 @@ export function moveWinId(layout: JustNode | null, winId: string, branch: JustBr
 
 }
 
-export function updateSplitPercentage(layout: JustNode | null, branch: JustBranch, size: number) {
-  return updateNodeOfBranch(layout, branch, {
-    $merge: {
-      size: size,
-    }
-  })
-}
+// export function updateSplitPercentage(layout: JustNode | null, branch: JustBranch, size: number) {
+//   return updateNodeOfBranch(layout, branch, {
+//     $merge: {
+//       size: size,
+//     }
+//   })
+// }
 
 
 function getBranch(layout: JustNode | null, winId: string, branch: JustBranch): JustBranch | null {
@@ -249,21 +249,21 @@ function getNodeByBranch<T extends JustNode>(obj: JustNode, path: JustBranch): T
   return path.reduce((acc: any, key) => (acc == null ? undefined : acc[key]), obj)
 }
 
-function makePatch(path: JustBranch, value:any): any {
-  return path.reduceRight((acc, key) => ({ [key]: acc }), value)
-}
+// function makePatch(path: JustBranch, value:any): any {
+//   return path.reduceRight((acc, key) => ({ [key]: acc }), value)
+// }
 
 function updateNodeOfBranch(layout: JustNode | null, branch: JustBranch, value: any): JustNode | null {
-  if (layout == null) return null;
-  return update(layout, makePatch(branch, value))
+  const patch = buildSpecFromUpdateSpec(branch, value)
+  return updateNode(layout, patch)
 }
 
 function updateNodeOfWinId(layout: JustNode | null, winId: string, value: any): JustNode | null {
-  if (layout == null) return null;
   const branch = getBranchByWinId(layout, winId)
   if (branch == null) return layout;
-  const patch = makePatch(branch, value)
-  return update(layout, patch)
+  // const patch = makePatch(branch, value)
+  const patch = buildSpecFromUpdateSpec(branch, value)
+  return updateNode(layout, patch)
 }
 
 export function hasWinId(layout: JustNode | null, winId: string)  {
@@ -320,6 +320,6 @@ export function updateSplitSize(node: JustNode | null, branch: JustBranch, size:
       size: size
     }
   })
-  updateNode(node, updateSpec)
+  return updateNode(node, updateSpec)
 }
 
