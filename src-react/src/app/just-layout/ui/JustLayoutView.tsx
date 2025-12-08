@@ -3,24 +3,24 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {
-  createJustLayoutSlice,
+  createJustLayoutSlice, type GetWinInfoFn,
   type JustLayoutActions,
   type JustLayoutState,
   type JustNode,
-  type WinInfo
 } from "../justLayoutSlice.ts";
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "@/app/just-layout/ui/JustNodeView.tsx";
 import classNames from "classnames";
 
 interface Props {
-  viewMap: Record<string, WinInfo>
+  // viewMap: Record<string, WinInfo>
+  getWinInfo: GetWinInfoFn
   initialValue: JustNode
 }
 
 export const LAYOUT_ID = "just-layout"
 
-export function JustLayoutView({viewMap, initialValue}: Props) {
+export function JustLayoutView({getWinInfo, initialValue}: Props) {
   const {onLoad} = useOnload();
   const {
     state: justLayoutState,
@@ -48,7 +48,7 @@ export function JustLayoutView({viewMap, initialValue}: Props) {
         {justLayoutState && <JustNodeView
             node={justLayoutState.layout}
             justBranch={[]}
-            viewMap={viewMap}
+            getWinInfo={getWinInfo}
         />}
       </div>
     </DndProvider>

@@ -1,21 +1,23 @@
 import JustWinTitleView from "@/app/just-layout/ui/JustWinTitleView.tsx";
 import JustWinBodyView from "@/app/just-layout/ui/JustWinBodyView.tsx";
-import type {JustBranch, JustStack, WinInfo} from "@/app/just-layout/justLayoutSlice.ts";
+import type {GetWinInfoFn, JustBranch, JustStack} from "@/app/just-layout/justLayoutSlice.ts";
 import {useEffect, useState} from "react";
 
 interface Prop {
   justBranch: JustBranch
   justStack: JustStack
-  viewMap: Record<string, WinInfo>
+  getWinInfo: GetWinInfoFn
+  // viewMap: Record<string, WinInfo>
 }
 
-function JustWinView ({justBranch, justStack, viewMap}: Prop) {
+function JustWinView ({justBranch, justStack, getWinInfo}: Prop) {
   const [showTitle, setShowTitle] = useState(true)
   useEffect(() => {
     if (justStack.active === null) {
       return;
     }
-    setShowTitle(viewMap[justStack.active].showTitle ?? true)
+    const winInfo = getWinInfo(justStack.active);
+    setShowTitle(winInfo.showTitle ?? true)
 
   }, [justStack])
   return (
@@ -24,10 +26,10 @@ function JustWinView ({justBranch, justStack, viewMap}: Prop) {
         <JustWinTitleView
           justBranch={justBranch}
           justStack={justStack}
-          viewMap={viewMap}
+          getWinInfo={getWinInfo}
         />
       }
-      <JustWinBodyView justBranch={justBranch} justStack={justStack} viewMap={viewMap} />
+      <JustWinBodyView justBranch={justBranch} justStack={justStack} getWinInfo={getWinInfo} />
     </div>
   )
 }

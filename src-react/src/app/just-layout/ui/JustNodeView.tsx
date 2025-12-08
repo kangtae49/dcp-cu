@@ -1,9 +1,9 @@
 import {
-  createJustLayoutSlice,
+  createJustLayoutSlice, type GetWinInfoFn,
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustNode, type JustSplitDirection, type JustSplitType, type WinInfo
+  type JustNode, type JustSplitDirection, type JustSplitType
 } from "@/app/just-layout/justLayoutSlice.ts";
 import JustWinView from "@/app/just-layout/ui/JustWinView.tsx";
 import classNames from "classnames";
@@ -15,10 +15,11 @@ import {type CSSProperties, useRef} from "react";
 interface Props {
   justBranch: JustBranch
   node: JustNode | null
-  viewMap: Record<string, WinInfo>
+  getWinInfo: GetWinInfoFn
+  // viewMap: Record<string, WinInfo>
 }
 
-export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => {
+export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo }) => {
   const layoutId = "just-layout"
   const refNode = useRef<HTMLDivElement>(null);
 
@@ -55,7 +56,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
         <JustWinView
           justStack={node}
           justBranch={justBranch}
-          viewMap={viewMap}
+          getWinInfo={getWinInfo}
         />
       )}
       {(node?.type === 'split-percentage' || node?.type === 'split-pixels') && (
@@ -77,7 +78,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
             <JustNodeView
               node={node.first}
               justBranch={[...justBranch, "first"]}
-              viewMap={viewMap}
+              getWinInfo={getWinInfo}
             />
           </div>
 
@@ -99,7 +100,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, viewMap }) => 
             <JustNodeView
               node={node.second}
               justBranch={[...justBranch, "second"]}
-              viewMap={viewMap}
+              getWinInfo={getWinInfo}
             />
           </div>
         </div>

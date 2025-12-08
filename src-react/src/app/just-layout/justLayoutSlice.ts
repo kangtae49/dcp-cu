@@ -8,6 +8,8 @@ import {
   updateSplitSize,
 } from "@/app/just-layout/layoutUtil.ts";
 
+
+
 export type JustDirection = 'row' | 'column';
 export type JustSplitDirection = 'first' | 'second';
 export type JustSplitTypeUnit = 'split-percentage' | 'split-pixels';
@@ -101,6 +103,7 @@ export interface WinInfo {
   showClose?: boolean
   showTitle?: boolean
 }
+export type GetWinInfoFn = (winId: string)=> WinInfo;
 
 export const createJustLayoutSlice = (id: string) =>
   createSlice({

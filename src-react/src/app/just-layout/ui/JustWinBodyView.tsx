@@ -2,12 +2,11 @@
 import {type DropTargetMonitor, useDrop, type XYCoord} from "react-dnd";
 import classnames from 'classnames';
 import {
-  createJustLayoutSlice,
+  createJustLayoutSlice, type GetWinInfoFn,
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack,
-  type WinInfo
 } from "@/app/just-layout/justLayoutSlice.ts";
 import {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
@@ -17,13 +16,14 @@ import {Activity, useRef} from "react";
 interface Prop {
   justBranch: JustBranch
   justStack: JustStack
-  viewMap: Record<string, WinInfo>
+  // viewMap: Record<string, WinInfo>
+  getWinInfo: GetWinInfoFn
 }
 
 function JustWinBodyView (props: Prop) {
   const ref = useRef<HTMLDivElement>(null)
 
-  const { viewMap, justBranch, justStack } = props;
+  const { getWinInfo, justBranch, justStack } = props;
 
   const {
     // state: justLayoutState,
@@ -49,7 +49,7 @@ function JustWinBodyView (props: Prop) {
       accept: ['DRAG-SOURCE-JUST-TITLE'],
       canDrop: () => {
         let canDrop = true;
-        if (justStack.active !== null && !(viewMap[justStack.active].canDrop ?? true)) {
+        if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {
           canDrop = false
         }
         return canDrop;
@@ -113,7 +113,7 @@ function JustWinBodyView (props: Prop) {
     >
       {justStack.tabs.map(winId =>
         <Activity key={winId} mode={justStack.active === winId ? 'visible' : 'hidden'}>
-          {viewMap[winId].view}
+          {getWinInfo(winId).view}
         </Activity>
       )}
     </div>

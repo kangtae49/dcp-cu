@@ -15,6 +15,7 @@ import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {useCallback, useEffect, useState} from "react";
 import {INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/app/side-menu/SideMenu.tsx";
+import {buildWinId} from "@/App.tsx";
 
 
 function JustToolBar() {
@@ -73,7 +74,7 @@ function JustToolBar() {
             <Icon icon={faGear} />
           </div>
         }>
-          <MenuItem className="just-menu-item" onClick={() => openWin("setting-config1")}>
+          <MenuItem className="just-menu-item" onClick={() => openWin(buildWinId({viewId: "setting-config1"}))}>
             <div className="just-icon">
               <Jdenticon size="25" value="setting-config1" />
             </div>
@@ -82,7 +83,7 @@ function JustToolBar() {
             </div>
             <div className="just-icon" />
           </MenuItem>
-          <MenuItem className="just-menu-item" onClick={() => openWin("setting-config2")}>
+          <MenuItem className="just-menu-item" onClick={() => openWin(buildWinId({viewId: "setting-config2"}))}>
             <div className="just-icon">
               <Jdenticon size="25" value="setting-config2" />
             </div>

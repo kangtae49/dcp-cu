@@ -9,6 +9,7 @@ import {
 } from "@/app/just-layout/justLayoutSlice.ts";
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
+import {buildWinId} from "@/App.tsx";
 
 
 export const INIT_SIDE_MENU_SIZE = 200;
@@ -18,9 +19,9 @@ export interface SideMenuItem {
   menuName: string
 }
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
-  {menuId: "demo", menuName: "Demo"},
-  {menuId: "demo-grid", menuName: "Demo Grid"},
-  {menuId: "demo-line-chart", menuName: "Demo Line Chart"},
+  {menuId: buildWinId({viewId: 'demo'}), menuName: "Demo"},
+  {menuId: buildWinId({viewId: 'demo-grid'}), menuName: "Demo Grid"},
+  {menuId: buildWinId({viewId: 'demo-line-chart'}), menuName: "Demo Line Chart"},
 ]
 
 function SideMenu() {

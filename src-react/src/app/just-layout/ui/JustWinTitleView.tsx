@@ -4,12 +4,11 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faEllipsisVertical, faAngleDown, faCircleXmark} from "@fortawesome/free-solid-svg-icons"
 
 import {
-  createJustLayoutSlice,
+  createJustLayoutSlice, type GetWinInfoFn,
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack,
-  type WinInfo
 } from "@/app/just-layout/justLayoutSlice.ts";
 import JustDraggableTitle, {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
@@ -23,10 +22,11 @@ import {Menu, MenuItem} from "@szhsin/react-menu";
 interface Prop {
   justBranch: JustBranch
   justStack: JustStack
-  viewMap: Record<string, WinInfo>
+  getWinInfo: GetWinInfoFn
+  // viewMap: Record<string, WinInfo>
 }
 
-function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
+function JustWinTitleView({justBranch, justStack, getWinInfo}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
   const {
@@ -80,7 +80,7 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
       accept: ['DRAG-SOURCE-JUST-TITLE'],
       canDrop: () => {
         let canDrop = true;
-        if (justStack.active !== null && !(viewMap[justStack.active].canDrop ?? true)) {
+        if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {
           canDrop = false
         }
         return canDrop;
@@ -135,7 +135,7 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
             winId={winId}
             justBranch={justBranch}
             justStack={justStack}
-            winInfo={viewMap[winId]}
+            winInfo={getWinInfo(winId)}
             rect={rect}
           />
         )}
@@ -148,12 +148,12 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
         }>
           {justStack.tabs.map(winId =>
             <MenuItem key={winId} className="just-menu-item">
-              <div className="just-icon" onClick={() => activeWin(winId)}>{viewMap[winId].icon}</div>
+              <div className="just-icon" onClick={() => activeWin(winId)}>{getWinInfo(winId).icon}</div>
               <div className="just-title" onClick={() => activeWin(winId)}>
-                {viewMap[winId].title}
+                {getWinInfo(winId).title}
               </div>
 
-              {(viewMap[winId].showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {
+              {(getWinInfo(winId).showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {
                 e.stopPropagation();
                 closeWin(winId)
               }}>
