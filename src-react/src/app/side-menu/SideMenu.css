@@ -15,6 +15,7 @@
     color: white;
     /*justify-content: center;*/
     min-width: 0;
+    padding-left: 10px;
 }
 
 .side-menu .side-menu-title .side-menu-minimize {
@@ -37,7 +38,6 @@
     justify-content: center;
     padding: 3px;
     border-radius: 5px;
-    margin-right: 3px;
     box-sizing: border-box;
 }
 .side-menu-item .side-menu-icon svg { width: 100%; height: 100%; color: var(--icon-color);}
@@ -68,7 +68,3 @@
     background-color: #b9dfe8;
 }
 
-
-.side-menu-name {
-    padding-left: 5px;
-}
