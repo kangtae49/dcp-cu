@@ -4,7 +4,8 @@
     background-color: #2b2d30;
     height: 100%;
     color: rgb(255, 255, 255, 0.7);
-    border: 1px solid #1e1f22;
+    border-left: 1px solid #1e1f22;
+    border-top: 1px solid #1e1f22;
 }
 
 .side-menu .side-menu-title {
@@ -16,11 +17,14 @@
     /*justify-content: center;*/
     min-width: 0;
     padding-left: 10px;
+    border-bottom: 1px solid #1e1f22;
+    box-sizing: border-box;
 }
 
 .side-menu .side-menu-title .side-menu-minimize {
     flex: 0 0 30px;
     padding: 5px;
+    box-sizing: border-box;
 }
 
 .side-menu-title .side-menu-name {
