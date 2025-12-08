@@ -127,7 +127,7 @@ function JustDraggableTitle(props: Prop) {
   drag(drop(ref))
 
 
-  console.log("JustDraggableTitle", winId, winInfo)
+  // console.log("JustDraggableTitle", winId, winInfo)
   return (
     <div
       className={classnames(

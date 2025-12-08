@@ -19,26 +19,13 @@
     flex: 1;
 }
 
-.just-tool-bar .just-icon-system {
-    flex: 0 0 40px;
-    width: 50px;
-    color: white;
-
-}
-
-
-
-.just-tool-bar .just-icon-system svg {
-    width: 40px;
-    height: 16px;
-}
-
 
 .just-tool-bar .just-app-icon {
-    padding: 5px;
-    width: 20px;
-    height: 20px;
+    padding: 3px;
+    width: 30px;
+    height: 30px;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 .just-tool-bar .just-app-icon.on {
     background-color: rgba(255, 255, 255, 0.22);
@@ -60,16 +47,17 @@
     display: flex;
     align-items: center;
     z-index: 999;
-
+    flex: 0 0 30px;
 }
 .just-tool-center .just-tool-center-menu:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 .just-tool-center .just-icon {
-    padding: 5px;
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
+    padding: 4px 3px 3px 3px;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 .just-tool-center .just-icon.on {
     background-color: rgba(255, 255, 255, 0.22);

@@ -106,7 +106,7 @@ function JustWinTitleView({justBranch, justStack, viewMap}: Prop) {
     function update() {
       if (ref.current === null) return;
       const newRect = ref.current?.getBoundingClientRect() ?? null;
-      console.log("parent Rect:", newRect)
+      // console.log("parent Rect:", newRect)
       setRect(newRect)
     }
     update();

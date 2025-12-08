@@ -4,6 +4,7 @@
     --title-bg-color: #1e1f22;
     --title-font-color: rgb(255, 255, 255, 0.7);
     --splitter-color: #7d7e81;
+    overflow: hidden;
 }
 
 
