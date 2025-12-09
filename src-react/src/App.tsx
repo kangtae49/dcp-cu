@@ -20,8 +20,11 @@ import DemoGridView from "@/app/demo/DemoGridView.tsx";
 import ConfigView from "@/app/config/ui/ConfigView.tsx";
 import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import {stableStringify} from "@/utils/json-util.ts";
+import Page01View from "@/app/demo/Page01View.tsx";
 
-export type ViewId = "side-menu" | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config"
+export type ViewId = "side-menu"
+  | "page01"
+  | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config"
 export interface WinObjId {
   viewId: ViewId
   params?: Record<string, any>
@@ -37,6 +40,14 @@ const viewMap = {
     showTitle: false,
     // showClose: false,
   }),
+  "page01": (winId: string) => {
+    const winObjId = fromWinId(winId)
+    return ({
+      title: "자산통계정보",
+      icon: <Jdenticon size="30" value={winObjId.viewId} />,
+      view: <Page01View winObjId={winObjId} />
+    })
+  },
   "demo": (_winId: string) => ({
     title: "Demo",
     icon: <Jdenticon size="30" value="demo" />,

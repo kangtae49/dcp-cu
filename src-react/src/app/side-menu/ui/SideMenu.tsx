@@ -19,6 +19,7 @@ export interface SideMenuItem {
   menuName: string
 }
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
+  {menuId: fromWinObjId({viewId: 'page01'}), menuName: "자산통계정보"},
   {menuId: fromWinObjId({viewId: 'demo'}), menuName: "Demo"},
   {menuId: fromWinObjId({viewId: 'demo-grid'}), menuName: "Demo Grid"},
   {menuId: fromWinObjId({viewId: 'demo-line-chart'}), menuName: "Demo Line Chart"},

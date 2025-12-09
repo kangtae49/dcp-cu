@@ -30,8 +30,10 @@ function ConfigView({winObjId}: Props) {
 
   return (
     <div className="config">
-      <div className="config-key" onClick={clickConfigKey}>
-        <div className="config-title"><Icon icon={faPenToSquare} /> {configKey}</div>
+      <div className="config-key">
+        <div className="config-title" onClick={clickConfigKey}>
+          <Icon icon={faPenToSquare} /> {configKey}
+        </div>
       </div>
       <div className="config-table">
         {configKey && <ConfigGrid configKey={configKey} />}
