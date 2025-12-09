@@ -359,15 +359,16 @@ class JsApi:
         result = {}
         with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
             dfs = pd.read_excel(xlsx, sheet_name=0, dtype=str, engine="openpyxl")
+            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
             if isinstance(dfs, pd.Series):
                 dfs = dfs.to_frame()
             dfs = dfs.fillna("")
+            # dfs = dfs.astype(object).where(pd.notnull(dfs), None)
             result = {
                 'key': key,
                 'header': dfs.columns.to_list(),
                 'data': dfs.to_dict(orient="records"),
             }
-
             # if isinstance(dfs, pd.DataFrame):
             #     result = {key: dfs.to_dict(orient="records")}
             # else:

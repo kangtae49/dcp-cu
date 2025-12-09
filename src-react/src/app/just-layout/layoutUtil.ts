@@ -7,6 +7,7 @@ import type {
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
 import {get, set} from "lodash";
+import {fromWinObjId} from "@/App.tsx";
 
 
 export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert): JustNode | null {
@@ -38,19 +39,38 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
       }
     })
   } else if (payload.pos === 'second') {
-    return updateNodeOfBranch(layout, payload.branch, {
-      $set: {
-        type: "split-percentage",
-        direction: payload.direction,
-        first: targetNode,
-        second: {
-          type: "stack",
-          tabs: [payload.winId],
-          active: payload.winId,
-        },
-        size: payload.size ?? 50,
-      }
-    })
+    if (targetNode.type === 'stack' && targetNode.active === fromWinObjId({viewId: "side-menu"})) {
+      return updateNodeOfBranch(layout, payload.branch, {
+        $set: {
+          type: 'split-pixels',
+          direction: payload.direction,
+          first: targetNode,
+          second: {
+            type: "stack",
+            tabs: [payload.winId],
+            active: payload.winId,
+          },
+          primary: 'first',
+          size: 200,
+        }
+      })
+
+    } else {
+      return updateNodeOfBranch(layout, payload.branch, {
+        $set: {
+          type: 'split-percentage',
+          direction: payload.direction,
+          first: targetNode,
+          second: {
+            type: "stack",
+            tabs: [payload.winId],
+            active: payload.winId,
+          },
+          size: payload.size ?? 50,
+        }
+      })
+
+    }
   } else if (payload.pos === 'first') {
     return updateNodeOfBranch(layout, payload.branch, {
       $set: {

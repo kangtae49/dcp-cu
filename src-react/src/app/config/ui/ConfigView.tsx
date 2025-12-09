@@ -5,13 +5,15 @@ import ConfigGrid from "@/app/grid/ConfigGrid.tsx";
 import "./ConfigView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
+import type {WinObjId} from "@/App.tsx";
 // import classNames from "classnames";
 
 interface Props {
-  configKey: string
+  winObjId: WinObjId
 }
 
-function ConfigView({configKey}: Props) {
+function ConfigView({winObjId}: Props) {
+  const configKey = winObjId.params?.file;
   // const {
   //   state: configsState,
   // } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)

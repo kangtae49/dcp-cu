@@ -2,12 +2,15 @@ import {getActiveWinIds, getBranchByWinId, hasWinId} from "@/app/just-layout/lay
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
 import type {JustLayoutActions} from "@/app/just-layout/justLayoutSlice.ts";
-import {buildWinId} from "@/App.tsx";
+import {fromWinObjId} from "@/App.tsx";
 
 export function createJustLayoutThunks(sliceId: string) {
   return {
     toggleSideMenu: createSliceThunk(sliceId, ({size}, {dispatch, sliceState}) => {
       const justLayoutActions = getActions<JustLayoutActions>(sliceId);
+      if (sliceState.layout.type === 'stack') {
+        return;
+      }
       const newSize = sliceState.layout.size <= 0 ? size : 0;
       dispatch(justLayoutActions.updateResize({
         branch: [],
@@ -31,7 +34,7 @@ export function createJustLayoutThunks(sliceId: string) {
         }))
       } else {
         const activeWinIds = getActiveWinIds(sliceState?.layout ?? null);
-        const targetWinIds = activeWinIds.filter(activeWinId => activeWinId !== buildWinId({viewId: 'side-menu'}));
+        const targetWinIds = activeWinIds.filter(activeWinId => activeWinId !== fromWinObjId({viewId: 'side-menu'}));
         if (targetWinIds.length === 0) {
           dispatch(justLayoutActions.insertWin({
             branch: [], direction: "row", index: -1, pos: "second", winId: winId, size: 25,

@@ -14,8 +14,9 @@ import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {useCallback, useEffect, useState} from "react";
-import {INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/app/side-menu/SideMenu.tsx";
-import {buildWinId} from "@/App.tsx";
+import {INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/app/side-menu/ui/SideMenu.tsx";
+import {fromWinObjId} from "@/App.tsx";
+import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
 
 
 function JustToolBar() {
@@ -74,24 +75,19 @@ function JustToolBar() {
             <Icon icon={faGear} />
           </div>
         }>
-          <MenuItem className="just-menu-item" onClick={() => openWin(buildWinId({viewId: "setting-config1"}))}>
-            <div className="just-icon">
-              <Jdenticon size="25" value="setting-config1" />
-            </div>
-            <div className="just-title">
-              설정1
-            </div>
-            <div className="just-icon" />
-          </MenuItem>
-          <MenuItem className="just-menu-item" onClick={() => openWin(buildWinId({viewId: "setting-config2"}))}>
-            <div className="just-icon">
-              <Jdenticon size="25" value="setting-config2" />
-            </div>
-            <div className="just-title">
-              설정2
-            </div>
-            <div className="just-icon" />
-          </MenuItem>
+          {
+            CONFIG_KEYS.map((winObjId) =>
+              <MenuItem className="just-menu-item" onClick={() => openWin(fromWinObjId(winObjId))}>
+                <div className="just-icon">
+                  <Jdenticon size="25" value={winObjId.viewId} />
+                </div>
+                <div className="just-title">
+                  {winObjId.params?.['title']}
+                </div>
+                <div className="just-icon" />
+              </MenuItem>
+            )
+          }
         </Menu>
       </div>
 

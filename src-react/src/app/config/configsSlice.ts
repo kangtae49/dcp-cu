@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {type WinObjId} from "@/App.tsx";
 
 export interface ConfigTable {
   key: string,
@@ -8,12 +9,16 @@ export interface ConfigTable {
 
 export interface ConfigsState {
   configs: Record<string, ConfigTable>
-  keys: string[]
+  keys: WinObjId[]
 }
+
+export const CONFIG_KEYS: WinObjId[] = [
+  { viewId: "setting-config", params: {"title": "업체명", "file": "업체명.xlsx"}}
+]
 
 const initialState: ConfigsState = {
   configs: {} as Record<string, ConfigTable>,
-  keys: ["설정1.xlsx", "설정2.xlsx"]
+  keys: CONFIG_KEYS
 }
 
 export interface ConfigsPayloadSetConfig {

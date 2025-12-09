@@ -8,26 +8,26 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons"
 // import TopMenuBar from "@/app/top-menu-bar/TopMenuBar.tsx";
 import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
-import SideMenu from "@/app/side-menu/SideMenu.tsx";
+import SideMenu from "@/app/side-menu/ui/SideMenu.tsx";
 import DemoView from "@/app/demo/DemoView.tsx";
 import Jdenticon from "react-jdenticon";
 import PyJobListener from "@/app/listeners/PyJobListener.tsx";
 import PyWatchListener from "@/app/listeners/PyWatchListener.tsx";
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {type ConfigsActions, type ConfigsSlice, createConfigsSlice} from "@/app/config/configsSlice.ts";
+import {CONFIG_KEYS, type ConfigsActions, type ConfigsSlice, createConfigsSlice} from "@/app/config/configsSlice.ts";
 import {useEffect, useState} from "react";
 import DemoGridView from "@/app/demo/DemoGridView.tsx";
 import ConfigView from "@/app/config/ui/ConfigView.tsx";
 import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import {stableStringify} from "@/utils/json-util.ts";
 
-export type ViewId = "side-menu" | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config1" | "setting-config2"
-export interface ViewObjId {
+export type ViewId = "side-menu" | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config"
+export interface WinObjId {
   viewId: ViewId
   params?: Record<string, any>
 }
 
-const viewMap: Record<ViewId, GetWinInfoFn> = {
+const viewMap = {
   "side-menu": (_winId: string) => ({
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
@@ -57,17 +57,38 @@ const viewMap: Record<ViewId, GetWinInfoFn> = {
     icon: <Jdenticon size="30" value="about" />,
     view: <AboutView />
   }),
-  "setting-config1": (_winId: string) => ({
-    title: "설정1",
-    icon: <Jdenticon size="30" value="setting-config1" />,
-    view: <ConfigView configKey={"설정1.xlsx"}/>
-  }),
-  "setting-config2": (_winId: string) => ({
-    title: "설정2",
-    icon: <Jdenticon size="30" value="setting-config2" />,
-    view: <ConfigView configKey={"설정2.xlsx"}/>
-  }),
-}
+
+  // "setting-config": (winId: string) => {
+  //   const winObjId = fromWinId(winId);
+  //   return ({
+  //     title: winObjId.params?.['title'],
+  //     icon: <Jdenticon size="30" value="setting-config" />,
+  //     view: <ConfigView winObjId={winObjId} />
+  //   })
+  // },
+} as Record<ViewId, GetWinInfoFn>;
+
+CONFIG_KEYS.forEach((winObjId: WinObjId) => {
+
+  viewMap[winObjId.viewId] = (_winId) => ({
+    title: winObjId.params?.['title'],
+    icon: <Jdenticon size="30" value={"setting-config"} />,
+    view: <ConfigView winObjId={winObjId} />
+  });
+})
+
+// ["xx", "bb"].forEach((key) => {
+//   viewMap[key] = (_winId) => ({
+//     title: key,
+//     icon: <Icon icon={faCircleQuestion} />,
+//     view: <SideMenu />,
+//     canDrag: true,
+//     canDrop: true,
+//     showTitle: true,
+//   });
+// }
+
+
 
 // dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId01", direction: 'row', pos: 'first' }))
 // dispatch(justLayoutActions.removeWin({ branch: [], winId: "winId01" }))
@@ -85,8 +106,8 @@ const initialValue: JustNode = {
   // minSize: 38,
   first: {
     type: 'stack',
-    tabs: [buildWinId({viewId: 'side-menu'})],
-    active: buildWinId({viewId: 'side-menu'})
+    tabs: [fromWinObjId({viewId: 'side-menu'})],
+    active: fromWinObjId({viewId: 'side-menu'})
   },
   second: {
     type: 'split-percentage',
@@ -95,13 +116,13 @@ const initialValue: JustNode = {
     show: true,
     first: {
       type: 'stack',
-      tabs: [buildWinId({viewId: 'demo-grid'})],
-      active: buildWinId({viewId: 'demo-grid'})
+      tabs: [fromWinObjId({viewId: 'demo-grid'})],
+      active: fromWinObjId({viewId: 'demo-grid'})
     },
     second: {
       type: 'stack',
-      tabs: [buildWinId({viewId: 'about'})],
-      active: buildWinId({viewId: 'about'})
+      tabs: [fromWinObjId({viewId: 'about'})],
+      active: fromWinObjId({viewId: 'about'})
     }
   },
 }
@@ -112,10 +133,14 @@ export function getWinInfo(winId: string): WinInfo {
 }
 
 
-export function buildWinId(viewObjId: ViewObjId): string {
-   const winId = stableStringify(viewObjId)
+export function fromWinObjId(winObjId: WinObjId): string {
+  const winId = stableStringify(winObjId)
   if (winId == undefined) throw new Error("buildWinId: stringify error")
   return winId
+}
+
+export function fromWinId(winId: string): WinObjId {
+  return JSON.parse(winId) as WinObjId
 }
 
 function App() {
@@ -141,12 +166,28 @@ function App() {
   useEffect(() => {
     if(!isPywebviewReady) return;
     console.log("api", window.pywebview.api)
-    window.pywebview.api.read_config("설정1.xlsx").then(res => {
-      dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
+
+    CONFIG_KEYS.forEach((winObjId: WinObjId) => {
+      const file: string = winObjId.params?.['file'];
+      window.pywebview.api.read_config(file).then(res => {
+        dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
+      })
+
+      // viewMap[winObjId.viewId] = (_winId) => ({
+      //   title: winObjId.params?.['title'],
+      //   icon: <Jdenticon size="30" value={"setting-config"} />,
+      //   view: <ConfigView winObjId={winObjId} />
+      // });
     })
-    window.pywebview.api.read_config("설정2.xlsx").then(res => {
-      dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
-    })
+
+
+
+    // window.pywebview.api.read_config("설정1.xlsx").then(res => {
+    //   dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
+    // })
+    // window.pywebview.api.read_config("설정2.xlsx").then(res => {
+    //   dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
+    // })
   }, [isPywebviewReady])
 
 
