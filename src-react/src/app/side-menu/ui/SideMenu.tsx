@@ -9,7 +9,7 @@ import {
 } from "@/app/just-layout/justLayoutSlice.ts";
 import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
-import {fromWinObjId} from "@/App.tsx";
+import {fromWinId, fromWinObjId} from "@/App.tsx";
 
 
 export const INIT_SIDE_MENU_SIZE = 200;
@@ -50,7 +50,7 @@ function SideMenu() {
           SIDE_MENU_ID_LIST.map(item =>
             <div key={item.menuId} className="side-menu-item" onClick={() => openWin(item.menuId)}>
               <div className="side-menu-icon">
-                <Jdenticon size="25" value={item.menuId} />
+                <Jdenticon size="25" value={fromWinId(item.menuId).viewId} />
               </div>
               <div className="side-menu-name">{item.menuName}</div>
             </div>

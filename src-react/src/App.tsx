@@ -77,18 +77,6 @@ CONFIG_KEYS.forEach((winObjId: WinObjId) => {
   });
 })
 
-// ["xx", "bb"].forEach((key) => {
-//   viewMap[key] = (_winId) => ({
-//     title: key,
-//     icon: <Icon icon={faCircleQuestion} />,
-//     view: <SideMenu />,
-//     canDrag: true,
-//     canDrop: true,
-//     showTitle: true,
-//   });
-// }
-
-
 
 // dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId01", direction: 'row', pos: 'first' }))
 // dispatch(justLayoutActions.removeWin({ branch: [], winId: "winId01" }))

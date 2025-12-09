@@ -142,7 +142,8 @@ function JustDraggableTitle(props: Prop) {
       <div className="just-icon" onClick={() => activeWin(winId)}>{winInfo.icon}</div>
       <div className="just-title" onClick={() => activeWin(winId)}>{winInfo.title}</div>
 
-      {(winInfo.showClose ?? true) && <div className="just-icon just-close" onClick={() => closeWin(winId)}>
+      {(winInfo.showClose ?? true) &&
+        <div className="just-icon just-close" onClick={() => closeWin(winId)}>
         <Icon icon={faCircleXmark}/>
       </div>}
     </div>

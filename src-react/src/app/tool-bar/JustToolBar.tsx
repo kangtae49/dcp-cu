@@ -15,7 +15,7 @@ import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {useCallback, useEffect, useState} from "react";
 import {INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/app/side-menu/ui/SideMenu.tsx";
-import {fromWinObjId} from "@/App.tsx";
+import {fromWinId, fromWinObjId} from "@/App.tsx";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
 
 
@@ -61,7 +61,7 @@ function JustToolBar() {
           SIDE_MENU_ID_LIST.map(item =>
             <div key={item.menuId} className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
               <div className="just-icon">
-                <Jdenticon size="25" value={item.menuId} />
+                <Jdenticon size="25" value={fromWinId(item.menuId).viewId} />
               </div>
             </div>
           )
