@@ -12,3 +12,4 @@ Output/
 .venv
 ~*
 scripts/data/
+scripts/
