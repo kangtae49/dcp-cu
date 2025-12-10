@@ -77,7 +77,7 @@ function JustToolBar() {
         }>
           {
             CONFIG_KEYS.map((winObjId) =>
-              <MenuItem className="just-menu-item" onClick={() => openWin(fromWinObjId(winObjId))}>
+              <MenuItem key={fromWinObjId(winObjId)} className="just-menu-item" onClick={() => openWin(fromWinObjId(winObjId))}>
                 <div className="just-icon">
                   <Jdenticon size="25" value={winObjId.viewId} />
                 </div>
