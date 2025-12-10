@@ -6,7 +6,7 @@ import type {
 } from "@/app/just-layout/justLayoutSlice.ts";
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
-import {get, set} from "lodash";
+import {get, isEqual, set} from "lodash";
 import {fromWinObjId} from "@/App.tsx";
 
 
@@ -158,6 +158,9 @@ export function removeEmpty(layout: JustNode | null): JustNode | null {
   const branch = findEmptyBranch(layout)
   if (branch === null) return layout
   if (branch.length === 0) return null
+  if (isEqual(branch, ['second'])) {  // first: side-menu
+    return layout;
+  }
   const lastSplitType = branch[branch.length - 1]
   const parentBranch = branch.slice(0, -1)
   const otherSplitType = lastSplitType === 'first' ? 'second' : 'first'

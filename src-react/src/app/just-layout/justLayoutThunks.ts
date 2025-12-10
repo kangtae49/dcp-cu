@@ -1,4 +1,4 @@
-import {getActiveWinIds, getBranchByWinId, hasWinId} from "@/app/just-layout/layoutUtil.ts";
+import {getActiveWinIds, getBranchByWinId, getBranchRightTop, hasWinId} from "@/app/just-layout/layoutUtil.ts";
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
 import type {JustLayoutActions} from "@/app/just-layout/justLayoutSlice.ts";
@@ -36,9 +36,15 @@ export function createJustLayoutThunks(sliceId: string) {
         const activeWinIds = getActiveWinIds(sliceState?.layout ?? null);
         const targetWinIds = activeWinIds.filter(activeWinId => activeWinId !== fromWinObjId({viewId: 'side-menu'}));
         if (targetWinIds.length === 0) {
+
+          const branch = getBranchRightTop(sliceState?.layout)
           dispatch(justLayoutActions.insertWin({
-            branch: [], direction: "row", index: -1, pos: "second", winId: winId, size: 25,
+            branch: branch, direction: "row", index: -1, pos: "stack", winId: winId,
           }))
+
+          // dispatch(justLayoutActions.insertWin({
+          //   branch: [], direction: "row", index: -1, pos: "second", winId: winId, size: 25,
+          // }))
         } else {
           const targetBranch = getBranchByWinId(sliceState?.layout ?? null, targetWinIds[0])
           if (targetBranch !== null) {
