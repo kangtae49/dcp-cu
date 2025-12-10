@@ -4,6 +4,7 @@ import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
 import SelectBox from "@/app/components/select/SelectBox.tsx";
+import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 
 interface Props {
   winObjId: WinObjId
@@ -25,6 +26,7 @@ function Page01View({winObjId}: Props) {
               <div className="search-item-label">기업체명</div>
               <div className="search-item-value">
                 <SelectBox
+                  onChange={(option) => console.log(option)}
                   options={[
                     {
                       value: "한화생명보험주식회사0",
@@ -49,11 +51,16 @@ function Page01View({winObjId}: Props) {
 
                   ]}
                 />
-                {/*<select>*/}
-                {/*  <option value="">한화생명보험주식회사1</option>*/}
-                {/*  <option value="">한화생명보험주식회사2</option>*/}
-                {/*  <option value="">한화생명보험주식회사3</option>*/}
-                {/*</select>*/}
+              </div>
+            </div>
+            <div className="search-item">
+              <div className="search-item-label">조회기간</div>
+              <div className="search-item-value">
+                <MonthPicker />
+              </div>
+              <div>~</div>
+              <div className="search-item-value">
+                <MonthPicker />
               </div>
             </div>
           </div>

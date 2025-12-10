@@ -61,6 +61,7 @@
 .page-search .search-filter {
     flex: 1;
     display: flex;
+    flex-direction: column;
 }
 
 .page-search .search-box {
@@ -70,14 +71,12 @@
 
 .search-row {
     display: flex;
-    flex-direction: column;
     padding: 3px;
 }
 
 .search-row .search-item {
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .search-item-label {
@@ -111,47 +110,3 @@
 }
 
 
-
-select {
-    border: 1px solid #c1cde0;
-    min-height: 30px;
-    padding: 3px;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    outline: none;
-}
-
-/*select li {*/
-/*    border-color: #007bff;*/
-/*    !*box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);*!*/
-/*}*/
-
-/*select option:checked {*/
-/*    background-color: #007bff !important;*/
-/*}*/
-
-/*select option:hover {*/
-/*    background-color: #007bff !important;*/
-/*}*/
-
-/*select:focus > option:checked {*/
-/*    background-color: #007bff;*/
-/*    color: white;*/
-/*}*/
-
-/*select option:checked {*/
-/*    background-color: #95b0d8;*/
-/*    !*color: #000;*!*/
-/*}*/
-
-
-
-select option:hover {
-    background-color: #007bff;
-    /*color: #000;*/
-}
-
-/*select option:focus {*/
-/*    background-color: #c338b7;*/
-/*}*/

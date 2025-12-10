@@ -8,6 +8,7 @@
     border-radius: 3px;
     box-sizing: border-box;
 
+
 }
 .just-select:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -24,6 +25,7 @@
     padding: 3px;
     border: 1px solid #393b40;
     border-radius: 5px;
+    background-color: white;
 }
 
 .just-selected .just-selected-label {
@@ -55,6 +57,7 @@
     max-height: 60vh;
     overflow: auto;
     box-sizing: border-box;
+    z-index: 100;
 }
 
 .just-select .szh-menu__item {
