@@ -68,7 +68,7 @@
 
 .page-search .search-box {
     flex: 0 0 65px;
-    padding-top: 3px;
+    padding: 3px;
 }
 
 
@@ -99,7 +99,7 @@
     /*padding: 6px;*/
     height: 30px;
     color: #ffc233;
-    background-color: #007bff;
+    background-color: #174aae;
     padding: 3px;
     box-sizing: border-box;
 

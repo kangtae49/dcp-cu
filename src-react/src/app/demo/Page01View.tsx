@@ -67,18 +67,28 @@ function Page01View({winObjId}: Props) {
                 <MonthPicker />
               </div>
             </div>
+            <div className="search-box">
+              <div className="search-icon-btn">
+                <div className="search-icon">
+                  <Icon icon={faMagnifyingGlass} />
+                </div>
+                <div className="search-btn-label">
+                  검색
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="search-box">
-          <div className="search-icon-btn">
-            <div className="search-icon">
-              <Icon icon={faMagnifyingGlass} />
-            </div>
-            <div className="search-btn-label">
-              검색
-            </div>
-          </div>
-        </div>
+        {/*<div className="search-box">*/}
+        {/*  <div className="search-icon-btn">*/}
+        {/*    <div className="search-icon">*/}
+        {/*      <Icon icon={faMagnifyingGlass} />*/}
+        {/*    </div>*/}
+        {/*    <div className="search-btn-label">*/}
+        {/*      검색*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
       <div className="page-grid">
         Grid
