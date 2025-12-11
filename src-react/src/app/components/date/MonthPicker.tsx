@@ -6,8 +6,22 @@ import "./MonthPicker.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCalendar} from "@fortawesome/free-solid-svg-icons"
 
-function MonthPicker () {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+interface Props {
+  initialDate?: Date | null
+  onChange?: (date: Date | null) => void
+}
+
+function MonthPicker ({initialDate, onChange}: Props) {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate ?? new Date());
+
+  const handleChange = (date: Date | null) => {
+    console.log(date)
+    setSelectedDate(date)
+
+    if (onChange) {
+      onChange(date)
+    }
+  }
   return (
     <div className="month-picker">
       <DatePicker
@@ -24,7 +38,7 @@ function MonthPicker () {
         icon={<Icon icon={faCalendar} />}
         yearDropdownItemNumber={15}
         selected={selectedDate}
-        onChange={(date) => setSelectedDate(date)}
+        onChange={(date) => handleChange(date)}
       />
     </div>
   );

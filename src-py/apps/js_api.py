@@ -225,11 +225,13 @@ class JsApi:
                 ))
 
     def start_script(self, job_id: str, subpath: str, args: list[str] = []):
-
-        script_path = get_scripts_path().joinpath(subpath)
-        interpreter = get_python_path()
-        print(script_path, interpreter)
-        print(f"start_script: ", job_id, script_path, subpath, args)
+        scripts_root = get_scripts_path()
+        print(f"start_script: ", job_id, subpath, args)
+        print(f"script root: ", scripts_root)
+        script_path_abs = scripts_root.joinpath(subpath).absolute()
+        interpreter_abs = get_python_path().absolute()
+        print(script_path_abs, interpreter_abs)
+        print(f"start_script: ", interpreter_abs, script_path_abs, args)
         dispatch_job_event(
             PyJobEvent(
                 action=PyAction.PY_JOB_STATUS,
@@ -243,12 +245,13 @@ class JsApi:
         def runner():
             try:
                 p = subprocess.Popen(
-                    [interpreter, script_path] + args,
+                    [interpreter_abs, script_path_abs] + args,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     # stderr=subprocess.STDOUT,
                     text=True,
                     bufsize=1,
+                    cwd=scripts_root
                 )
                 with process_lock:
                     processes[job_id] = p
