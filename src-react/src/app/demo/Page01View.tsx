@@ -9,9 +9,17 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {type ConfigsActions, type ConfigsState, createConfigsSlice} from "@/app/config/configsSlice.ts";
 import {useEffect, useState} from "react";
 import { format } from "date-fns";
+import {createJobMonitorSlice, type JobMonitorActions, type JobMonitorState} from "@/app/job/jobMonitorSlice.ts";
+import {createJobMonitorThunks} from "@/app/job/jobMonitorThunks.ts";
+import type {JobStatus} from "@/types/models";
 
 interface Props {
   winObjId: WinObjId
+}
+
+interface JobInfo {
+  jobId: string,
+  status: JobStatus
 }
 
 function Page01View({winObjId}: Props) {
@@ -21,9 +29,17 @@ function Page01View({winObjId}: Props) {
     // actions: configsActions,
     // dispatch
   } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
+
+  const {
+    state: jobMonitorState,
+    thunks: jobMonitorThunks,
+    dispatch
+  } = useDynamicSlice<JobMonitorState, JobMonitorActions>("JOB_MONITOR", createJobMonitorSlice, createJobMonitorThunks)
+
   const [company, setCompany] = useState<Option[]>([])
   const [startDate, setStartDate] = useState<Date | null>(new Date())
   const [endDate, setEndDate] = useState<Date | null>(new Date())
+  const [jobInfo, setJobInfo] = useState<JobInfo | null>(null)
 
   useEffect(() => {
     if (!configsState?.configs) return;
@@ -32,6 +48,16 @@ function Page01View({winObjId}: Props) {
     setCompany(toOptions(config.data))
   }, [configsState?.configs]);
 
+  useEffect(() => {
+    if (jobInfo === null) return;
+
+    const status: JobStatus | null = dispatch(jobMonitorThunks.getJobStatus({jobId: jobInfo?.jobId}))
+    if (status !== null && jobInfo.status !== status) {
+      console.log('jobStatus:', status)
+      setJobInfo({...jobInfo, status})
+    }
+
+  }, [jobMonitorState, jobInfo]);
 
   const toOptions = (data: Record<string, string>[]): Option[] => {
     return data.map(d => {
@@ -50,11 +76,16 @@ function Page01View({winObjId}: Props) {
   }
 
   const searchPage01 = () => {
-    console.log('searchPage01')
-    const jobId = "job_001"
+
+
     if (!startDate || !endDate) return;
     const startYm = format(startDate, "yyyyMM");
     const endYm = format(endDate, "yyyyMM");
+
+    if (jobInfo !== null && jobInfo.status === 'RUNNING') return;
+    console.log('searchPage01')
+    const jobId = "job_001"
+    setJobInfo({jobId, status: 'RUNNING'})
     window.pywebview.api.start_script(jobId, "page01.py", [jobId, winObjId.viewId, "101", startYm, endYm])
   }
 
@@ -92,7 +123,11 @@ function Page01View({winObjId}: Props) {
             <div className="search-box">
               <div className="search-icon-btn" onClick={() => searchPage01()}>
                 <div className="search-icon">
-                  <Icon icon={faMagnifyingGlass} />
+                  {jobInfo !== null && jobInfo.status === 'RUNNING' ?
+                    <div className="spinner"></div>
+                    :
+                    <Icon icon={faMagnifyingGlass} />
+                  }
                 </div>
                 <div className="search-btn-label">
                   검색
