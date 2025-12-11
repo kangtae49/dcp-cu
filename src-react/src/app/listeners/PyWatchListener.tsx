@@ -23,7 +23,8 @@ function PyWatchListener() {
       const pyWatchEvent = e.detail;
       const watchFile = pyWatchEvent.data;
       console.log(watchFile)
-      if (!keys.includes(watchFile.key)) return;
+      const files = keys.map(k => k?.params?.['file'])
+      if (!files.includes(watchFile.key)) return;
 
       if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
         window.pywebview.api.read_config(watchFile.key).then(res => {

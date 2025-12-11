@@ -24,6 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
+    "charset": "utf8",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

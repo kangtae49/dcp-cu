@@ -3,14 +3,40 @@ import {type WinObjId} from "@/App.tsx";
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
-import SelectBox from "@/app/components/select/SelectBox.tsx";
+import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
+import {useDynamicSlice} from "@/store/hooks.ts";
+import {type ConfigsActions, type ConfigsState, createConfigsSlice} from "@/app/config/configsSlice.ts";
+import {useEffect, useState} from "react";
 
 interface Props {
   winObjId: WinObjId
 }
 
 function Page01View({winObjId}: Props) {
+  const configKey = "업체명.xlsx";
+  const {
+    state: configsState,
+    // actions: configsActions,
+    // dispatch
+  } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
+  const [company, setCompany] = useState<Option[]>([])
+
+  useEffect(() => {
+    if (!configsState?.configs) return;
+    const config = configsState?.configs?.[configKey];
+    console.log('config:', config)
+    setCompany(toOptions(config.data))
+  }, [configsState?.configs]);
+
+
+  const toOptions = (data: Record<string, string>[]): Option[] => {
+    return data.map(d => {
+      return {value: d.cdVlId, label: d.cdVlNm}
+    })
+  }
+
+  // useDynamicSlice
   return (
     <div className="win-page">
       <div className="page-title">
@@ -27,29 +53,7 @@ function Page01View({winObjId}: Props) {
               <div className="search-item-value">
                 <SelectBox
                   onChange={(option) => console.log(option)}
-                  options={[
-                    {
-                      value: "한화생명보험주식회사0",
-                      label: "한화생명보험주식회사0"
-                    },
-                    {
-                      value: "한화",
-                      label: "한화"
-                    },
-                    {
-                      value: "한화생명보험주식회사3",
-                      label: "한화생명보험주식회사3"
-                    },
-                    {
-                      value: "한화생명보험주식회사1",
-                      label: "한화생명보험주식회사1"
-                    },
-                    {
-                      value: "한화생명보험주식회사2",
-                      label: "한화생명보험주식회사2"
-                    },
-
-                  ]}
+                  options={company}
                 />
               </div>
             </div>
@@ -66,8 +70,13 @@ function Page01View({winObjId}: Props) {
           </div>
         </div>
         <div className="search-box">
-          <div className="search-btn">
-            <Icon icon={faMagnifyingGlass} />
+          <div className="search-icon-btn">
+            <div className="search-icon">
+              <Icon icon={faMagnifyingGlass} />
+            </div>
+            <div className="search-btn-label">
+              검색
+            </div>
           </div>
         </div>
       </div>
