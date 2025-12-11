@@ -36,6 +36,7 @@ function MonthPicker ({initialDate, onChange}: Props) {
         showYearDropdown
         scrollableYearDropdown
         icon={<Icon icon={faCalendar} />}
+        toggleCalendarOnIconClick
         yearDropdownItemNumber={15}
         selected={selectedDate}
         onChange={(date) => handleChange(date)}
