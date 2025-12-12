@@ -29,10 +29,11 @@ function TerminalView({lines}: Props) {
       const term = new XTerm({
         // fontFamily: 'operator mono,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
         fontFamily: '"JetBrains Mono", Consolas, "Courier New", monospace',
+        // fontFamily: 'Pretendard',
         fontSize: 14,
         lineHeight: 1.2,
         fontWeight: 'normal',
-        fontWeightBold: 'bold',
+        // fontWeightBold: 'bold',
         theme: { background: '#0c0c0c' },
         cursorStyle: 'underline',
         cursorBlink: false,

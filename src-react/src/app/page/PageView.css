@@ -4,6 +4,7 @@
     padding: 1px;
     background-color: #ede9e9;
     height: 100%;
+    box-sizing: border-box;
     /*background: linear-gradient(*/
     /*    to bottom,*/
     /*    #e8f4ff 0%,*/
