@@ -12,7 +12,6 @@ function TerminalView({lines}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -28,9 +27,13 @@ function TerminalView({lines}: Props) {
   useEffect(() => {
     if (containerRef.current) {
       const term = new XTerm({
-        fontFamily: 'operator mono,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+        // fontFamily: 'operator mono,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+        fontFamily: '"JetBrains Mono", Consolas, "Courier New", monospace',
         fontSize: 14,
-        theme: { background: '#1e1f22' },
+        lineHeight: 1.2,
+        fontWeight: 'normal',
+        fontWeightBold: 'bold',
+        theme: { background: '#0c0c0c' },
         cursorStyle: 'underline',
         cursorBlink: false,
       });
@@ -66,6 +69,7 @@ function TerminalView({lines}: Props) {
     for(const line of lines) {
       termRef?.current?.writeln(line)
     }
+    fitAddonRef.current?.fit();
   }, [lines.length]);
 
   return (

@@ -155,7 +155,7 @@
     min-height: 0;
 }
 .page-body .tabs {
-    flex: 0 0 30px;
+    flex: 0 0 35px;
     display: flex;
     align-items: center;
     gap: 3px;
@@ -166,14 +166,19 @@
     display: flex;
     min-height: 0;
     /*padding: 1px;*/
-    /*box-sizing: border-box;*/
+    /*border: 1px solid #ac2070;*/
+    box-sizing: border-box;
 }
 
 .page-body .tabs .tab-title {
     padding: 3px;
-    background-color: #25324d;
+    background-color: #8b8e95;
     border: 1px solid #43454a;
     border-radius: 3px;
-    font-size: 12px;
+    font-size: 14px;
     color: #bcccdc;
+}
+
+.page-body .tabs .tab-title.active {
+    background-color: #25324d;
 }

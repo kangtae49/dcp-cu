@@ -2,7 +2,7 @@ import "./PageView.css"
 import {type WinObjId} from "@/App.tsx";
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
+import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
@@ -19,6 +19,7 @@ import {createJobMonitorThunks} from "@/app/job/jobMonitorThunks.ts";
 import type {JobDataStream, JobStatus, PyJobEvent} from "@/types/models";
 import TerminalView from "@/app/terminal/TerminalView.tsx";
 import {createPageSlice, PAGE01_ID, type PageActions, type PageState} from "@/app/page/pageSlice.ts";
+import classNames from "classnames";
 
 interface Props {
   winObjId: WinObjId
@@ -27,7 +28,9 @@ interface Props {
 function Page01View({winObjId}: Props) {
   const configKey = "업체명.xlsx";
   const jobId = "job01"
-
+  // chart-line.svg
+  // terminal.svg
+  // table.svg, table-cells-large.svg, table-cells.svg, table-list.svg
   const [companyList, setCompanyList] = useState<Option[]>([])
 
   const dispatch = useAppDispatch();
@@ -163,9 +166,33 @@ function Page01View({winObjId}: Props) {
       </div>
       <div className="page-body">
         <div className="tabs">
-          <div className="tab-graph tab-title" onClick={()=>dispatch(pageActions.setTab('GRAPH'))}>graph</div>
-          <div className="tab-graph tab-title" onClick={()=>dispatch(pageActions.setTab('GRID'))}>grid</div>
-          <div className="tab-graph tab-title" onClick={()=>dispatch(pageActions.setTab('LOG'))}>log</div>
+          <div className={classNames(
+            "tab-title",
+                {
+                  "active": pageState?.tab === "GRAPH",
+                }
+              )}
+              onClick={()=>dispatch(pageActions.setTab('GRAPH'))}>
+            <Icon icon={faChartLine} />graph
+          </div>
+          <div className={classNames(
+            "tab-title",
+                {
+                  "active": pageState?.tab === "GRID",
+                }
+              )}
+              onClick={()=>dispatch(pageActions.setTab('GRID'))}>
+            <Icon icon={faTableList} />grid
+          </div>
+          <div className={classNames(
+            "tab-title",
+                {
+                  "active": pageState?.tab === "LOG",
+                }
+              )}
+              onClick={()=>dispatch(pageActions.setTab('LOG'))}>
+            <Icon icon={faTerminal} />log
+          </div>
         </div>
         <div className="tab-body">
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
