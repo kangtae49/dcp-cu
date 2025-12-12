@@ -72,7 +72,10 @@ function ConfigGrid({configKey}: Props) {
     setConfigTable(configsState.configs[configKey] ?? defaultConfigTable)
   }, [configsState, configKey])
 
-
+  useEffect(() => {
+    // if (ref.current == null) return null;
+    ref?.current?.forceUpdate();
+  }, [configTable]);
 
   const handleColumnResize = (ci: Id, width: number) => {
     setColumns((prevColumns) => {

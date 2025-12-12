@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {type RootState, type AppDispatch, injectReducer, getSlice} from "./index";
 import type {Slice} from "@reduxjs/toolkit";
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
 // import type {Slice} from "@reduxjs/toolkit";
 // import {useEffect} from "react";
 
@@ -33,10 +33,15 @@ export function useDynamicSlice<
     if (!slice) {
       console.log("useDynamicSlice createSlice", id)
       slice = createSliceFn(id);
-      injectReducer(id, slice)
+      // injectReducer(id, slice)
     }
     return slice
   }, [id]);
+
+  useEffect(() => {
+    // console.log("useDynamicSlice: Injecting reducer via useEffect", id);
+    injectReducer(id, slice);
+  }, [id, slice]);
 
   // injectReducer(id, slice)
   // useEffect(() => {

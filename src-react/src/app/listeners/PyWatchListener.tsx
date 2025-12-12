@@ -16,17 +16,22 @@ function PyWatchListener() {
   } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
   useEffect(() => {
-    const keys = configsState!.keys;
-    console.log('keys:', keys)
 
+    if (!configsState || !configsState.keys) {
+      return;
+    }
+    console.log('configsState:', configsState)
+    const keys = configsState.keys;
+    if (!keys) return;
     const handler = (e: CustomEvent<PyWatchEvent>) => {
       const pyWatchEvent = e.detail;
       const watchFile = pyWatchEvent.data;
       console.log(watchFile)
-      const files = keys.map(k => k?.params?.['file'])
-      if (!files.includes(watchFile.key)) return;
+      const files = keys.map(k => k.params?.['file'])
+      if (!files?.includes(watchFile.key)) return;
 
       if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
+        console.log('!!!!!!!!!!!!!')
         window.pywebview.api.read_config(watchFile.key).then(res => {
           dispatch(
             configsActions.updateConfigs({
@@ -55,7 +60,7 @@ function PyWatchListener() {
       window.removeEventListener("py-watch-event", handler as EventListener);
     }
 
-  }, [])
+  }, [configsState, dispatch])
   return null;
 }
 

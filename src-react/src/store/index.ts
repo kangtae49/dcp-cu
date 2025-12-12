@@ -40,6 +40,7 @@ export const store = configureStore({
 
 export function injectReducer(key: string, slice: Slice) { //reducer: Reducer) {
   if (asyncSlices[key]) return
+  console.log("injectReducer", key)
   asyncSlices[key] = slice
   const reducer = createReducer()
   store.replaceReducer(reducer)

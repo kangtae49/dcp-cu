@@ -96,7 +96,7 @@ function Page01View({winObjId}: Props) {
   const handleCompany = (option: Option) => {
     dispatch(pageActions.setCompany(option))
   }
-  const searchPage01 = async () => {
+  const searchPage01 = () => {
 
     if (!pageState?.startDate || !pageState?.endDate) return;
     const startYm = format(pageState.startDate, "yyyyMM");
@@ -106,11 +106,11 @@ function Page01View({winObjId}: Props) {
     console.log('searchPage01')
 
     if (pageState.jobInfo) {
-      await dispatch(jobMonitorActions.clearEvents({jobId: pageState.jobInfo?.jobId}))
+      dispatch(jobMonitorActions.clearEvents({jobId: pageState.jobInfo?.jobId}))
     }
 
     dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING'}))
-    window.pywebview.api.start_script(jobId, "page01.py", [jobId, winObjId.viewId, "101", startYm, endYm])
+    window.pywebview.api.start_script(jobId, "page01.py", [jobId, winObjId.viewId, "101", startYm, endYm]).then()
   }
 
   return (
