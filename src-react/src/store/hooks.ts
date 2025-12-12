@@ -38,7 +38,9 @@ export function useDynamicSlice<
     return slice
   }, [id]);
 
-
+  // injectReducer(id, slice)
+  // useEffect(() => {
+  // }, [id, slice])
   // injectReducer(id, slice)
   // useEffect(() => {
   //   console.log("useDynamicSlice", id)

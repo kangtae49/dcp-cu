@@ -3,7 +3,7 @@ import {devToolsEnhancer} from "@redux-devtools/remote";
 
 // const staticReducers = {} as Record<string, Reducer>
 // const asyncReducers = {} as Record<string, Reducer>
-const staticSlices = {} as Record<string, Slice>
+// const staticSlices = {} as Record<string, Slice>
 const asyncSlices = {} as Record<string, Slice>
 
 function slicesToReducers(slices: Record<string, any>) {
@@ -13,11 +13,14 @@ function slicesToReducers(slices: Record<string, any>) {
 }
 
 function createReducer() {
-  if (Object.keys(staticSlices).length === 0 && Object.keys(asyncSlices).length === 0) {
+  // if (Object.keys(staticSlices).length === 0 && Object.keys(asyncSlices).length === 0) {
+  //   return (state = {}) => state
+  // }
+  if (Object.keys(asyncSlices).length === 0) {
     return (state = {}) => state
   }
   return combineReducers({
-    ...slicesToReducers(staticSlices),
+    // ...slicesToReducers(staticSlices),
     ...slicesToReducers(asyncSlices),
   })
 }
@@ -38,7 +41,8 @@ export const store = configureStore({
 export function injectReducer(key: string, slice: Slice) { //reducer: Reducer) {
   if (asyncSlices[key]) return
   asyncSlices[key] = slice
-  store.replaceReducer(createReducer())
+  const reducer = createReducer()
+  store.replaceReducer(reducer)
 }
 
 export function getSlice (key: string): Slice  {

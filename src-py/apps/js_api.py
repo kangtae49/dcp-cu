@@ -244,6 +244,7 @@ class JsApi:
 
         def runner():
             try:
+                CREATE_NO_WINDOW = 0x08000000
                 p = subprocess.Popen(
                     [interpreter_abs, script_path_abs] + args,
                     stdout=subprocess.PIPE,
@@ -251,6 +252,8 @@ class JsApi:
                     # stderr=subprocess.STDOUT,
                     text=True,
                     bufsize=1,
+                    shell=False,
+                    creationflags=CREATE_NO_WINDOW,
                     cwd=scripts_root
                 )
                 with process_lock:

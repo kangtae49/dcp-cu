@@ -14,13 +14,19 @@ import Jdenticon from "react-jdenticon";
 import PyJobListener from "@/app/listeners/PyJobListener.tsx";
 import PyWatchListener from "@/app/listeners/PyWatchListener.tsx";
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {CONFIG_KEYS, type ConfigsActions, type ConfigsSlice, createConfigsSlice} from "@/app/config/configsSlice.ts";
+import {
+  CONFIG_ID,
+  CONFIG_KEYS,
+  type ConfigsActions,
+  type ConfigsSlice,
+  createConfigsSlice
+} from "@/app/config/configsSlice.ts";
 import {useEffect, useState} from "react";
 import DemoGridView from "@/app/demo/DemoGridView.tsx";
 import ConfigView from "@/app/config/ui/ConfigView.tsx";
 import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import {stableStringify} from "@/utils/json-util.ts";
-import Page01View from "@/app/demo/Page01View.tsx";
+import Page01View from "@/app/page/Page01View.tsx";
 
 export type ViewId = "side-menu"
   | "page01"
@@ -31,10 +37,10 @@ export interface WinObjId {
 }
 
 const viewMap = {
-  "side-menu": (_winId: string) => ({
+  "side-menu": (winId: string) => ({
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
-    view: <SideMenu />,
+    view: <SideMenu key={winId} />,
     canDrag: false,
     canDrop: false,
     showTitle: false,
@@ -45,28 +51,28 @@ const viewMap = {
     return ({
       title: "자산통계정보",
       icon: <Jdenticon size="30" value={winObjId.viewId} />,
-      view: <Page01View winObjId={winObjId} />
+      view: <Page01View key={winId} winObjId={winObjId} />
     })
   },
-  "demo": (_winId: string) => ({
+  "demo": (winId: string) => ({
     title: "Demo",
     icon: <Jdenticon size="30" value="demo" />,
-    view: <DemoView />
+    view: <DemoView key={winId} />
   }),
-  "demo-grid": (_winId: string) => ({
+  "demo-grid": (winId: string) => ({
     title: "Demo Grid",
     icon: <Jdenticon size="30" value="demo-grid" />,
-    view: <DemoGridView />
+    view: <DemoGridView key={winId} />
   }),
-  "demo-line-chart": (_winId: string) => ({
+  "demo-line-chart": (winId: string) => ({
     title: "Demo Line Chart",
     icon: <Jdenticon size="30" value="demo-line-chart" />,
-    view: <DemoLineChartView />
+    view: <DemoLineChartView key={winId} />
   }),
-  "about": (_winId: string) => ({
+  "about": (winId: string) => ({
     title: "About",
     icon: <Jdenticon size="30" value="about" />,
-    view: <AboutView />
+    view: <AboutView key={winId} />
   }),
 
   // "setting-config": (winId: string) => {
@@ -146,7 +152,7 @@ function App() {
   const [isPywebviewReady, setIsPywebviewReady] = useState(false);
   const {
     actions: configsActions, dispatch
-  } = useDynamicSlice<ConfigsSlice, ConfigsActions>("CONFIGS", createConfigsSlice)
+  } = useDynamicSlice<ConfigsSlice, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
   useEffect(() => {
 

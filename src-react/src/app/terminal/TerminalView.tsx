@@ -60,14 +60,13 @@ function TerminalView({lines}: Props) {
     };
   }, []);
 
-
   useEffect(() => {
     // if (!termRef.current) return;
     termRef?.current?.clear()
     for(const line of lines) {
       termRef?.current?.writeln(line)
     }
-  }, [lines, termRef.current]);
+  }, [lines.length]);
 
   return (
     <div

@@ -1,5 +1,7 @@
 import type {JobStatus, PyJobEvent} from "@/types/models";
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
+
+export const JOB_MONITOR_ID = "JOB-MONITOR"
 
 export interface JobMonitorState {
   status: Record<string, JobStatus>,
@@ -29,13 +31,13 @@ export const createJobMonitorSlice = (id: string) =>
     name: id,
     initialState,
     reducers: {
-      setStatus: (state, { payload }: {payload: JobMonitorSetStatus}) => {
+      setStatus: (state, { payload }: PayloadAction<JobMonitorSetStatus>) => {
         state.status[payload.jobId] = payload.status
       },
-      addEvent: (state, { payload }: {payload: JobMonitorAddEvent}) => {
+      addEvent: (state, { payload }: PayloadAction<JobMonitorAddEvent>) => {
         state.events[payload.jobId] = [...(state.events[payload.jobId] ?? []), payload.event]
       },
-      clearEvents: (state, { payload }: {payload: JobMonitorClearEvent}) => {
+      clearEvents: (state, { payload }: PayloadAction<JobMonitorClearEvent>) => {
         state.events[payload.jobId] = []
       }
     }

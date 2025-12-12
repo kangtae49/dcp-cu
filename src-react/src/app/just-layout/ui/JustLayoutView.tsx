@@ -6,7 +6,7 @@ import {
   createJustLayoutSlice, type GetWinInfoFn,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustNode,
+  type JustNode, LAYOUT_ID,
 } from "../justLayoutSlice.ts";
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "@/app/just-layout/ui/JustNodeView.tsx";
@@ -18,7 +18,7 @@ interface Props {
   initialValue: JustNode
 }
 
-export const LAYOUT_ID = "just-layout"
+
 
 export function JustLayoutView({getWinInfo, initialValue}: Props) {
   const {onLoad} = useOnload();

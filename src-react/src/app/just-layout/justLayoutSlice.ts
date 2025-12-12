@@ -1,4 +1,4 @@
-import {createSlice, current} from "@reduxjs/toolkit";
+import {createSlice, current, type PayloadAction} from "@reduxjs/toolkit";
 import {type JSX} from "react";
 import {
   activeWinId,
@@ -8,7 +8,7 @@ import {
   updateSplitSize,
 } from "@/app/just-layout/layoutUtil.ts";
 
-
+export const LAYOUT_ID = "JUST-LAYOUT"
 
 export type JustDirection = 'row' | 'column';
 export type JustSplitDirection = 'first' | 'second';
@@ -110,39 +110,39 @@ export const createJustLayoutSlice = (id: string) =>
     name: id,
     initialState,
     reducers: {
-      setLayout: (state, { payload }: {payload: JustNode}) => { state.layout = payload },
-      insertWin: (state, { payload }: {payload: JustPayloadInsert}) => {
+      setLayout: (state, { payload }: PayloadAction<JustNode>) => { state.layout = payload },
+      insertWin: (state, { payload }: PayloadAction<JustPayloadInsert>) => {
         state.layout = insertWinId(
           state.layout == null ? null : current(state.layout),
           payload
         )
       },
-      removeWin: (state, { payload }: {payload: JustPayloadRemove}) => {
+      removeWin: (state, { payload }: PayloadAction<JustPayloadRemove>) => {
         state.layout = removeEmpty(removeWinId(
           state.layout == null ? null : current(state.layout),
           payload.winId
         ))
       },
-      removeAllTabs: (state, { payload }: {payload: JustPayloadAllTabs}) => {
+      removeAllTabs: (state, { payload }: PayloadAction<JustPayloadAllTabs>) => {
         state.layout = removeEmpty(removeAllTabs(
           state.layout == null ? null : current(state.layout),
           payload.branch
         ))
       },
-      activeWin: (state, { payload }: {payload: JustPayloadActive}) => {
+      activeWin: (state, { payload }: PayloadAction<JustPayloadActive>) => {
         state.layout = activeWinId(
           state.layout == null ? null : current(state.layout),
           payload.winId
         )
       },
-      updateResize: (state, { payload }: {payload: JustPayloadResize}) => {
+      updateResize: (state, { payload }: PayloadAction<JustPayloadResize>) => {
         state.layout = updateSplitSize(
           state.layout == null ? null : current(state.layout),
           payload.branch,
           payload.size
         )
       },
-      moveWin: (state, { payload }: {payload: JustPayloadMoveWin}) => {
+      moveWin: (state, { payload }: PayloadAction<JustPayloadMoveWin>) => {
         state.layout = removeEmpty(moveWinId(
           state.layout == null ? null : current(state.layout),
           payload.winId,

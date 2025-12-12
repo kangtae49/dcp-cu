@@ -1,6 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {type WinObjId} from "@/App.tsx";
 
+export const CONFIG_ID = "CONFIGS"
+
 export interface ConfigTable {
   key: string,
   header: string [],

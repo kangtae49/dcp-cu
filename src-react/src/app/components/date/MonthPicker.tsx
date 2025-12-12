@@ -1,22 +1,22 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {useState} from "react";
 import { ko } from 'date-fns/locale';
 import "./MonthPicker.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCalendar} from "@fortawesome/free-solid-svg-icons"
+import {format, parse} from "date-fns";
 
 interface Props {
-  initialDate?: Date | null
-  onChange?: (date: Date | null) => void
+  value?: string | null
+  onChange?: (date: string | null) => void
 }
 
-function MonthPicker ({initialDate, onChange}: Props) {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate ?? new Date());
+function MonthPicker ({value, onChange}: Props) {
+  // const [selectedDate, setSelectedDate] = useState<Date | null>(value ?? new Date());
 
-  const handleChange = (date: Date | null) => {
+  const handleChange = (date: string | null) => {
     console.log(date)
-    setSelectedDate(date)
+    // setSelectedDate(date)
 
     if (onChange) {
       onChange(date)
@@ -38,8 +38,8 @@ function MonthPicker ({initialDate, onChange}: Props) {
         icon={<Icon icon={faCalendar} />}
         toggleCalendarOnIconClick
         yearDropdownItemNumber={15}
-        selected={selectedDate}
-        onChange={(date) => handleChange(date)}
+        selected={parse(value ?? format(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd", new Date())}
+        onChange={(date) => handleChange(format(date ?? new Date(), "yyyy-MM-dd"))}
       />
     </div>
   );

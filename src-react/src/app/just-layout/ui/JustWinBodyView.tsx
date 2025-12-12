@@ -6,11 +6,10 @@ import {
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustStack,
+  type JustStack, LAYOUT_ID,
 } from "@/app/just-layout/justLayoutSlice.ts";
 import {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
-import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {Activity, useRef} from "react";
 
 interface Prop {

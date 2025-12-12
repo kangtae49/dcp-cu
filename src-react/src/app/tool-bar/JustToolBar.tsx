@@ -4,9 +4,8 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   createJustLayoutSlice,
   type JustLayoutActions,
-  type JustLayoutState
+  type JustLayoutState, LAYOUT_ID
 } from "@/app/just-layout/justLayoutSlice.ts";
-import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import classNames from "classnames";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"

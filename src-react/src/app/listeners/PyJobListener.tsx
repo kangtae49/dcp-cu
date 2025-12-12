@@ -1,7 +1,12 @@
 import {useEffect} from "react";
 import type {JobDataStatus, PyJobEvent} from "@/types/models";
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {createJobMonitorSlice, type JobMonitorActions, type JobMonitorState} from "@/app/job/jobMonitorSlice.ts";
+import {
+  createJobMonitorSlice,
+  JOB_MONITOR_ID,
+  type JobMonitorActions,
+  type JobMonitorState
+} from "@/app/job/jobMonitorSlice.ts";
 
 
 function PyJobListener() {
@@ -9,7 +14,7 @@ function PyJobListener() {
     // state: jobMonitorState,
     actions: jobMonitorActions,
     dispatch
-  } = useDynamicSlice<JobMonitorState, JobMonitorActions>("JOB_MONITOR", createJobMonitorSlice)
+  } = useDynamicSlice<JobMonitorState, JobMonitorActions>(JOB_MONITOR_ID, createJobMonitorSlice)
 
   useEffect(() => {
     const handler = (e: CustomEvent<PyJobEvent>) => {

@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {
+  CONFIG_ID,
   type ConfigsActions,
   type ConfigsState,
   type ConfigTable,
@@ -19,7 +20,7 @@ function ConfigGrid({configKey}: Props) {
     state: configsState,
     // actions: configsActions,
     // dispatch
-  } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
+  } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
   const ref = useRef<ReactGrid>(null)
 

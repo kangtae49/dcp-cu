@@ -3,7 +3,7 @@ import {
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustNode, type JustSplitDirection, type JustSplitType
+  type JustNode, type JustSplitDirection, type JustSplitType, LAYOUT_ID
 } from "@/app/just-layout/justLayoutSlice.ts";
 import JustWinView from "@/app/just-layout/ui/JustWinView.tsx";
 import classNames from "classnames";
@@ -20,13 +20,12 @@ interface Props {
 }
 
 export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo }) => {
-  const layoutId = "just-layout"
   const refNode = useRef<HTMLDivElement>(null);
 
   const {
     // state: justLayoutState,
     actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
   const dispatch = useAppDispatch();
 
   const onResize= ({size}: SplitSize) => {

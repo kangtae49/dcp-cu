@@ -4,7 +4,7 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   type ConfigsState,
   type ConfigsActions,
-  createConfigsSlice,
+  createConfigsSlice, CONFIG_ID,
 } from "@/app/config/configsSlice.ts";
 
 
@@ -13,7 +13,7 @@ function PyWatchListener() {
     state: configsState,
     actions: configsActions,
     dispatch
-  } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
+  } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
   useEffect(() => {
     const keys = configsState!.keys;

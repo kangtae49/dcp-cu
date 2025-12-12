@@ -8,11 +8,10 @@ import {
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustStack,
+  type JustStack, LAYOUT_ID,
 } from "@/app/just-layout/justLayoutSlice.ts";
 import JustDraggableTitle, {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
-import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {useEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 // import '@szhsin/react-menu/dist/index.css';

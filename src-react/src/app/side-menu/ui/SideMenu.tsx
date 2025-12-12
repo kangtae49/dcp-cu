@@ -5,9 +5,8 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   createJustLayoutSlice,
   type JustLayoutActions,
-  type JustLayoutState
+  type JustLayoutState, LAYOUT_ID
 } from "@/app/just-layout/justLayoutSlice.ts";
-import {LAYOUT_ID} from "@/app/just-layout/ui/JustLayoutView.tsx";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 import {fromWinId, fromWinObjId} from "@/App.tsx";
 
