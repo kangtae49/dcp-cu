@@ -18,6 +18,8 @@
     "@reduxjs/toolkit": "^2.9.2",
     "@silevis/reactgrid": "^4.1.17",
     "@szhsin/react-menu": "^4.5.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
     "immutability-helper": "^3.1.1",

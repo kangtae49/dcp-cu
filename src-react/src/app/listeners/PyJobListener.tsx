@@ -21,9 +21,21 @@ function PyJobListener() {
       }
       dispatch(jobMonitorActions.addEvent({jobId: pyJobEvent.job_id!, event: pyJobEvent}))
     }
+    const handleFocus = () => {
+      console.log('re_send_events');
+      window.pywebview.api.re_send_events()
+    };
+
+    const handleBlur = () => {
+    };
+
     window.addEventListener("py-job-event", handler as EventListener);
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("blur", handleBlur);
     return () => {
       window.removeEventListener("py-job-event", handler as EventListener);
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("blur", handleBlur);
     }
 
   }, [])

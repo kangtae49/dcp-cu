@@ -71,6 +71,7 @@ class WatchFile(BaseModel):
     mtime: int
 
 JobData = JobDataStream | JobDataStatus | JobDataError
+# JobData = Union[JobDataStream, JobDataStatus, JobDataError]
 
 class PyJobEvent(BaseModel):
     job_id: str = ""

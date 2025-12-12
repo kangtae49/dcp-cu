@@ -1,8 +1,8 @@
 from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import webview
 
-from apps.utils.event_util import dispatch_watch_event
 from apps.models import PyWatchEvent, PyAction, WatchFile, WatchStatus
 import time
 
@@ -10,11 +10,12 @@ from apps.utils.path_util import get_data_path
 
 
 class MyHandler(FileSystemEventHandler):
-    def __init__(self, window, watch_dir):
+    def __init__(self, watch_dir, event_api):
         # self.last_mtime = {}
-        self.window = window
+        # self.window = window
         self.exts = ['.xlsx', '.xls']
         self.watch_dir = watch_dir
+        self.event_api = event_api
 
     def dispatch(self, event):
         if event.is_directory:
@@ -42,7 +43,7 @@ class MyHandler(FileSystemEventHandler):
 
 
     def on_modified(self, event):
-        dispatch_watch_event(self.window, PyWatchEvent(
+        self.event_api.dispatch_watch_event(PyWatchEvent(
             action=PyAction.PY_WATCH_FILE,
             data=WatchFile(
                 status=WatchStatus.MODIFIED,
@@ -53,7 +54,7 @@ class MyHandler(FileSystemEventHandler):
         ))
 
     def on_created(self, event):
-        dispatch_watch_event(self.window, PyWatchEvent(
+        self.event_api.dispatch_watch_event(PyWatchEvent(
             action=PyAction.PY_WATCH_FILE,
             data=WatchFile(
                 status=WatchStatus.CREATED,
@@ -64,7 +65,7 @@ class MyHandler(FileSystemEventHandler):
         ))
 
     def on_deleted(self, event):
-        dispatch_watch_event(self.window, PyWatchEvent(
+        self.event_api.dispatch_watch_event(PyWatchEvent(
             action=PyAction.PY_WATCH_FILE,
             data=WatchFile(
                 status=WatchStatus.DELETED,
@@ -75,10 +76,10 @@ class MyHandler(FileSystemEventHandler):
         ))
 
 
-def start_watchdog_data(window):
+def start_watchdog_data(event_api):
     print("start watchdog")
     watch_dir = get_data_path()
-    event_handler = MyHandler(window, watch_dir)
+    event_handler = MyHandler(watch_dir, event_api)
     observer = Observer()
     observer.schedule(event_handler, path=watch_dir, recursive=True)
     observer.start()

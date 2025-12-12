@@ -20,6 +20,9 @@ export interface JobMonitorAddEvent {
   jobId: string,
   event: PyJobEvent
 }
+export interface JobMonitorClearEvent {
+  jobId: string,
+}
 
 export const createJobMonitorSlice = (id: string) =>
   createSlice({
@@ -32,6 +35,9 @@ export const createJobMonitorSlice = (id: string) =>
       addEvent: (state, { payload }: {payload: JobMonitorAddEvent}) => {
         state.events[payload.jobId] = [...(state.events[payload.jobId] ?? []), payload.event]
       },
+      clearEvents: (state, { payload }: {payload: JobMonitorClearEvent}) => {
+        state.events[payload.jobId] = []
+      }
     }
   })
 

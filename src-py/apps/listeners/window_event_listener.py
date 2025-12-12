@@ -19,6 +19,7 @@ class WindowEventListener:
         window.events.closing += self.on_closing
         window.events.closed += self.on_closed
 
+
     def on_initialized(self, renderer):
         # return False to cancel initialization
         print(f'GUI is initialized with renderer: {renderer}')
@@ -29,7 +30,6 @@ class WindowEventListener:
     def on_shown(self):
         self.custom_event("shown")
         print('on_show')
-
     def on_loaded(self):
         print('on_loaded')
         DropFilesListener(self.window)
@@ -41,6 +41,7 @@ class WindowEventListener:
         #     document.head.appendChild(s);
         #     """
         #     self.window.evaluate_js(js_code)
+
 
     def on_closing(self):
         print('closing')

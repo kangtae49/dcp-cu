@@ -15,7 +15,6 @@ from charset_normalizer import from_path
 from pandas._typing import IntStrT
 
 from apps.constants import APP_NAME
-from apps.utils.event_util import dispatch_job_event
 from apps.models import DialogType, DialogOptions, Sub, PyJobEvent, PyAction, StreamType, JobData, \
     JobDataStatus, JobStatus, JobDataError, JobDataStream
 import pandas as pd
@@ -41,9 +40,10 @@ class ApiError(Exception):
         super().__init__(f"{message}")
 
 class JsApi:
-    def __init__(self):
+    def __init__(self, event_api):
         self.setting = {}
         self.fullscreen = False
+        self.event_api = event_api
 
     def dialog_open(self, options: Optional[dict] = None) -> List[str] | None:
         try:
@@ -217,7 +217,7 @@ class JsApi:
     def dispatch_job_stream(self, stream: str, job_id: str, stream_type: StreamType):
         for line in stream:
             msg = line.rstrip()
-            dispatch_job_event(
+            self.event_api.dispatch_job_event(
                 PyJobEvent(
                     action=PyAction.PY_JOB_STREAM,
                     job_id=job_id,
@@ -232,7 +232,7 @@ class JsApi:
         interpreter_abs = get_python_path().absolute()
         print(script_path_abs, interpreter_abs)
         print(f"start_script: ", interpreter_abs, script_path_abs, args)
-        dispatch_job_event(
+        self.event_api.dispatch_job_event(
             PyJobEvent(
                 action=PyAction.PY_JOB_STATUS,
                 job_id=job_id,
@@ -266,7 +266,7 @@ class JsApi:
                 with process_lock:
                     processes.pop(job_id, None)
                 print("finally")
-                dispatch_job_event(
+                self.event_api.dispatch_job_event(
                     PyJobEvent(
                         action=PyAction.PY_JOB_STATUS,
                         job_id=job_id,
@@ -286,7 +286,7 @@ class JsApi:
             p = processes.get(job_id)
 
         if not p:
-            dispatch_job_event(
+            self.event_api.dispatch_job_event(
                 PyJobEvent(
                     action=PyAction.PY_JOB_ERROR,
                     job_id=job_id,
@@ -307,7 +307,7 @@ class JsApi:
 
             threading.Thread(target=killer, args=(p,), daemon=True).start()
 
-            dispatch_job_event(
+            self.event_api.dispatch_job_event(
                 PyJobEvent(
                     action=PyAction.PY_JOB_STATUS,
                     job_id=job_id,
@@ -317,7 +317,7 @@ class JsApi:
                 )
             )
         except Exception as e:
-            dispatch_job_event(
+            self.event_api.dispatch_job_event(
                 PyJobEvent(
                     action=PyAction.PY_JOB_ERROR,
                     job_id=job_id,
@@ -381,3 +381,6 @@ class JsApi:
 
         return result
 
+    def re_send_events(self):
+        print("JsApi.re_send_events")
+        self.event_api.re_send_events()

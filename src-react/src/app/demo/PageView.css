@@ -146,3 +146,34 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+
+.page-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.page-body .tabs {
+    flex: 0 0 30px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    /*justify-content: center;*/
+}
+.page-body .tab-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    /*padding: 1px;*/
+    /*box-sizing: border-box;*/
+}
+
+.page-body .tabs .tab-title {
+    padding: 3px;
+    background-color: #25324d;
+    border: 1px solid #43454a;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #bcccdc;
+}

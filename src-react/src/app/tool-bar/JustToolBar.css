@@ -90,6 +90,7 @@
 .just-tool-menus .szh-menu-container {
     display: flex;
     background-color: #2b2d30;
+    z-index: 999;
 }
 .just-tool-menus .szh-menu {
     background-color: #2b2d30;

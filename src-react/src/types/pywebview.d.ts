@@ -14,6 +14,7 @@ declare global {
         start_file(filepath: string): Promise<void>,
         read_data_excel(subpath: string, sheet_name: SheetName): Promise<ConfigTable>,
         read_config(subpath: string): Promise<ConfigTable>,
+        re_send_events(): Promise<void>,
       },
     },
 

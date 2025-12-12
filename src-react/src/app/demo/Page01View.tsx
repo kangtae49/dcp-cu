@@ -7,11 +7,12 @@ import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {type ConfigsActions, type ConfigsState, createConfigsSlice} from "@/app/config/configsSlice.ts";
-import {useEffect, useState} from "react";
+import {Activity, useEffect, useState} from "react";
 import { format } from "date-fns";
 import {createJobMonitorSlice, type JobMonitorActions, type JobMonitorState} from "@/app/job/jobMonitorSlice.ts";
 import {createJobMonitorThunks} from "@/app/job/jobMonitorThunks.ts";
-import type {JobStatus} from "@/types/models";
+import type {JobDataStream, JobStatus, PyJobEvent} from "@/types/models";
+import TerminalView from "@/app/terminal/TerminalView.tsx";
 
 interface Props {
   winObjId: WinObjId
@@ -21,6 +22,8 @@ interface JobInfo {
   jobId: string,
   status: JobStatus
 }
+
+type TabType = "GRAPH" | "GRID" | "LOG"
 
 function Page01View({winObjId}: Props) {
   const configKey = "업체명.xlsx";
@@ -32,6 +35,7 @@ function Page01View({winObjId}: Props) {
 
   const {
     state: jobMonitorState,
+    actions: jobMonitorActions,
     thunks: jobMonitorThunks,
     dispatch
   } = useDynamicSlice<JobMonitorState, JobMonitorActions>("JOB_MONITOR", createJobMonitorSlice, createJobMonitorThunks)
@@ -40,6 +44,8 @@ function Page01View({winObjId}: Props) {
   const [startDate, setStartDate] = useState<Date | null>(new Date())
   const [endDate, setEndDate] = useState<Date | null>(new Date())
   const [jobInfo, setJobInfo] = useState<JobInfo | null>(null)
+  const [tab, setTab] = useState<TabType>("GRAPH")
+  const [logs, setLogs] = useState<string[]>([])
 
   useEffect(() => {
     if (!configsState?.configs) return;
@@ -57,6 +63,10 @@ function Page01View({winObjId}: Props) {
       setJobInfo({...jobInfo, status})
     }
 
+    const events: PyJobEvent [] = dispatch(jobMonitorThunks.getJobEvents({jobId: jobInfo?.jobId}))
+    const streamEvents = events.filter((event) => event.action === 'PY_JOB_STREAM')
+    const logs = streamEvents.map((event) => (event.data as JobDataStream).message ?? '')
+    setLogs(logs)
   }, [jobMonitorState, jobInfo]);
 
   const toOptions = (data: Record<string, string>[]): Option[] => {
@@ -75,7 +85,7 @@ function Page01View({winObjId}: Props) {
     setEndDate(date)
   }
 
-  const searchPage01 = () => {
+  const searchPage01 = async () => {
 
 
     if (!startDate || !endDate) return;
@@ -84,7 +94,11 @@ function Page01View({winObjId}: Props) {
 
     if (jobInfo !== null && jobInfo.status === 'RUNNING') return;
     console.log('searchPage01')
-    const jobId = "job_001"
+
+    if (jobInfo) {
+      await dispatch(jobMonitorActions.clearEvents({jobId: jobInfo?.jobId}))
+    }
+    const jobId = "page01"
     setJobInfo({jobId, status: 'RUNNING'})
     window.pywebview.api.start_script(jobId, "page01.py", [jobId, winObjId.viewId, "101", startYm, endYm])
   }
@@ -147,11 +161,23 @@ function Page01View({winObjId}: Props) {
         {/*  </div>*/}
         {/*</div>*/}
       </div>
-      <div className="page-grid">
-        Grid
-      </div>
-      <div className="page-graph">
-        Graph
+      {/*<div className="page-graph">*/}
+      {/*  Graph*/}
+      {/*</div>*/}
+      {/*<div className="page-grid">*/}
+      {/*  Grid*/}
+      {/*</div>*/}
+      <div className="page-body">
+        <div className="tabs">
+          <div className="tab-graph tab-title" onClick={()=>setTab('GRAPH')}>graph</div>
+          <div className="tab-grid tab-title" onClick={()=>setTab('GRID')}>grid</div>
+          <div className="tab-log tab-title" onClick={()=>setTab('LOG')}>log</div>
+        </div>
+        <div className="tab-body">
+          <Activity mode={tab === "LOG" ? "visible" : "hidden"}>
+              <TerminalView lines={logs} />
+          </Activity>
+        </div>
       </div>
 
     </div>

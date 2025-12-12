@@ -6,10 +6,15 @@ import threading
 import webview
 
 from apps import js_api
+from apps.event_api import EventApi
 from apps.listeners.window_event_listener import WindowEventListener
 from apps.watch_dir import start_watchdog_data
+# from webview.platforms.cef import browser_settings, settings
 
-api = js_api.JsApi()
+# settings.update({'persist_session_cookies': True})
+# browser_settings.update({'dom_paste_disabled': False})
+event_api = EventApi()
+api = js_api.JsApi(event_api)
 window_listener = None
 
 
@@ -57,6 +62,7 @@ def run():
         zoomable=False,
         confirm_close=False,
         width=840, height=600,
+        # on_top=True,
         # frameless=True,
         # easy_drag=False,
         # resizable=True,
@@ -67,9 +73,10 @@ def run():
 
     threading.Thread(
         target=start_watchdog_data,
-        args=(window, ),
+        args=(event_api, ),
         daemon=True
     ).start()
 
+    # webview.start(gui="cef", debug=debug)
     webview.start(debug=debug)
     # webview.start(debug=False)
