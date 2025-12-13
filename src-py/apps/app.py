@@ -5,10 +5,14 @@ import threading
 
 import webview
 
+
+
 from apps import js_api
 from apps.event_api import EventApi
 from apps.listeners.window_event_listener import WindowEventListener
 from apps.watch_dir import start_watchdog_data
+
+
 # from webview.platforms.cef import browser_settings, settings
 
 # settings.update({'persist_session_cookies': True})

@@ -1,3 +1,5 @@
+import type {ConfigTable} from "@/app/config/configsSlice.ts";
+
 function DemoView() {
   const startScript = () => {
     window.pywebview.api.start_script("job_id_01", "hello_world.py", ["한글 스페이스", "두번째 음냐"])
@@ -17,7 +19,9 @@ function DemoView() {
   }
 
   const readConfig = () => {
-    window.pywebview.api.read_config('설정1.xlsx').then(res => {
+    window.pywebview.api.read_config('설정1.xlsx')
+      .then(res => JSON.parse(res) as ConfigTable)
+      .then(res => {
       console.log(res)
 
     })

@@ -18,7 +18,7 @@ import {
   CONFIG_ID,
   CONFIG_KEYS,
   type ConfigsActions,
-  type ConfigsSlice,
+  type ConfigsSlice, type ConfigTable,
   createConfigsSlice
 } from "@/app/config/configsSlice.ts";
 import {useEffect, useState} from "react";
@@ -174,7 +174,9 @@ function App() {
 
     CONFIG_KEYS.forEach((winObjId: WinObjId) => {
       const file: string = winObjId.params?.['file'];
-      window.pywebview.api.read_config(file).then(res => {
+      window.pywebview.api.read_config(file)
+        .then(res => JSON.parse(res) as ConfigTable)
+        .then(res => {
         dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
       })
 

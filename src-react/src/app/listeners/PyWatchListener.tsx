@@ -4,7 +4,7 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   type ConfigsState,
   type ConfigsActions,
-  createConfigsSlice, CONFIG_ID,
+  createConfigsSlice, CONFIG_ID, type ConfigTable,
 } from "@/app/config/configsSlice.ts";
 
 
@@ -32,7 +32,9 @@ function PyWatchListener() {
 
       if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
         console.log('!!!!!!!!!!!!!')
-        window.pywebview.api.read_config(watchFile.key).then(res => {
+        window.pywebview.api.read_config(watchFile.key)
+          .then(res => JSON.parse(res) as ConfigTable)
+          .then(res => {
           dispatch(
             configsActions.updateConfigs({
               configs: {

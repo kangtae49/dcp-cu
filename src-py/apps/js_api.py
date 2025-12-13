@@ -385,7 +385,7 @@ class JsApi:
             #     for k, v in dfs.items():
             #         result = {key: v.to_dict(orient="records")}
             #         break
-        return json.loads(json.dumps(result, ignore_nan=True))
+        return json.dumps(result, ignore_nan=True)
 
     def re_send_events(self):
         print("JsApi.re_send_events")
