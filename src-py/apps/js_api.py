@@ -391,8 +391,8 @@ class JsApi:
     def read_data_excel(self, key: str) -> str:
         file_path = get_scripts_path().joinpath(key)
         result = {}
-        with pd.ExcelFile(file_path) as xlsx:
-            dfs = pd.read_excel(xlsx, sheet_name=0)
+        with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
+            dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
             # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
             # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
             if isinstance(dfs, pd.Series):

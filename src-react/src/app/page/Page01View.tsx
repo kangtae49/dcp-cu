@@ -2,7 +2,7 @@ import "./PageView.css"
 import {type WinObjId} from "@/App.tsx";
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawesome/free-solid-svg-icons"
+import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faPenToSquare} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
@@ -20,6 +20,7 @@ import type {JobDataStream, JobStatus, PyJobEvent} from "@/types/models";
 import TerminalView from "@/app/terminal/TerminalView.tsx";
 import {createPageSlice, PAGE01_ID, type PageActions, type PageState} from "@/app/page/pageSlice.ts";
 import classNames from "classnames";
+import ConfigGrid from "@/app/grid/ConfigGrid.tsx";
 
 interface Props {
   winObjId: WinObjId
@@ -54,6 +55,7 @@ function Page01View({winObjId}: Props) {
     // dispatch
   } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
+  const [outFile, setOutFile] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -86,9 +88,10 @@ function Page01View({winObjId}: Props) {
     if (!pageState?.jobInfo) return;
     if (pageState.jobInfo.status === 'DONE') {
       const outFile = `${pageState.jobInfo.args.join('_')}.xlsx`
-      window.pywebview.api.read_data_excel(outFile).then(JSON.parse).then(data => {
-        console.log('data:', data)
-      })
+      setOutFile(outFile)
+      // window.pywebview.api.read_data_excel(outFile).then(JSON.parse).then(data => {
+      //   console.log('data:', data)
+      // })
     }
   }, [pageState?.jobInfo])
 
@@ -131,6 +134,11 @@ function Page01View({winObjId}: Props) {
     dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING', path: script_path, args}))
     window.pywebview.api.start_script(jobId, script_path, args).then()
   }
+
+  const openGrid = (key: string) => {
+    window.pywebview.api.start_data_file(key)
+  }
+
 
   return (
     <div className="win-page">
@@ -213,6 +221,20 @@ function Page01View({winObjId}: Props) {
         <div className="tab-body">
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
             {pageState?.logs && <TerminalView lines={pageState.logs} />}
+          </Activity>
+          <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
+            {outFile && (
+                <div className="tab-grid">
+                    <div className="tab-grid-title">
+                      <div className="tab-grid-label" onClick={()=> openGrid(`output\\${outFile}`)}>
+                        <Icon icon={faPenToSquare} /> {outFile}
+                      </div>
+                    </div>
+                    <div className="tab-grid-table">
+                      <ConfigGrid configKey={`output\\${outFile}`} />
+                    </div>
+                </div>
+            )}
           </Activity>
         </div>
       </div>
