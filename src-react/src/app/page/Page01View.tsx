@@ -88,7 +88,7 @@ function Page01View({winObjId}: Props) {
     if (!pageState?.jobInfo) return;
     if (pageState.jobInfo.status === 'DONE') {
       const outFile = `${pageState.jobInfo.args.join('_')}.xlsx`
-      setOutFile(outFile)
+      setOutFile(outFile);
       // window.pywebview.api.read_data_excel(outFile).then(JSON.parse).then(data => {
       //   console.log('data:', data)
       // })
@@ -223,7 +223,8 @@ function Page01View({winObjId}: Props) {
             {pageState?.logs && <TerminalView lines={pageState.logs} />}
           </Activity>
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
-            {outFile && (
+            {outFile &&
+              (
                 <div className="tab-grid">
                     <div className="tab-grid-title">
                       <div className="tab-grid-label" onClick={()=> openGrid(`output\\${outFile}`)}>

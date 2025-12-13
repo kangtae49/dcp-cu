@@ -13,6 +13,7 @@ import webview
 import pysubs2
 from charset_normalizer import from_path
 import simplejson as json
+import zipfile
 from pandas._typing import IntStrT
 
 from apps.constants import APP_NAME
@@ -389,28 +390,33 @@ class JsApi:
 
 
     def read_data_excel(self, key: str) -> str:
+        print(f"read_data_excel: {key}")
         file_path = get_scripts_path().joinpath(key)
         result = {}
-        with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
-            dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
-            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
-            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
-            if isinstance(dfs, pd.Series):
-                dfs = dfs.to_frame()
-            # dfs = dfs.fillna("")
-            # dfs = dfs.astype(object).where(pd.notnull(dfs), None)
-            result = {
-                'key': key,
-                'header': dfs.columns.to_list(),
-                'data': dfs.to_dict(orient="records"),
-            }
-            # if isinstance(dfs, pd.DataFrame):
-            #     result = {key: dfs.to_dict(orient="records")}
-            # else:
-            #     for k, v in dfs.items():
-            #         result = {key: v.to_dict(orient="records")}
-            #         break
-        return json.dumps(result, ignore_nan=True)
+        # dfs = pd.read_excel(file_path, sheet_name=0, engine="openpyxl")
+        try:
+            with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
+                dfs = pd.read_excel(xlsx, sheet_name=0)
+                # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
+                # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
+                if isinstance(dfs, pd.Series):
+                    dfs = dfs.to_frame()
+                # dfs = dfs.fillna("")
+                # dfs = dfs.astype(object).where(pd.notnull(dfs), None)
+                result = {
+                    'key': key,
+                    'header': dfs.columns.to_list(),
+                    'data': dfs.to_dict(orient="records"),
+                }
+                # if isinstance(dfs, pd.DataFrame):
+                #     result = {key: dfs.to_dict(orient="records")}
+                # else:
+                #     for k, v in dfs.items():
+                #         result = {key: v.to_dict(orient="records")}
+                #         break
+                return json.dumps(result, ignore_nan=True)
+        except zipfile.BadZipFile:
+            raise
 
     def re_send_events(self):
         print("JsApi.re_send_events")

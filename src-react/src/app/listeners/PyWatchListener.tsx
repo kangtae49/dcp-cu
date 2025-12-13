@@ -32,17 +32,19 @@ function PyWatchListener() {
 
       if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
         console.log('!!!!!!!!!!!!!')
-        window.pywebview.api.read_data_excel(watchFile.key)
-          .then(res => JSON.parse(res) as ConfigTable)
-          .then(res => {
-          dispatch(
-            configsActions.updateConfigs({
-              configs: {
-                [watchFile.key]: res
-              }
+        setTimeout(() => {
+          window.pywebview.api.read_data_excel(watchFile.key)
+            .then(res => JSON.parse(res) as ConfigTable)
+            .then(res => {
+              dispatch(
+                configsActions.updateConfigs({
+                  configs: {
+                    [watchFile.key]: res
+                  }
+                })
+              )
             })
-          )
-        })
+        }, 100)
       } else if (watchFile.status === 'DELETED') {
         dispatch(
           configsActions.updateConfigs({
