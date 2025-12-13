@@ -25,9 +25,11 @@ interface Props {
   winObjId: WinObjId
 }
 
+
+
 function Page01View({winObjId}: Props) {
   const configKey = "업체명.xlsx";
-  const jobId = "job01"
+  // const jobId = `job-${new Date().getTime()}`
   // chart-line.svg
   // terminal.svg
   // table.svg, table-cells-large.svg, table-cells.svg, table-list.svg
@@ -80,9 +82,20 @@ function Page01View({winObjId}: Props) {
     dispatch(pageActions.setLogs(logs))
   }, [jobMonitorState, pageState?.jobInfo]);
 
-  const toOptions = (data: Record<string, string>[]): Option[] => {
+  useEffect(() => {
+    if (!pageState?.jobInfo) return;
+    if (pageState.jobInfo.status === 'DONE') {
+      const outFile = `output/${pageState.jobInfo.args.join('_')}.json`
+      window.pywebview.api.app_read_file(outFile).then(JSON.parse).then(data => {
+        console.log('data:', data)
+      })
+    }
+  }, [pageState?.jobInfo])
+
+
+  const toOptions = (data: Record<string, string | number | null>[]): Option[] => {
     return data.map(d => {
-      return {value: d.cdVlId, label: d.cdVlNm}
+      return {value: d.cdVlId, label: d.cdVlNm ? d.cdVlNm.toString() : ''}
     })
   }
 
@@ -101,9 +114,10 @@ function Page01View({winObjId}: Props) {
   }
   const searchPage01 = () => {
 
-    if (!pageState?.startDate || !pageState?.endDate) return;
+    if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return;
     const startYm = format(pageState.startDate, "yyyyMM");
     const endYm = format(pageState.endDate, "yyyyMM");
+    const companyVal = pageState.company.value;
 
     if (pageState.jobInfo !== null && pageState.jobInfo.status === 'RUNNING') return;
     console.log('searchPage01')
@@ -111,9 +125,11 @@ function Page01View({winObjId}: Props) {
     if (pageState.jobInfo) {
       dispatch(jobMonitorActions.clearEvents({jobId: pageState.jobInfo?.jobId}))
     }
-
-    dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING'}))
-    window.pywebview.api.start_script(jobId, "page01.py", [jobId, winObjId.viewId, "101", startYm, endYm]).then()
+    const jobId = `job-${new Date().getTime()}`
+    const script_path = "page01.py"
+    const args = [jobId, winObjId.viewId, companyVal?.toString() ?? '', startYm, endYm];
+    dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING', path: script_path, args}))
+    window.pywebview.api.start_script(jobId, script_path, args).then()
   }
 
   return (

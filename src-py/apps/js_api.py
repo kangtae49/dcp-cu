@@ -12,6 +12,7 @@ from typing import Optional
 import webview
 import pysubs2
 from charset_normalizer import from_path
+import simplejson as json
 from pandas._typing import IntStrT
 
 from apps.constants import APP_NAME
@@ -104,9 +105,10 @@ class JsApi:
 
     def app_read_file(self, subpath: str):
         try:
-            appdata_local = os.getenv("LOCALAPPDATA")
-            fullpath = os.path.join(appdata_local, APP_NAME, subpath)
-            content = self.read_file(fullpath)
+            # appdata_local = os.getenv("LOCALAPPDATA")
+            # fullpath = os.path.join(appdata_local, APP_NAME, subpath)
+            file_path = get_scripts_path().joinpath(subpath).absolute()
+            content = self.read_file(str(file_path))
             print(f"app_read_file !{subpath}!{content}!")
             return content
         except ApiError as e:
@@ -114,17 +116,17 @@ class JsApi:
         except Exception as e:
             raise ApiException(f"{e}")
 
-    def app_write_file(self, subpath: str, default: str):
-        try:
-            appdata_local = os.getenv("LOCALAPPDATA")
-            fullpath = os.path.join(appdata_local, APP_NAME, subpath)
-            # self.setting.update({subpath: content})
-            content = self.setting.get(subpath, default)
-            self.write_file(fullpath, content)
-        except ApiError as e:
-            raise e
-        except Exception as e:
-            raise ApiException(f"{e}")
+    # def app_write_file(self, subpath: str, default: str):
+    #     try:
+    #         appdata_local = os.getenv("LOCALAPPDATA")
+    #         fullpath = os.path.join(appdata_local, APP_NAME, subpath)
+    #         # self.setting.update({subpath: content})
+    #         content = self.setting.get(subpath, default)
+    #         self.write_file(fullpath, content)
+    #     except ApiError as e:
+    #         raise e
+    #     except Exception as e:
+    #         raise ApiException(f"{e}")
 
     def app_read(self, subpath: str):
         if subpath not in self.setting :
@@ -360,15 +362,17 @@ class JsApi:
     #     return result
 
 
-    def read_config(self, key: str) -> dict[str, list[dict[str, Any]]]:
+    # def read_config(self, key: str) -> dict[str, list[dict[str, Any]]]:
+    def read_config(self, key: str) -> str:
         file_path = get_data_path().joinpath(key)
         result = {}
-        with pd.ExcelFile(file_path, engine="openpyxl") as xlsx:
-            dfs = pd.read_excel(xlsx, sheet_name=0, dtype=str, engine="openpyxl")
+        with pd.ExcelFile(file_path) as xlsx:
+            dfs = pd.read_excel(xlsx, sheet_name=0)
+            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
             # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
             if isinstance(dfs, pd.Series):
                 dfs = dfs.to_frame()
-            dfs = dfs.fillna("")
+            # dfs = dfs.fillna("")
             # dfs = dfs.astype(object).where(pd.notnull(dfs), None)
             result = {
                 'key': key,
@@ -381,8 +385,7 @@ class JsApi:
             #     for k, v in dfs.items():
             #         result = {key: v.to_dict(orient="records")}
             #         break
-
-        return result
+        return json.loads(json.dumps(result, ignore_nan=True))
 
     def re_send_events(self):
         print("JsApi.re_send_events")

@@ -12,9 +12,10 @@ declare global {
         stop_script(job_id: string): Promise<void>,
         start_data_file(subpath: string): Promise<void>,
         start_file(filepath: string): Promise<void>,
-        read_data_excel(subpath: string, sheet_name: SheetName): Promise<ConfigTable>,
+        // read_data_excel(subpath: string, sheet_name: SheetName): Promise<ConfigTable>,
         read_config(subpath: string): Promise<ConfigTable>,
         re_send_events(): Promise<void>,
+        app_read_file(subpath: start): Promise<string>,
       },
     },
 

@@ -6,7 +6,7 @@ export const CONFIG_ID = "CONFIGS"
 export interface ConfigTable {
   key: string,
   header: string [],
-  data: Record<string, string> []
+  data: Record<string, string | number> []
 }
 
 export interface ConfigsState {

@@ -7,6 +7,8 @@ import {format} from "date-fns";
 export const PAGE01_ID = "PAGE01"
 export interface JobInfo {
   jobId: string,
+  path: string,
+  args: string[],
   status: JobStatus
 }
 

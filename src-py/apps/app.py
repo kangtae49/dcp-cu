@@ -13,10 +13,9 @@ from apps.watch_dir import start_watchdog_data
 
 # settings.update({'persist_session_cookies': True})
 # browser_settings.update({'dom_paste_disabled': False})
+# window_listener = None
 event_api = EventApi()
 api = js_api.JsApi(event_api)
-window_listener = None
-
 
 def get_index_url():
     if hasattr(sys, "_MEIPASS"):
@@ -47,6 +46,8 @@ def run():
     # }
     print(webview.settings, flush=True)
 
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--verbose", action="store_true", help="verbose")
     args = parser.parse_args()
@@ -67,6 +68,8 @@ def run():
         # easy_drag=False,
         # resizable=True,
     )
+
+    # event_api.set_window(window)
 
     # events
     WindowEventListener(window, api)

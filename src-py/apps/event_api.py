@@ -8,6 +8,7 @@ class EventApi:
     def __init__(self):
         self.events = deque()
 
+
     def dispatch_job_event(self, event: PyJobEvent):
         window = webview.active_window()
         if window:
