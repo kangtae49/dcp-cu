@@ -177,8 +177,8 @@ function App() {
       window.pywebview.api.read_config(file)
         .then(res => JSON.parse(res) as ConfigTable)
         .then(res => {
-        dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
-      })
+          dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
+        })
 
       // viewMap[winObjId.viewId] = (_winId) => ({
       //   title: winObjId.params?.['title'],

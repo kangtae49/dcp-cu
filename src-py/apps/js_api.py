@@ -387,6 +387,31 @@ class JsApi:
             #         break
         return json.dumps(result, ignore_nan=True)
 
+
+    def read_output(self, key: str) -> str:
+        file_path = get_scripts_path().joinpath('output').joinpath(key)
+        result = {}
+        with pd.ExcelFile(file_path) as xlsx:
+            dfs = pd.read_excel(xlsx, sheet_name=0)
+            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
+            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
+            if isinstance(dfs, pd.Series):
+                dfs = dfs.to_frame()
+            # dfs = dfs.fillna("")
+            # dfs = dfs.astype(object).where(pd.notnull(dfs), None)
+            result = {
+                'key': key,
+                'header': dfs.columns.to_list(),
+                'data': dfs.to_dict(orient="records"),
+            }
+            # if isinstance(dfs, pd.DataFrame):
+            #     result = {key: dfs.to_dict(orient="records")}
+            # else:
+            #     for k, v in dfs.items():
+            #         result = {key: v.to_dict(orient="records")}
+            #         break
+        return json.dumps(result, ignore_nan=True)
+
     def re_send_events(self):
         print("JsApi.re_send_events")
         self.event_api.re_send_events()

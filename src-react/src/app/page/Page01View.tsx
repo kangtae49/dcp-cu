@@ -85,8 +85,8 @@ function Page01View({winObjId}: Props) {
   useEffect(() => {
     if (!pageState?.jobInfo) return;
     if (pageState.jobInfo.status === 'DONE') {
-      const outFile = `output/${pageState.jobInfo.args.join('_')}.json`
-      window.pywebview.api.app_read_file(outFile).then(JSON.parse).then(data => {
+      const outFile = `${pageState.jobInfo.args.join('_')}.xlsx`
+      window.pywebview.api.read_output(outFile).then(JSON.parse).then(data => {
         console.log('data:', data)
       })
     }
