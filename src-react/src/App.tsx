@@ -174,7 +174,7 @@ function App() {
 
     CONFIG_KEYS.forEach((winObjId: WinObjId) => {
       const file: string = winObjId.params?.['file'];
-      window.pywebview.api.read_config(file)
+      window.pywebview.api.read_data_excel(file)
         .then(res => JSON.parse(res) as ConfigTable)
         .then(res => {
           dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))

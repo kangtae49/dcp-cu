@@ -15,7 +15,7 @@ export interface ConfigsState {
 }
 
 export const CONFIG_KEYS: WinObjId[] = [
-  { viewId: "setting-config", params: {"title": "업체명", "file": "업체명.xlsx"}}
+  { viewId: "setting-config", params: {"title": "업체명", "file": "data\\업체명.xlsx"}}
 ]
 
 const initialState: ConfigsState = {

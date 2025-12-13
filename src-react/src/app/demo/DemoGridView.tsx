@@ -5,7 +5,7 @@ import ConfigGrid from "@/app/grid/ConfigGrid.tsx";
 
 function DemoGridView() {
 
-  const configKey = "설정1.xlsx";
+  const configKey = "data\\설정1.xlsx";
   const clickEdit = () => {
     window.pywebview.api.start_data_file(configKey)
   }

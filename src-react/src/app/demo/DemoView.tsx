@@ -15,11 +15,11 @@ function DemoView() {
   }
 
   const openSetting = () => {
-    window.pywebview.api.start_data_file('설정1.xlsx')
+    window.pywebview.api.start_data_file('data\\설정1.xlsx')
   }
 
   const readConfig = () => {
-    window.pywebview.api.read_config('설정1.xlsx')
+    window.pywebview.api.read_data_excel('data\\설정1.xlsx')
       .then(res => JSON.parse(res) as ConfigTable)
       .then(res => {
       console.log(res)

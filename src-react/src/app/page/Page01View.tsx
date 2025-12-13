@@ -28,7 +28,7 @@ interface Props {
 
 
 function Page01View({winObjId}: Props) {
-  const configKey = "업체명.xlsx";
+  const configKey = "data\\업체명.xlsx";
   // const jobId = `job-${new Date().getTime()}`
   // chart-line.svg
   // terminal.svg
@@ -86,7 +86,7 @@ function Page01View({winObjId}: Props) {
     if (!pageState?.jobInfo) return;
     if (pageState.jobInfo.status === 'DONE') {
       const outFile = `${pageState.jobInfo.args.join('_')}.xlsx`
-      window.pywebview.api.read_output(outFile).then(JSON.parse).then(data => {
+      window.pywebview.api.read_data_excel(outFile).then(JSON.parse).then(data => {
         console.log('data:', data)
       })
     }

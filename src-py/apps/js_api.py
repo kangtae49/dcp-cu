@@ -332,7 +332,7 @@ class JsApi:
                 )
             )
     def start_data_file(self, subpath: str):
-        file_path = get_data_path().joinpath(subpath)
+        file_path = get_scripts_path().joinpath(subpath)
         os.startfile(file_path)
 
     def start_file(self, filepath: str):
@@ -363,33 +363,33 @@ class JsApi:
 
 
     # def read_config(self, key: str) -> dict[str, list[dict[str, Any]]]:
-    def read_config(self, key: str) -> str:
-        file_path = get_data_path().joinpath(key)
-        result = {}
-        with pd.ExcelFile(file_path) as xlsx:
-            dfs = pd.read_excel(xlsx, sheet_name=0)
-            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
-            # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
-            if isinstance(dfs, pd.Series):
-                dfs = dfs.to_frame()
-            # dfs = dfs.fillna("")
-            # dfs = dfs.astype(object).where(pd.notnull(dfs), None)
-            result = {
-                'key': key,
-                'header': dfs.columns.to_list(),
-                'data': dfs.to_dict(orient="records"),
-            }
-            # if isinstance(dfs, pd.DataFrame):
-            #     result = {key: dfs.to_dict(orient="records")}
-            # else:
-            #     for k, v in dfs.items():
-            #         result = {key: v.to_dict(orient="records")}
-            #         break
-        return json.dumps(result, ignore_nan=True)
+    # def read_config(self, key: str) -> str:
+    #     file_path = get_data_path().joinpath(key)
+    #     result = {}
+    #     with pd.ExcelFile(file_path) as xlsx:
+    #         dfs = pd.read_excel(xlsx, sheet_name=0)
+    #         # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
+    #         # dfs = pd.read_excel(xlsx, sheet_name=0, engine="openpyxl")
+    #         if isinstance(dfs, pd.Series):
+    #             dfs = dfs.to_frame()
+    #         # dfs = dfs.fillna("")
+    #         # dfs = dfs.astype(object).where(pd.notnull(dfs), None)
+    #         result = {
+    #             'key': key,
+    #             'header': dfs.columns.to_list(),
+    #             'data': dfs.to_dict(orient="records"),
+    #         }
+    #         # if isinstance(dfs, pd.DataFrame):
+    #         #     result = {key: dfs.to_dict(orient="records")}
+    #         # else:
+    #         #     for k, v in dfs.items():
+    #         #         result = {key: v.to_dict(orient="records")}
+    #         #         break
+    #     return json.dumps(result, ignore_nan=True)
 
 
-    def read_output(self, key: str) -> str:
-        file_path = get_scripts_path().joinpath('output').joinpath(key)
+    def read_data_excel(self, key: str) -> str:
+        file_path = get_scripts_path().joinpath(key)
         result = {}
         with pd.ExcelFile(file_path) as xlsx:
             dfs = pd.read_excel(xlsx, sheet_name=0)

@@ -6,7 +6,7 @@ import webview
 from apps.models import PyWatchEvent, PyAction, WatchFile, WatchStatus
 import time
 
-from apps.utils.path_util import get_data_path
+from apps.utils.path_util import get_data_path, get_scripts_path
 
 
 class MyHandler(FileSystemEventHandler):
@@ -78,7 +78,8 @@ class MyHandler(FileSystemEventHandler):
 
 def start_watchdog_data(event_api):
     print("start watchdog")
-    watch_dir = get_data_path()
+    watch_dir = get_scripts_path()
+    print('watch_dir:', watch_dir)
     event_handler = MyHandler(watch_dir, event_api)
     observer = Observer()
     observer.schedule(event_handler, path=watch_dir, recursive=True)

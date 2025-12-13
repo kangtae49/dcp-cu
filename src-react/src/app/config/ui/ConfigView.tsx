@@ -14,6 +14,8 @@ interface Props {
 
 function ConfigView({winObjId}: Props) {
   const configKey = winObjId.params?.file;
+  const configTitle = winObjId.params?.title;
+
   // const {
   //   state: configsState,
   // } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
@@ -32,7 +34,7 @@ function ConfigView({winObjId}: Props) {
     <div className="config">
       <div className="config-key">
         <div className="config-title" onClick={clickConfigKey}>
-          <Icon icon={faPenToSquare} /> {configKey}
+          <Icon icon={faPenToSquare} /> {configTitle}
         </div>
       </div>
       <div className="config-table">

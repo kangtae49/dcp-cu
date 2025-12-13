@@ -61,8 +61,8 @@ function ConfigGrid({configKey}: Props) {
       cells: [
         { type: "number", value: idx+2, nonEditable: true},
         ...table.header.map<DefaultCellTypes>(h => {
-          if (typeof row[h] === 'string') {
-            return ({type: "text", text: row[h], nonEditable: true})
+          if (row[h] === null || typeof row[h] === 'string') {
+            return ({type: "text", text: row[h] ?? '', nonEditable: true})
           } else {
             return ({type: "number", value: row[h], nonEditable: true})
           }
