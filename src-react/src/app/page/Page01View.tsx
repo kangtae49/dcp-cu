@@ -234,11 +234,13 @@ function Page01View({winObjId}: Props) {
                   outFile={`output\\${outFile}`}
                   legend={[
                     {
-                      "id": "cpstrtRlest",
-                      "name": "cpstrtRlest"
+                      id: "cpstrtRlest",
+                      name: "cpstrtRlest",
+                      color: "#ca2828"
                     }, {
-                      "id": "cpstrtVlscrt",
-                      "name": "cpstrtVlscrt"
+                      id: "cpstrtVlscrt",
+                      name: "cpstrtVlscrt",
+                      color: "#1140bd"
                     }
                   ]}
               />

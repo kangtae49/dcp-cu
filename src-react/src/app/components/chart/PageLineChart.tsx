@@ -11,8 +11,9 @@ import {
 import {useEffect, useState} from "react";
 
 interface DataKey {
-  id: string,
+  id: string
   name: string
+  color: string
 }
 
 interface Props {
@@ -95,7 +96,7 @@ function PageLineChart({title, outFile, legend}: Props) {
             data={configTable.data}
           >
             {legend.map(l =>
-              <Line key={l.id} dataKey={l.id} name={l.name} />
+              <Line key={l.id} dataKey={l.id} name={l.name} stroke={l.color}/>
             )}
             <XAxis dataKey="stdrYm" />
             <YAxis />
