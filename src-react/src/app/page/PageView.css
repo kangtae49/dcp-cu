@@ -184,29 +184,3 @@
     background-color: #25324d;
 }
 
-.tab-grid {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-
-    padding: 5px;
-    box-sizing: border-box;
-}
-
-.tab-grid .tab-grid-title {
-    flex: 0 0 25px;
-    display: flex;
-    padding: 3px;
-}
-.tab-grid .tab-grid-title svg {
-    color: #cf5300;
-}
-
-.tab-grid .tab-grid-table {
-    flex: 1;
-    display: flex;
-    min-height: 0;
-    min-width: 0;
-}

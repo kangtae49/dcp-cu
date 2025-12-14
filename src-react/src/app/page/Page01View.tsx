@@ -2,7 +2,7 @@ import "./PageView.css"
 import {type WinObjId} from "@/App.tsx";
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faPenToSquare} from "@fortawesome/free-solid-svg-icons"
+import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
@@ -20,8 +20,9 @@ import type {JobDataStream, JobStatus, PyJobEvent} from "@/types/models";
 // import TerminalView from "@/app/terminal/TerminalView.tsx";
 import {createPageSlice, PAGE01_ID, type PageActions, type PageState} from "@/app/page/pageSlice.ts";
 import classNames from "classnames";
-import ConfigGrid from "@/app/grid/ConfigGrid.tsx";
-import TerminalView from "@/app/terminal/TerminalView.tsx";
+import TerminalView from "@/app/components/terminal/TerminalView.tsx";
+import PageLineChart from "@/app/components/chart/PageLineChart.tsx";
+import OutputGrid from "@/app/components/grid/OutputGrid.tsx";
 
 interface Props {
   winObjId: WinObjId
@@ -136,11 +137,6 @@ function Page01View({winObjId}: Props) {
     window.pywebview.api.start_script(jobId, script_path, args).then()
   }
 
-  const openGrid = (key: string) => {
-    window.pywebview.api.start_data_file(key)
-  }
-
-
   return (
     <div className="win-page">
       <div className="page-title">
@@ -225,18 +221,28 @@ function Page01View({winObjId}: Props) {
           </Activity>
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
             {outFile &&
-              (
-                <div className="tab-grid">
-                    <div className="tab-grid-title">
-                      <div className="tab-grid-label" onClick={()=> openGrid(`output\\${outFile}`)}>
-                        <Icon icon={faPenToSquare} /> {outFile}
-                      </div>
-                    </div>
-                    <div className="tab-grid-table">
-                      <ConfigGrid configKey={`output\\${outFile}`} />
-                    </div>
-                </div>
-            )}
+              <OutputGrid
+                  title={outFile}
+                  outFile={`output\\${outFile}`}
+              />
+            }
+          </Activity>
+          <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
+            {outFile &&
+              <PageLineChart
+                  title={outFile}
+                  outFile={`output\\${outFile}`}
+                  legend={[
+                    {
+                      "id": "cpstrtRlest",
+                      "name": "cpstrtRlest"
+                    }, {
+                      "id": "cpstrtVlscrt",
+                      "name": "cpstrtVlscrt"
+                    }
+                  ]}
+              />
+            }
           </Activity>
         </div>
       </div>

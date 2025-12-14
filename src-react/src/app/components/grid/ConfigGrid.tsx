@@ -38,7 +38,6 @@ function ConfigGrid({configKey}: Props) {
   const [columns, setColumns] = useState<Column[]>(getColumns([]));
 
   const getTableRows = (table: ConfigTable): Row[] => {
-    console.log('table:', table)
     return [
       getTableHeader(table.header),
       ...getTableBody(table)

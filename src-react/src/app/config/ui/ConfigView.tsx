@@ -1,7 +1,7 @@
 // import {useState} from "react";
 // import {useDynamicSlice} from "@/store/hooks.ts";
 // import {type ConfigsActions, type ConfigsState, createConfigsSlice} from "@/app/config/configsSlice.ts";
-import ConfigGrid from "@/app/grid/ConfigGrid.tsx";
+import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
 import "./ConfigView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";

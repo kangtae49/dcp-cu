@@ -1,5 +1,5 @@
 import {Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis} from 'recharts';
-import "../chart/chart.css"
+import "@/app/components/chart/chart.css"
 function DemoLineChartView() {
   const data = [
     {
