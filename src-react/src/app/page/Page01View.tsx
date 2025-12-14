@@ -17,10 +17,11 @@ import {
 } from "@/app/job/jobMonitorSlice.ts";
 import {createJobMonitorThunks} from "@/app/job/jobMonitorThunks.ts";
 import type {JobDataStream, JobStatus, PyJobEvent} from "@/types/models";
-import TerminalView from "@/app/terminal/TerminalView.tsx";
+// import TerminalView from "@/app/terminal/TerminalView.tsx";
 import {createPageSlice, PAGE01_ID, type PageActions, type PageState} from "@/app/page/pageSlice.ts";
 import classNames from "classnames";
 import ConfigGrid from "@/app/grid/ConfigGrid.tsx";
+import TerminalView from "@/app/terminal/TerminalView.tsx";
 
 interface Props {
   winObjId: WinObjId

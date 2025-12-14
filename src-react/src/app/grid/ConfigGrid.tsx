@@ -91,8 +91,6 @@ function ConfigGrid({configKey}: Props) {
       return [...prevColumns];
     });
   }
-  console.log('rows:', getTableRows(configTable))
-  console.log('columns:', columns)
 
   const handleScroll = () => {
     throttledUpdateScroll()

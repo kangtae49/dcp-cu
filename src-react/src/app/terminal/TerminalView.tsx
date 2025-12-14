@@ -1,5 +1,5 @@
 import "./TerminalView.css"
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Terminal as XTerm} from "@xterm/xterm"
 import '@xterm/xterm/css/xterm.css';
 import { FitAddon } from '@xterm/addon-fit';
@@ -12,6 +12,8 @@ function TerminalView({lines}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+  const [curLines, setCurLines] = useState<string[]>([])
+  console.log("curLines:", curLines.length, "lines:", lines.length)
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -45,18 +47,10 @@ function TerminalView({lines}: Props) {
         term.open(containerRef.current);
         termRef.current = term;
         fitAddonRef.current = fitAddon;
-        // termRefMap.set(termId, {
-        //   termRef: termRef,
-        //   fitAddonRef: fitAddonRef,
-        // });
-        // setTermRefMap(termRefMap);
-
-        // term.writeln(termId);
+        curLines.forEach((line) => term.writeln(line))
       } catch (e) {
         console.log(e);
       }
-
-
     }
     return () => {
       console.log("dispose terminal");
@@ -65,12 +59,18 @@ function TerminalView({lines}: Props) {
   }, []);
 
   useEffect(() => {
-    // if (!termRef.current) return;
-    termRef?.current?.clear()
-    for(const line of lines) {
-      termRef?.current?.writeln(line)
+    if (lines.length == 0) {
+      termRef?.current?.clear()
+      console.log("clear terminal")
+      setCurLines([])
+    } else {
+      lines.slice(curLines.length).forEach((line) => {
+        termRef?.current?.writeln(line)
+      })
+      setCurLines(lines)
     }
     fitAddonRef.current?.fit();
+    termRef?.current?.scrollToBottom()
   }, [lines.length]);
 
   return (
